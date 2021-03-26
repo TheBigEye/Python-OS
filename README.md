@@ -25,4 +25,4 @@
 - Startup screen
 - Cmd Screen
 - Internet, screen resolution and file options
-- Her love (xd)
+- The love of her (xd)
