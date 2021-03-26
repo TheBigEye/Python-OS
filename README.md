@@ -21,7 +21,7 @@
 
 # Features less likely to implement:
 
-- Deaggable windows
+- Draggable windows
 - Startup screen
 - Cmd Screen
 - Internet, screen resolution and file options
