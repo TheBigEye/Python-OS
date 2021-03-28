@@ -11,7 +11,7 @@
 
 # Future features:
 
-- File Browser
+- File Manager
 - Browser
 - Login screen
 - Antivirus (fake)
