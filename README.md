@@ -10,6 +10,7 @@
 - Draggable windows (Is bugged)
 - Right click menu
 - Clock
+- Theme Concept by Litorom1
 
 # Future features:
 

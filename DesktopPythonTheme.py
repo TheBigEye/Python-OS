@@ -43,7 +43,7 @@ Start_Menu_image_BG_Color = "#ffffff"
 FileManager_BG_Color = "#ffffff"
 
 # Imagen de fondo
-Background_image = tk.PhotoImage(file="Assets/Wallpapers/" + Wallpaper + ".png")
+Background_image = tk.PhotoImage(file="Assets/pythontheme/Wallpapers/" + Wallpaper + ".png")
 
 Background = tk.Label(Ventana, image=Background_image)
 Background.place(x=-1, y=-1, relwidth=1, relheight=1)
@@ -82,22 +82,22 @@ def on_drag_motion(event):
 # ------------------------------------------------------------------------------------ #
 
 # GUI
-Taskbar_image = tk.PhotoImage(file="Assets/GUI/Taskbar.png") # ------------------------------------------------ Taskbar
-Clockbar_image = tk.PhotoImage(file="Assets/GUI/Clockbar.png") # ----------------------------------------------Clockbar
-StartMenu_image = tk.PhotoImage(file="Assets/GUI/StartMenu.png") # ----------------------------------------- Start Menu
-FileManager_image = tk.PhotoImage(file="Assets/GUI/FileManager.png") # ----------------------------------- File Manager
-ErrorMessagebox_image = tk.PhotoImage(file="Assets/GUI/Error_MessageBox.png") # ---------------------- Error Messagebox
+Taskbar_image = tk.PhotoImage(file="Assets/pythontheme/GUI/Taskbar.png") # ------------------------------------------------ Taskbar
+Clockbar_image = tk.PhotoImage(file="Assets/pythontheme/GUI/Clockbar.png") # ----------------------------------------------Clockbar
+StartMenu_image = tk.PhotoImage(file="Assets/pythontheme/GUI/StartMenu.png") # ----------------------------------------- Start Menu
+FileManager_image = tk.PhotoImage(file="Assets/pythontheme/GUI/FileManager.png") # ----------------------------------- File Manager
+ErrorMessagebox_image = tk.PhotoImage(file="Assets/pythontheme/GUI/Error_MessageBox.png") # ---------------------- Error Messagebox
 
 # Taskbar Buttons
-Start_Button_image = tk.PhotoImage(file="Assets/Buttons/Start_Button.png") # ------------------------------- Start Menu
-FileManager_tb_Button_image = tk.PhotoImage(file="Assets/GUI/FileManager.png") # ------------------------- File Manager
+Start_Button_image = tk.PhotoImage(file="Assets/pythontheme/Buttons/Start_Button.png") # ------------------------------- Start Menu
+FileManager_tb_Button_image = tk.PhotoImage(file="Assets/pythontheme/GUI/FileManager.png") # ------------------------- File Manager
 
 # Clockbar Buttons
 
 # Start menu buttons
 
 # Window buttons
-Close_wd_button_image = tk.PhotoImage(file="Assets/Buttons/Close_white.png") # 1
+Close_wd_button_image = tk.PhotoImage(file="Assets/pythontheme/Buttons/Close_white.png") # 1
 
 # =================================================== Taskbar ========================================================
 
@@ -247,7 +247,7 @@ def Close_error():
     Error_MessageBox.place(x=1512, y=1512)
 
 
-OK_ErrorMessageBox_image = tk.PhotoImage(file="Assets/Buttons/OK_Button.png")
+OK_ErrorMessageBox_image = tk.PhotoImage(file="Assets/pythontheme/Buttons/OK_Button.png")
 OK_ErrorMessageBox = Button(
     Error_MessageBox,
     width=30,
@@ -260,7 +260,7 @@ OK_ErrorMessageBox = Button(
 
 OK_ErrorMessageBox.place(x=343, y=78)
 
-Close_ErrorMessageBox_image = tk.PhotoImage(file="Assets/Buttons/Close_red.png")
+Close_ErrorMessageBox_image = tk.PhotoImage(file="Assets/pythontheme/Buttons/Close_red.png")
 Close_ErrorMessageBox = Button(
     Error_MessageBox,
     width=7,
@@ -307,7 +307,7 @@ Taskbar_Icons.place(x=824, y=1)
 
 
 # Icono de la bateria
-Battery_icon = tk.PhotoImage(file="Assets/Images/Battery.png")
+Battery_icon = tk.PhotoImage(file="Assets/pythontheme/Images/Battery.png")
 
 Battery_Status_icon = Button(
     Taskbar_Icons,
@@ -323,11 +323,11 @@ Battery_Status_icon.place(x=24, y=-6)
 
 # Icono del internet
 Internet_Warning_icon = tk.PhotoImage(
-    file="Assets/Images/Internet_Warning.png"
+    file="Assets/pythontheme/Images/Internet_Warning.png"
 )  # Warning status
 
 Internet_Connected_icon = tk.PhotoImage(
-    file="Assets/Images/Internet_Connected.png"
+    file="Assets/pythontheme/Images/Internet_Connected.png"
 )  # Connected status
 
 Internet_Status_icon = Button(
@@ -343,7 +343,7 @@ Internet_Status_icon.place(x=48, y=-6)
 
 
 # Icono del volumen de sonido
-Volume_icon = tk.PhotoImage(file="Assets/Images/Volume.png")
+Volume_icon = tk.PhotoImage(file="Assets/pythontheme/Images/Volume.png")
 
 Volume_Status_icon = Button(
     Taskbar_Icons,
@@ -387,14 +387,14 @@ clock.place(x=928, y=5)
 icon_bg = "#212121"
 
 # load icons images
-Settings_Icon = tk.PhotoImage(file="Assets/Images/Settings_Icon.png")
-Settings_Icon_2 = tk.PhotoImage(file="Assets/Images/Settings_Icon_2.png")
+Settings_Icon = tk.PhotoImage(file="Assets/pythontheme/Images/Settings_Icon.png")
+Settings_Icon_2 = tk.PhotoImage(file="Assets/pythontheme/Images/Settings_Icon_2.png")
 
-Print_Dialog_Icon = tk.PhotoImage(file="Assets/Images/Print_Dialog_Icon.png")
-Tasks_Icon = tk.PhotoImage(file="Assets/Images/Tasks_Icon.png")
+Print_Dialog_Icon = tk.PhotoImage(file="Assets/pythontheme/Images/Print_Dialog_Icon.png")
+Tasks_Icon = tk.PhotoImage(file="Assets/pythontheme/Images/Tasks_Icon.png")
 
-File_Manager_Icon = tk.PhotoImage(file="Assets/Images/File_Manager_Icon.png")
-Screen_Icon = tk.PhotoImage(file="Assets/Images/Screen_Icon.png")
+File_Manager_Icon = tk.PhotoImage(file="Assets/pythontheme/Images/File_Manager_Icon.png")
+Screen_Icon = tk.PhotoImage(file="Assets/pythontheme/Images/Screen_Icon.png")
 
 # Buttons (left side) =============================================================================================
 
@@ -502,7 +502,7 @@ def RightClickEvent():
 ContextualMenu = tk.PhotoImage(file="Assets/ContextualMenu.png")
 
 # Buttons
-ViewButton = tk.PhotoImage(file="Assets/Buttons/CM_View_button.png")
+ViewButton = tk.PhotoImage(file="Assets/pythontheme/Buttons/CM_View_button.png")
 
 Contextual_Menu = Label(
     Ventana,
