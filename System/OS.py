@@ -27,7 +27,7 @@ Os.resizable(0, 0)
 Os.configure(background="#000000")
 
 # Local variables 
-Kernel = 4  
+Kernel = 3  
 
 Load = 0
 
@@ -114,9 +114,6 @@ if Is_in_Boot == True :
         #print(Load)
         #print(Booted)
 
-        if Load > 59:
-           Is_in_Login == True
-
         frame = frames[ind]
         ind += 1
         if ind == frameCnt:
@@ -131,6 +128,8 @@ if Is_in_Boot == True :
     Os.after(1, update, 0)
 
 
+if Is_in_Boot == True :
+    print("Booting!...")
 
 # -----------------------------------------------------------------[ Login ]------------------------------------------------------------------------- #
 
@@ -143,45 +142,69 @@ if Is_in_Boot == True :
   just press the button ._.                                          
                                                          
   -----------------------------------------------------  
-"""
+"""  
 
-if Is_in_Login == True:
-    
 
-    # Login
-    Login_GUI_Image = tk.PhotoImage(file="Assets/GUI/Login.png")
-    Login = Label(Os, image=Login_GUI_Image, borderwidth=0.1)
-    Login.place(x=0, y=0)
+   
+# Login
+Login_GUI_Image = tk.PhotoImage(file="Assets/GUI/Login.png")
+Login = Label(Os, image=Login_GUI_Image, borderwidth=0.1)
+Login.place(x=0, y=1000)
 
-    # Login entry (Password)
-    Login_Password_Entry = Entry(
-        Login, 
-        show= "-",
-        borderwidth= 0.1,
-        width= 20,
-        fg= "White",
-        bg="#5A7EFC",
-        font= ("Segou UI", 10)
+# Login entry (Password)
+Login_Password_Entry = Entry(
+    Login, 
+    show= "-",
+    borderwidth= 0.1,
+    width= 20,
+    fg= "White",
+    bg="#5A7EFC",
+    font= ("Segou UI", 10)
     )
 
-    Login_Password_Entry.config(insertbackground="White")
-    Login_Password_Entry.insert(0,"Password")
-    Login_Password_Entry.place(x= 435, y= 344)
+Login_Password_Entry.config(insertbackground="White")
+Login_Password_Entry.insert(0,"Password")
+Login_Password_Entry.place(x= 0, y= 1000)
 
 
-    Login_Button_icon = tk.PhotoImage(file="Assets/Buttons/Login_Button.png")
-    Login_Button = Button(
-        Login,
-        width=30,
-        height=19,
-        borderwidth="0",
-        relief="raised",
-        bg="#080D11",
-        image=Login_Button_icon,
-        #command=Open_FileManager,
+Login_Button_icon = tk.PhotoImage(file="Assets/Buttons/Login_Button.png")
+Login_Button = Button(
+    Login,
+    width=30,
+    height=19,
+    borderwidth="0",
+    relief="raised",
+    bg="#080D11",
+    image=Login_Button_icon,
+    #command=Open_FileManager,
     ) 
-    Login_Button.place(x=495, y=384)
+Login_Button.place(x=0, y=1000)  
 
+def Login_screen():
+    global Booted, Is_in_Login
+
+    print("Finished!")
+    
+    Os.configure(background="#000000")
+
+    BootLogo.place(x=400, y=1000)
+    loading.place(x=480, y=1000)
+
+    Os.configure(background="#050505")
+    Os.configure(background="#477afb")
+
+    #Booted = True
+    Is_in_Login = True
+
+    if Is_in_Login == True:
+        print("Entering to login screen!...")
+
+    Login.place(x=0, y=0)
+    Login_Password_Entry.place(x= 435, y= 344)
+    Login_Button.place(x=495, y=384)  
+
+
+Os.after(15000, Login_screen)  
 
 
 
