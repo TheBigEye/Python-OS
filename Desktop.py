@@ -25,6 +25,10 @@
 
 # ======================================================================================================================
 
+
+
+from System.GUI.Attributes.Draggable import make_draggable
+from System.GUI.MessageBox import Display_MessageBox
 from tkinter import *
 import tkinter as tk
 import time
@@ -34,6 +38,7 @@ Ventana.title("PythonOS")
 Ventana.geometry("1024x600")
 Ventana.resizable(0, 0)
 Ventana.configure(background="#000000")
+Ventana.iconbitmap("Assets\Images\icon.ico")
 
 # Variables
 Wallpaper = "BlissHill"
@@ -48,31 +53,10 @@ Background = tk.Label(Ventana, image = Background_image)
 Background.place(x = -1, y = -1, relwidth = 1, relheight = 1)
 
 
-Default_Taskbar_y = 571
+Default_Taskbar_y = 571    
 
 
-# Drag and drop function
-def make_draggable(widget):
-    widget.bind("<Button-1>", on_drag_start)
-    widget.bind("<B1-Motion>", on_drag_motion)
-
-
-def on_drag_start(event):
-    widget = event.widget
-    widget.update_idletasks()
-    widget._drag_start_x = event.x
-    widget._drag_start_y = event.y
-
-
-def on_drag_motion(event): 
-    widget = event.widget
-    x = widget.winfo_x() - widget._drag_start_x + event.x
-    y = widget.winfo_y() - widget._drag_start_y + event.y
-    widget.update_idletasks()
-    widget.place(x = x, y = y)
-
-
-# Resource address table # ==============================================================================================
+# ----------------------------------------------------------------[ Resources ]----------------------------------------------------------------------- #
 
 # ---------------------------------------------------------------------------------- #
 #    Here the addresses of all the images, sounds and resources used are specified   #
@@ -83,21 +67,24 @@ def on_drag_motion(event):
 
 
 # GUI
-Taskbar_GUI_Image = tk.PhotoImage(file = "Assets/GUI/Taskbar.png") # -------------------------------------------- Taskbar
-Clockbar_GUI_Image = tk.PhotoImage(file = "Assets/GUI/Clockbar.png") # ------------------------------------------Clockbar
-StartMenu_GUI_Image = tk.PhotoImage(file = "Assets/GUI/StartMenu.png") # ------------------------------------- Start Menu
-FileManager_GUI_Image = tk.PhotoImage(file = "Assets/GUI/FileManager.png") # ------------------------------- File Manager
-ErrorMessageBox_GUI_Image = tk.PhotoImage(file = "Assets/GUI/Error_MessageBox.png") # ------------------ Error Messagebox
+Taskbar_GUI_Image = tk.PhotoImage(file = "Assets/GUI/Taskbar.png")                                              # Taskbar
+Clockbar_GUI_Image = tk.PhotoImage(file = "Assets/GUI/Clockbar.png")                                            # Clockbar
+StartMenu_GUI_Image = tk.PhotoImage(file = "Assets/GUI/StartMenu.png")                                          # Start Menu
+FileManager_GUI_Image = tk.PhotoImage(file = "Assets/GUI/FileManager.png")                                      # File Manager
 
 # Taskbar Buttons
-StartMenu_TB_Button_Image = tk.PhotoImage(file = "Assets/Buttons/Start_Button.png") # --------------------------- Start Menu
-FileManager_TB_Button_Image = tk.PhotoImage(file = "Assets/Buttons/FileManagerTaskIcon.png") # ------------- File Manager
+StartMenu_TB_Button_Image = tk.PhotoImage(file = "Assets/Buttons/Start_Button.png")                             # Start Menu
+Search_TB_Button_Image = tk.PhotoImage(file = "Assets/Buttons/SearchTaskIcon.png")                              # Search
+Browser_TB_Button_Image = tk.PhotoImage(file = "Assets/Buttons/BrowserTaskIcon.png")                            # Browser
+FileManager_TB_Button_Image = tk.PhotoImage(file = "Assets/Buttons/FileManagerTaskIcon.png")                    # File Manager
 
 # Window buttons
-Close_wd_button_image = tk.PhotoImage(file = "Assets/Buttons/Close_white.png")
+Close_WD_button_image = tk.PhotoImage(file = "Assets/Buttons/Close_white.png")
+
+# Error messagebox resources
 
 
-# =================================================== Taskbar ===========================================================
+# -----------------------------------------------------------------[ Taskbar ]------------------------------------------------------------------------ #
 
 
 # Taskbar GUI
@@ -117,7 +104,7 @@ Taskbar.place(x=50, y=Default_Taskbar_y)
 
 
 
-# ================================================= Start menu ==========================================================
+# ---------------------------------------------------------------[ Start menu ]----------------------------------------------------------------------- #
 
 
 
@@ -132,29 +119,28 @@ StartMenu = Label(
 
 )
 
-
 # Open
 def Open_StartMenu():
     StartMenu.place(x = 1, y = 126)
     time.sleep(0.1)
 
-    Start_A.place(x = 0, y = 600)
-    Start_B.place(x = 0, y = 571)
+    Open_Start_Button.place_forget()
+    Close_Start_Button.place(x = 0, y = 571)
 
 
 # Close
 def Close_StartMenu():
 
-    StartMenu.place(x = 1, y = 1000)
+    StartMenu.place_forget()
     time.sleep(0.1)
 
-    Start_A.place(x = 0, y = 571)
-    Start_B.place(x = 0, y = 600)
+    Open_Start_Button.place(x = 0, y = 571)
+    Close_Start_Button.place_forget()
 
 
 
 # Start buttons
-Start_A = Button(
+Open_Start_Button = Button(
     Ventana,
     width = 48,
     height = 28,
@@ -164,9 +150,9 @@ Start_A = Button(
     image = StartMenu_TB_Button_Image,
     command = Open_StartMenu,
 )
-Start_A.place(x = 0, y = 571)
+Open_Start_Button.place(x = 0, y = 571)
 
-Start_B = Button(
+Close_Start_Button = Button(
     Ventana,
     width = 48,
     height = 28,
@@ -176,8 +162,25 @@ Start_B = Button(
     image = StartMenu_TB_Button_Image,
     command = Close_StartMenu,
 )
-Start_B.place(x=0, y=600)
+Close_Start_Button.place_forget()
 
+
+
+def Settings_error():
+    Close_StartMenu()
+    Display_MessageBox(Background, "Error", "Settings.py", "In development, this is a test", draggable = False)
+
+def Print_error():
+    Close_StartMenu()
+    Display_MessageBox(Background, "Info", "Spoolvs.py", "In development, this is a test", draggable = False)
+
+def This_PC_error():
+    Close_StartMenu()
+    Display_MessageBox(Background, "Warning", "Core.py", "In development, this is a test", draggable = False)
+
+def FileManager_error():
+    Close_StartMenu()
+    Display_MessageBox(Background, "Error", "Explorer.py", "In development, this is a test", draggable = False)   
 
 
 # =================================================== Programs ========================================================
@@ -195,8 +198,10 @@ FileManagerMenu = Label(
 )
 
 
-FileManagerMenu.place(x=1512, y=1512)
+FileManagerMenu.place_forget()
 make_draggable(FileManagerMenu)
+
+
 
 
 def Open_FileManager():
@@ -214,7 +219,7 @@ def Close_FileManager():
 
     Ventana.title("PythonOS")
 
-    FileManagerMenu.place(x=1512, y=1512)
+    FileManagerMenu.place_forget()
 
 
 Close_FileManager_Button = Button(
@@ -222,76 +227,26 @@ Close_FileManager_Button = Button(
     width=10,
     height=10,
     bg="black",
-    image=Close_wd_button_image,
+    image=Close_WD_button_image,
     borderwidth="0",
     command=Close_FileManager,
 )
 
 Close_FileManager_Button.place(x=666, y=7)
 
-
-
-
-# ============================================== Error MessageBox ====================================================
-
-# Error MessgaeBox
-Error_MessageBox = Label(
-    Background,
-    width=382,
-    height=106,
-    bg="white",
-    image=ErrorMessageBox_GUI_Image,
-    borderwidth="0",
-)
-
-Error_MessageBox.place(x=1512, y=1512)
-
-
-def Open_error():
-
-    StartMenu.place(x=1, y=1000)
-    time.sleep(0.1)
-    Close_StartMenu
-
-    time.sleep(1)
-    Error_MessageBox.place(x=320, y=240)
-
-
-def Close_error():
-    time.sleep(0.3)
-    Error_MessageBox.place(x=1512, y=1512)
-
-
-OK_ErrorMessageBox_GUI_Image = tk.PhotoImage(file="Assets/Buttons/OK_Button.png")
-OK_ErrorMessageBox = Button(
-    Error_MessageBox,
-    width=30,
-    height=22,
-    bg="white",
-    image=OK_ErrorMessageBox_GUI_Image,
-    borderwidth="0",
-    command=Close_error,
-)
-
-OK_ErrorMessageBox.place(x=343, y=78)
-
-Close_ErrorMessageBox_GUI_Image = tk.PhotoImage(file="Assets/Buttons/Close_red.png")
-Close_ErrorMessageBox = Button(
-    Error_MessageBox,
-    width=7,
-    height=7,
-    bg="red",
-    image=Close_ErrorMessageBox_GUI_Image,
-    borderwidth="0",
-    command=Close_error,
-)
-
-Close_ErrorMessageBox.place(x=359, y=11)
-
-
-
-
 # ============================================== Iconos de la barra ===================================================
+
+Search_task_icon = Button(
+    Taskbar,
+    width=43,
+    height=25,
+    borderwidth="0",
+    relief="raised",
+    bg="#080D11",
+    image=Search_TB_Button_Image,
+    command=Open_FileManager,
+)
+Search_task_icon.place(x=-12, y=2)
 
 FileManager_task_icon = Button(
     Taskbar,
@@ -303,7 +258,19 @@ FileManager_task_icon = Button(
     image=FileManager_TB_Button_Image,
     command=Open_FileManager,
 )
-FileManager_task_icon.place(x=0, y=2)
+FileManager_task_icon.place(x=24, y=2)
+
+Browser_task_icon = Button(
+    Taskbar,
+    width=43,
+    height=25,
+    borderwidth="0",
+    relief="raised",
+    bg="#080D11",
+    image=Browser_TB_Button_Image,
+    command=Open_FileManager,
+)
+Browser_task_icon.place(x=64, y=2)
 
 
 # Base de los iconos de la barra de tarea
@@ -396,7 +363,7 @@ def times():
 
 clock = Label(Taskbar, borderwidth="0", relief="raised")
 clock.after(1, times)
-clock.place(x=928, y=5)
+clock.place(x=928, y=6)
 
 
 # ============================================== Botones de inicio =====================================================
@@ -415,6 +382,7 @@ Screen_Icon = tk.PhotoImage(file="Assets/Images/Screen_Icon.png")
 
 # Buttons (left side) =============================================================================================
 
+
 # Settings button
 Settings_Button = Button(
     StartMenu,
@@ -424,7 +392,7 @@ Settings_Button = Button(
     bg=icon_bg,
     relief="raised",
     image=Settings_Icon,
-    command=Open_error,
+    command= Settings_error
 )
 Settings_Button.place(x=65, y=224)
 
@@ -437,7 +405,7 @@ Settings_Button_2 = Button(
     bg=icon_bg,
     relief="raised",
     image=Settings_Icon_2,
-    command=Open_error,
+    command= Settings_error
 )
 Settings_Button_2.place(x=275, y=7)
 
@@ -450,7 +418,7 @@ Print_Button = Button(
     bg=icon_bg,
     relief="raised",
     image=Print_Dialog_Icon,
-    command=Open_error,
+    command= Print_error
 )
 Print_Button.place(x=65, y=204)
 
@@ -465,7 +433,7 @@ This_PC_Button = Button(
     bg=icon_bg,
     relief="raised",
     image=Screen_Icon,
-    command=Open_error,
+    command= This_PC_error
 )
 This_PC_Button.place(x=5, y=48)
 
@@ -478,7 +446,7 @@ File_Manager_Button = Button(
     bg=icon_bg,
     relief="raised",
     image=File_Manager_Icon,
-    command=Open_FileManager,
+    command= FileManager_error
 )
 File_Manager_Button.place(x=5, y=83)
 
@@ -509,7 +477,7 @@ ContextualMenu = tk.PhotoImage(file="Assets/ContextualMenu.png")
 ViewButton = tk.PhotoImage(file="Assets/Buttons/CM_View_button.png")
 
 Contextual_Menu = Label(
-    Ventana,
+    Background,
     width=184,
     height=233,
     image=ContextualMenu,
@@ -544,7 +512,7 @@ def disable_depopup(event):
     Background.unbind_all("<Button-1>")
 
 
-View_Button = Button(
+View_Contextual_Button = Button(
     Contextual_Menu,
     width=182,
     height=21,
@@ -552,7 +520,7 @@ View_Button = Button(
     image=ViewButton,
     command=View_Event,
 )
-View_Button.place(x=0, y=0)
+View_Contextual_Button.place(x=0, y=0)
 
 
 Background.bind("<Button-3>", open_popup)
