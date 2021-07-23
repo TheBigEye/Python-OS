@@ -9,6 +9,7 @@
 - Wallpaper
 - Draggable windows (Is bugged)
 - Right click menu
+- Message box (Error, Info, Warning)
 - Clock
 - Theme Concept by Litorom1
 
