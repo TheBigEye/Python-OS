@@ -61,7 +61,7 @@ Os.title("PythonOS")  # Window title
 Os.iconbitmap("Assets/Images/icon.ico")  # Window icon
 
 Os.geometry("1024x600")  # Window resolution
-Os.resizable(0, 0)  # Not is rezisable
+Os.resizable(0, 0)  # Not is resizable
 Os.configure(background=Black)  # Black is the color base
 
 
