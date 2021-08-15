@@ -1,4 +1,4 @@
-# ---------------------------- Liscence - Read pls -------------------------------- #
+# ---------------------------- License - Read pls -------------------------------- #
 #                                                                                   #
 #     TheBigEye - Python operating system simulator                                 #
 #     Copyright (C) 2021                                                            #
@@ -23,12 +23,9 @@
 #     from Microsoft (Until I replace them of course ...)                           #
 # --------------------------------------------------------------------------------- #
 
-# ======================================================================================================================
-
-
-
-from System.GUI.Attributes.Draggable import make_draggable
-from System.GUI.MessageBox import Display_MessageBox
+from System.GUI.Attributes.Draggable import make_draggable # Window draggable attribute
+from System.GUI.MessageBox import Display_MessageBox # MessageBox package
+from System.GUI.FileManager import Display_FileManager # FileManager package
 from tkinter import *
 import tkinter as tk
 import time
@@ -52,8 +49,8 @@ Background_image = tk.PhotoImage(file = "Assets/Wallpapers/" + Wallpaper + ".png
 Background = tk.Label(Ventana, image = Background_image)
 Background.place(x = -1, y = -1, relwidth = 1, relheight = 1)
 
-
-Default_Taskbar_y = 571    
+Default_Taskbar_x = 50
+Default_Taskbar_y = 571
 
 
 # ----------------------------------------------------------------[ Resources ]----------------------------------------------------------------------- #
@@ -63,8 +60,7 @@ Default_Taskbar_y = 571
 #    To make it more comfortable, I will put a numbering so that it is by order      #
 #                                                                                    #
 #    so organized I am XD...                                                         #
-# ---------------------------------------------------------------------------------- # 
-
+# ---------------------------------------------------------------------------------- #
 
 # GUI
 Taskbar_GUI_Image = tk.PhotoImage(file = "Assets/GUI/Taskbar.png")                                              # Taskbar
@@ -80,9 +76,6 @@ FileManager_TB_Button_Image = tk.PhotoImage(file = "Assets/Buttons/FileManagerTa
 
 # Window buttons
 Close_WD_button_image = tk.PhotoImage(file = "Assets/Buttons/Close_white.png")
-
-# Error messagebox resources
-
 
 # -----------------------------------------------------------------[ Taskbar ]------------------------------------------------------------------------ #
 
@@ -100,7 +93,7 @@ Taskbar = Label(
     relief = "raised",
 
 )
-Taskbar.place(x=50, y=Default_Taskbar_y)
+Taskbar.place(x=Default_Taskbar_x, y=Default_Taskbar_y)
 
 
 
@@ -164,77 +157,34 @@ Close_Start_Button = Button(
 )
 Close_Start_Button.place_forget()
 
-
+# ================================================== Error types ======================================================
 
 def Settings_error():
     Close_StartMenu()
-    Display_MessageBox(Background, "Error", "Settings.py", "In development, this is a test", draggable = False)
+    Display_MessageBox(Ventana, "Error", "Settings.py", "In development, this is a test", draggable = False)
 
 def Print_error():
     Close_StartMenu()
-    Display_MessageBox(Background, "Info", "Spoolvs.py", "In development, this is a test", draggable = False)
+    Display_MessageBox(Ventana, "Info", "Spoolvs.py", "In development, this is a test", draggable = False)
 
 def This_PC_error():
     Close_StartMenu()
-    Display_MessageBox(Background, "Warning", "Core.py", "In development, this is a test", draggable = False)
+    Display_MessageBox(Ventana, "Warning", "Core.py", "In development, this is a test", draggable = False)
 
 def FileManager_error():
     Close_StartMenu()
-    Display_MessageBox(Background, "Error", "Explorer.py", "In development, this is a test", draggable = False)   
+    Display_MessageBox(Ventana, "Error", "Explorer.py", "In development, this is a test", draggable = False)
 
 
 # =================================================== Programs ========================================================
 
 
-
-# File Manager
-FileManagerMenu = Label(
-    Background,
-    width=687,
-    height=374,
-    bg="black",
-    image=FileManager_GUI_Image,
-    borderwidth="0",
-)
-
-
-FileManagerMenu.place_forget()
-make_draggable(FileManagerMenu)
-
-
-
-
-def Open_FileManager():
-
+def FileManager():
     Close_StartMenu()
-
-    Ventana.title("PythonOS - File Manager")
-
-    time.sleep(0.2)
-    FileManagerMenu.place(x=250, y=150)
+    Display_FileManager(Ventana, "This PC", draggable = False)
 
 
-def Close_FileManager():
-    time.sleep(0.4)
-
-    Ventana.title("PythonOS")
-
-    FileManagerMenu.place_forget()
-
-
-Close_FileManager_Button = Button(
-    FileManagerMenu,
-    width=10,
-    height=10,
-    bg="black",
-    image=Close_WD_button_image,
-    borderwidth="0",
-    command=Close_FileManager,
-)
-
-Close_FileManager_Button.place(x=666, y=7)
-
-# ============================================== Iconos de la barra ===================================================
+# ============================================== Taskbar icons ========================================================
 
 Search_task_icon = Button(
     Taskbar,
@@ -244,7 +194,7 @@ Search_task_icon = Button(
     relief="raised",
     bg="#080D11",
     image=Search_TB_Button_Image,
-    command=Open_FileManager,
+    command=FileManager,
 )
 Search_task_icon.place(x=-12, y=2)
 
@@ -256,7 +206,7 @@ FileManager_task_icon = Button(
     relief="raised",
     bg="#080D11",
     image=FileManager_TB_Button_Image,
-    command=Open_FileManager,
+    command=FileManager,
 )
 FileManager_task_icon.place(x=24, y=2)
 
@@ -268,12 +218,12 @@ Browser_task_icon = Button(
     relief="raised",
     bg="#080D11",
     image=Browser_TB_Button_Image,
-    command=Open_FileManager,
+    command=FileManager,
 )
 Browser_task_icon.place(x=64, y=2)
 
 
-# Base de los iconos de la barra de tarea
+# Taskbar icons base (volume, internet, battery, etc)
 Taskbar_Icons_image = tk.PhotoImage(file="Assets/Taskbar_Icons.png")
 
 Taskbar_Icons = Label(
@@ -288,7 +238,7 @@ Taskbar_Icons = Label(
 Taskbar_Icons.place(x=824, y=1)
 
 
-# Icono de la bateria
+# Battery icon
 Battery_icon = tk.PhotoImage(file="Assets/Images/Battery.png")
 
 Battery_Status_icon = Button(
@@ -303,7 +253,7 @@ Battery_Status_icon = Button(
 Battery_Status_icon.place(x=24, y=-6)
 
 
-# Icono del internet
+# Internet connection icon
 Internet_Warning_icon = tk.PhotoImage(
     file="Assets/Images/Internet_Warning.png"
 )  # Warning status
@@ -324,7 +274,7 @@ Internet_Status_icon = Button(
 Internet_Status_icon.place(x=48, y=-6)
 
 
-# Icono del volumen de sonido
+# Sound volume icon
 Volume_icon = tk.PhotoImage(file="Assets/Images/Volume.png")
 
 Volume_Status_icon = Button(
@@ -366,7 +316,7 @@ clock.after(1, times)
 clock.place(x=928, y=6)
 
 
-# ============================================== Botones de inicio =====================================================
+# ============================================== Start buttons =====================================================
 
 icon_bg = "#212121"
 
