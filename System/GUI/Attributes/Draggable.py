@@ -1,7 +1,6 @@
 from tkinter import *
 
 # Drag and drop function
-
 def on_drag_start(event):
 
     global widget
@@ -10,7 +9,7 @@ def on_drag_start(event):
     widget._drag_start_x = event.x
     widget._drag_start_y = event.y
 
-    widget['cursor'] = "hand2"
+    #widget['cursor'] = "hand2"
 
 
 def on_drag_finish(event):
@@ -21,7 +20,7 @@ def on_drag_finish(event):
     widget._drag_start_x = 0
     widget._drag_start_y = 0
 
-    widget['cursor'] = ""
+    #widget['cursor'] = ""
 
 
 def on_drag_motion(event): 
@@ -36,7 +35,7 @@ def on_drag_motion(event):
 
 def make_draggable(widget):
 
-    global on_drag_start, on_drag_motion
+    global on_drag_start, on_drag_motion, on_drag_finish
 
     widget.bind("<Button-1>", on_drag_start)
     widget.bind("<ButtonRelease-1>", on_drag_finish)
