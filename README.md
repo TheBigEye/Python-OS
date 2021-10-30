@@ -1,8 +1,7 @@
 # Python-OS
 (Work in progress)A simulator of the operating system (inspired in windows) made in python using the Tkinter module
 
-# Features implemented:
-
+## Features implemented:
 - Start button
 - Start menu gui (For now there are only icons, then I will add buttons to run programs)
 - Taskbar
@@ -12,8 +11,7 @@
 - Clock
 - Theme Concept by Litorom1
 
-# Future features:
-
+## Future features:
 - File Manager
 - Browser
 - Login screen
@@ -21,8 +19,7 @@
 - Control panel
 - Draggable desktop icons
 
-# Features less likely to implement:
-
+## Features less likely to implement:
 - Startup screen
 - Cmd Screen
 - Internet, screen resolution and file options
