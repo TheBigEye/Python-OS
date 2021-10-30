@@ -1,33 +1,30 @@
-from tkinter import *
-from System.GUI.Attributes.Draggable import make_draggable
+from tkinter import Label, Button, PhotoImage
+from System.GUI.Attributes.Draggable import make_draggable_efficient
 
 __author__ = 'TheBigEye'
-__version__ = '1.0'
+__version__ = '1.1'
 
+def Display_FileManager(master, tab, draggable = False):
 
-
-def Display_FileManager(master, tab, draggable =  False):
-
-
-    # Documentation -----------------------------------------------------------------------------------------------------------
+# Documentation ---------------------------------------------------------------------------------------------------------------
 
     """
-    Create and display the FileManager
+    Create and display the File manager.
 
     Parameters
     ----------
     `master` : string
-        The parent where the File Manager will be placed.
+        The parent where the File manager will be placed.
 
     `tab` : string
-        Tab to be displayed from the File Manager: `Desktop`, `This PC`, `Images`, etc, (this is obligatory for it to work).
-
-    `draggable` : boolean
-        Specifies whether or not the File Manager can be moved with the mouse.
+        The tab that the File manager will display when it appears on the screen, `This PC`, `Desktop`, `Documents`, etc...
+        
+    `draggable` : boolean, optional
+        Specifies whether or not the File manager can be moved with the mouse., by default False
 
     """
 
-    # FileManager global variables --------------------------------------------------------------------------------------------
+# FileManager global variables ------------------------------------------------------------------------------------------------
     global FileManager_GUI_Image, Close_FileManager_image, Navigation_Pane_Image, Control_Pane_Image # Images
     global Window_bg # Colors
     global FileManager, Close_FileManager, Close_FileManager_Button, List, Control_pane, Navigation_pane # Functions
@@ -75,7 +72,7 @@ def Display_FileManager(master, tab, draggable =  False):
 
     if (draggable == True):
 
-        make_draggable(FileManager)
+        make_draggable_efficient(FileManager)
 
     Control_pane = Label(
         FileManager,
@@ -105,7 +102,6 @@ def Display_FileManager(master, tab, draggable =  False):
         borderwidth="0",
         command=Close_FileManager,
     )
-    
     
 
     FileManager.place(x= 225, y= 148)
@@ -211,14 +207,22 @@ def Display_FileManager(master, tab, draggable =  False):
     Documents_button.place(x= 3, y= 192)
     Downloads_button.place(x= 3, y= 216)
 
+    def update_filemanager():
+        Control_pane.update()
+        This_PC_button.update()
+        Desktop_button.update()
+        Documents_button.update()
+        Downloads_button.update()
+        FileManager.update()
+        FileManager.after(1, update_filemanager)
+
+
+    update_filemanager()
 
 
 
 
-
-
-
-
-
-
-
+# Print the module info
+#print("Author: " + str(__author__))
+#print("Module version: " + str(__version__))
+#print(Display_FileManager.__doc__)

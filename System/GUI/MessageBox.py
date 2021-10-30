@@ -1,14 +1,14 @@
-from tkinter import *
+from tkinter import Button, Label, PhotoImage  
 from System.GUI.Attributes.Draggable import make_draggable
 
 __author__ = 'TheBigEye'
 __version__ = '1.1'
 
-
+Font = "Segou UI"
 
 def Display_MessageBox(master, type, title, message, draggable = False):
 
-    # Documentation -----------------------------------------------------------------------------------------------------------
+# Documentation -----------------------------------------------------------------------------------------------------------
 
     """
     Create and display a Message box with title and personalized message.
@@ -32,17 +32,17 @@ def Display_MessageBox(master, type, title, message, draggable = False):
 
     """
 
-    # Error messagebox global variables ---------------------------------------------------------------------------------------
+# Error messagebox global variables ---------------------------------------------------------------------------------------
     global Error_MessageBox_GUI_Image, Error_Close_MessageBox_Image, Error_Logo_Image, Error_Ok_MessageBox_Image # Images
     global Error_Title_bg, Error_Message_bg # Colors
     global Error_MessageBox, Error_Title_label, Error_Message_label, Error_Logo, Error_Close_MessageBox, Error_Ok_button, Error_Close_button # Functions
 
-    # Info messagebox global variables ----------------------------------------------------------------------------------------
+# Info messagebox global variables ----------------------------------------------------------------------------------------
     global Info_MessageBox_GUI_Image, Info_Close_MessageBox_Image, Info_Logo_Image, Info_Ok_MessageBox_Image
     global Info_Title_bg, Info_Message_bg
     global Info_MessageBox, Info_Title_label, Info_Message_label, Info_Logo, Info_Close_MessageBox, Info_Ok_button, Info_Close_button
 
-    # Warning messagebox global variables -------------------------------------------------------------------------------------
+# Warning messagebox global variables -------------------------------------------------------------------------------------
     global Warning_MessageBox_GUI_Image, Warning_Close_MessageBox_Image, Warning_Logo_Image, Warning_Ok_MessageBox_Image
     global Warning_Title_bg, Warning_Message_bg
     global Warning_MessageBox, Warning_Title_label, Warning_Message_label, Warning_Logo, Warning_Close_MessageBox, Warning_Ok_button, Warning_Close_button
@@ -53,7 +53,6 @@ def Display_MessageBox(master, type, title, message, draggable = False):
     if (type == "Error"):
 
         Error_MessageBox_GUI_Image = PhotoImage(file = "Assets/GUI/Messagebox/Error_MessageBox.png")
-
         Error_Close_MessageBox_Image = PhotoImage(file="Assets/GUI/Messagebox/Close_Error_Button.png")
         Error_Logo_Image = PhotoImage(file="Assets/GUI/Messagebox/Error.png")
         Error_Ok_MessageBox_Image = PhotoImage(file="Assets/GUI/Messagebox/OK_Error_Button.png")
@@ -77,7 +76,7 @@ def Display_MessageBox(master, type, title, message, draggable = False):
             bg = Error_Title_bg,
             fg = "#FFFFFF",
             text = title,
-            font=("Segou UI", 9)
+            font=(Font, 9)
         )
 
         Error_Message_label = Label (
@@ -87,7 +86,7 @@ def Display_MessageBox(master, type, title, message, draggable = False):
             bg = Error_Message_bg,
             fg = "#FFFFFF",
             text = message,
-            font=("Segou UI", 8)
+            font=(Font, 8)
         )
 
         Error_Logo = Label (
@@ -145,7 +144,6 @@ def Display_MessageBox(master, type, title, message, draggable = False):
     if (type == "Info"):
 
         Info_MessageBox_GUI_Image = PhotoImage(file = "Assets/GUI/Messagebox/Info_MessageBox.png")
-
         Info_Close_MessageBox_Image = PhotoImage(file="Assets/GUI/Messagebox/Close_Info_Button.png")
         Info_Logo_Image = PhotoImage(file="Assets/GUI/Messagebox/Info.png")
         Info_Ok_MessageBox_Image = PhotoImage(file="Assets/GUI/Messagebox/OK_Info_Button.png")
@@ -169,7 +167,7 @@ def Display_MessageBox(master, type, title, message, draggable = False):
             bg = Info_Title_bg,
             fg = "#FFFFFF",
             text = title,
-            font=("Segou UI", 9)
+            font=(Font, 9)
         )
 
         Info_Message_label = Label (
@@ -179,7 +177,7 @@ def Display_MessageBox(master, type, title, message, draggable = False):
             bg = Info_Message_bg,
             fg = "#FFFFFF",
             text = message,
-            font=("Segou UI", 8)
+            font=(Font, 8)
         )
 
         Info_Logo = Label (
@@ -237,7 +235,6 @@ def Display_MessageBox(master, type, title, message, draggable = False):
     if (type == "Warning"):
 
         Warning_MessageBox_GUI_Image = PhotoImage(file = "Assets/GUI/Messagebox/Warning_MessageBox.png")
-
         Warning_Close_MessageBox_Image = PhotoImage(file="Assets/GUI/Messagebox/Close_Warning_Button.png")
         Warning_Logo_Image = PhotoImage(file="Assets/GUI/Messagebox/Warning.png")
         Warning_Ok_MessageBox_Image = PhotoImage(file="Assets/GUI/Messagebox/OK_Warning_Button.png")
@@ -261,7 +258,7 @@ def Display_MessageBox(master, type, title, message, draggable = False):
             bg = Warning_Title_bg,
             fg = "#FFFFFF",
             text = title,
-            font=("Segou UI", 9)
+            font=(Font, 9)
         )
 
         Warning_Message_label = Label (
@@ -271,7 +268,7 @@ def Display_MessageBox(master, type, title, message, draggable = False):
             bg = Warning_Message_bg,
             fg = "#FFFFFF",
             text = message,
-            font=("Segou UI", 8)
+            font=(Font, 8)
         )
 
         Warning_Logo = Label (
@@ -322,3 +319,8 @@ def Display_MessageBox(master, type, title, message, draggable = False):
         Warning_Logo.place(x= 12, y= 44)
 
         Warning_MessageBox.place(x= 320, y= 240)
+
+# Print the module info
+# print("Author: " + str(__author__))
+# print("Module version: " + str(__version__))
+# print(Display_MessageBox.__doc__)
