@@ -1,6 +1,4 @@
 # System variables (| Variable | True/False/int |)
-import os
-import datetime
 
 Kernel_lvl = "NULL"  # Kernel main variable
 
@@ -42,53 +40,9 @@ elif Kernel_lvl == "NULL":  # Normal boot
     Is_Boot = True
 
 
-# Implements a Logger, this will be used to log all the errors and information in a file in the Logs folder.
-def Logger(Log_Message):
-
-    # If the file does not exist, it creates it in the path where this project is, inside the Logs folder.
-    if not os.path.exists("Logs"):
-        os.makedirs("Logs")
-
-    current_time = str(datetime.datetime.now())
-
-    # Open the file and write the message.
-    with open("Logs/Log.txt", "a") as Log_File:
-        Log_File.write(current_time + " | " + Log_Message + "\n")
-
 
 # Define the Routines() method, inside there will be functions and things that will be executed when calling this method.
 def routines():
-
-    if Is_Boot:  # Normal boot
-
-        Logger("Starting from Normal boot")
-
-    elif Is_in_BIOS:  # BIOS Screen
-
-        Logger("Starting from BIOS Screen")
-
-    elif Is_in_INSTALLER:  # OS Installer
-
-        Logger("Starting from OS Installer")
-
-    elif Is_in_Boot:  # Bootloader
-
-        Logger("Starting from Bootloader")
-
-    elif Is_in_Login:  # Login Screen
-
-        Logger("Starting from Login Screen")
-
-    elif Is_in_Desktop:  # In the desktop
-
-        Logger("Starting from In the desktop")
-
-    elif Is_FAIL:  # Fail message
-
-        Logger("Fail message, STOPING...")
-
-    else:  # Unknown
-
-        Logger("Unknown boot method!")
+    pass
 
     

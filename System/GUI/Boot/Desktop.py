@@ -1,7 +1,8 @@
-from System.Core.Core import Logger
 from System.Utils.Colormap import Black
 from tkinter import Button, Entry, Label, PhotoImage
 import time
+
+from System.Utils.Utils import print_log
 
 __author__ = 'TheBigEye'
 __version__ = '2.0'
@@ -12,18 +13,21 @@ def Desktop(master):
  # Documentation ---------------------------------------------------------------------------------------------------------------
 
     """
-    Create and display the entire desktop.
+    This function is used to create the desktop.
 
     Parameters
     ----------
-    `master` : string
-        The parent where the desktop will be placed.
+    master : str
+        The Tkinter object which is the parent of all widgets.
 
+    Returns
+    -------
+        None
     """
 
   # ------------------------------------------------------[ Desktop ]----------------------------------------------------------------
 
-    Logger("Desktop: Loaded desktop functions and running")    
+    print_log("Desktop: Loaded desktop functions and running")    
 
     global Wallpaper, Desktop_wallpaper
 

@@ -23,7 +23,7 @@
 #     from Microsoft (Until I replace them of course ...)                           #
 # --------------------------------------------------------------------------------- #
 
-from System.Utils.Keymap import LEFT_MOUSE_CLICK, RIGHT_MOUSE_CLICK
+
 from System.GUI.Terminal import Display_Terminal
 from System.GUI.MessageBox import Display_MessageBox # MessageBox package
 from System.GUI.FileManager import Display_FileManager # FileManager package
@@ -454,17 +454,17 @@ def close_popup(event):
     try:
         Contextual_Menu.place_forget()
         Background.after(1)
-        Background.unbind_all(LEFT_MOUSE_CLICK)
+        Background.unbind_all("<Button-1>")
     except:
         pass
 
 
 def enable_depopup(event):
-    Background.bind_all(LEFT_MOUSE_CLICK, close_popup)
+    Background.bind_all("<Button-1>", close_popup)
 
 
 def disable_depopup(event):
-    Background.unbind_all(LEFT_MOUSE_CLICK)
+    Background.unbind_all("<Button-1>")
 
 
 View_Contextual_Button = Button(
@@ -478,7 +478,7 @@ View_Contextual_Button = Button(
 View_Contextual_Button.place(x=0, y=0)
 
 
-Background.bind(RIGHT_MOUSE_CLICK, open_popup)
+Background.bind("<Button-3>", open_popup)
 Background.bind("<Motion>", enable_depopup)
 Contextual_Menu.bind("<Motion>", disable_depopup)
 # ======================================================================================================================
@@ -489,47 +489,12 @@ Contextual_Menu.bind("<Motion>", disable_depopup)
 # all widgets in the window are updated forever every 1 milliseconds without it freezing the window or widgets.
 # This is done by the after method.
 
-def update_widgets():
-    Background.update()
-    Background.update()
-    Taskbar.update()
-    StartMenu.update()
-    Clockbar.update()
-    Taskbar_Icons.update()
-    Background.after(1, update_widgets)
 
-
-update_widgets()
 
 # this fixes the bug (Taskbar buttons or labels disappear or blink when a widget is dragged onto them).
 # This is done by the bind method.
 
-def bind_widgets():
-    Background.bind("<Button-3>", RightClickEvent)
-    Background.bind("<Button-1>", enable_depopup)
-    Background.bind("<Motion>", enable_depopup)
-    Background.bind("<ButtonRelease-3>", disable_depopup)
-    Background.bind("<Motion>", disable_depopup)
-    Background.bind("<Button-1>", disable_depopup)
-    Background.bind("<ButtonRelease-1>", disable_depopup)
-    Background.bind("<Button-3>", disable_depopup)
-    Background.bind("<Motion>", disable_depopup)
-    Background.bind("<ButtonRelease-3>", disable_depopup)
-    Background.bind("<Motion>", disable_depopup)
-    Background.bind("<ButtonRelease-1>", disable_depopup)
-    Background.bind("<Button-3>", disable_depopup)
-    Background.bind("<Motion>", disable_depopup)
-    Background.bind("<ButtonRelease-3>", disable_depopup)
-    Background.bind("<Motion>", disable_depopup)
-    Background.bind("<ButtonRelease-1>", disable_depopup)
-    Background.bind("<Button-3>", disable_depopup)
-    Background.bind("<Motion>", disable_depopup)
-    Background.bind("<ButtonRelease-3>", disable_depopup)
-    Background.bind("<Motion>", disable_depopup)
-    Background.bind("<ButtonRelease-1>", disable_depopup)
 
-
-Background.after(1, bind_widgets)
 
 
 Ventana.mainloop()
