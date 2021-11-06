@@ -1,0 +1,7 @@
+
+
+# Mouse
+LEFT_MOUSE_CLICK = "<Button-1>"
+MIDDLE_MOUSE_CLICK = "<Button-3>"
+RIGHT_MOUSE_CLICK = "<Button-3>"
+DRAGGING_MOUSE_CLICK = "<B1-Motion>"

@@ -1,0 +1,22 @@
+# coding: utf8
+
+# Terminal prompts
+TRIPLE_PROMPT_ICON = ">>>"
+DOUBLE_PROMPT_ICON = ">>"
+MONO_PROMPT_ICON = ">"
+BAR_PROMPT_ICON = "▂"
+
+DISKETTE_ICON_1 = "💾"
+DISKETTE_ICON_2 = "🖬"
+DISKETTE_ICON_3 = "🖪"
+DISKETTE_ICON_4 = "🖫"
+
+HARD_DISK_ICON = "🖴"
+
+DVD_ICON = "📀"
+CD_ICON = "💿"
+
+PC_ICON = "🖥️"
+
+EXCLAMATION = "❗"
+DOUBLE_EXCLAMATION = "❗❗"
