@@ -38,7 +38,6 @@ def res_warning():
 
         print_warning("The resolution of the screen is lower than that of the window.")
 
-
 res_warning()
 routines()
 

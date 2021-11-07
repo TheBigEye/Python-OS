@@ -214,7 +214,7 @@ def Display_FileManager(master, tab, draggable = False):
         Documents_button.update()
         Downloads_button.update()
         FileManager.update()
-        FileManager.after(1, update_filemanager)
+        FileManager.after(10, update_filemanager)
 
 
     update_filemanager()
