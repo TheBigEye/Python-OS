@@ -1,0 +1,24 @@
+21:24:11 | [ERROR] Boot order not found or not assigned, STOPING...
+21:24:48 | Bootloader: Initializing...
+21:24:48 | Starting from the normal boot
+21:24:58 | Bootloader: Finishing...
+21:25:00 | Desktop: Loaded desktop functions and running
+23:10:42 | Starting from desktop
+23:11:10 | Starting from desktop
+23:25:45 | Starting from desktop
+23:26:12 | Starting from desktop
+23:26:29 | Starting from desktop
+23:26:39 | Starting from desktop
+23:26:49 | Starting from desktop
+23:30:33 | Starting from desktop
+23:30:47 | Starting from desktop
+23:31:05 | Starting from desktop
+23:31:20 | Starting from desktop
+23:32:04 | Starting from desktop
+23:32:19 | Starting from desktop
+23:33:15 | Starting from desktop
+23:39:54 | Starting from desktop
+23:40:39 | Starting from desktop
+23:41:44 | Starting from desktop
+23:42:30 | Starting from desktop
+23:43:18 | Starting from desktop

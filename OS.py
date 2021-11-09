@@ -17,7 +17,7 @@ from System.GUI.Boot.Desktop import Desktop
 from System.GUI.Boot.Installer import Os_Installer
 from System.GUI.Boot.Login import Login
 from System.GUI.Boot.RSOD import RSOD
-from System.Utils.Utils import Logger_improved, print_error, print_info, print_log, print_warning
+from System.Utils.Utils import print_error, print_log, print_warning
 
 # -----------------------------------------------------------------[ Main ]----------------------------------------------------------------------- #
 
@@ -31,14 +31,15 @@ Os.resizable(0, 0)  # Not is resizable
 Os.configure(background=Black)  # Black is the color base
 
 
-#  if the resolution of the screen is lower than that of the window, then it will print a warning on the console.
-def res_warning():
+#  Warnings.
+def warnings():
 
     if Os.winfo_screenwidth() < 1024 and Os.winfo_screenheight() < 600:
 
         print_warning("The resolution of the screen is lower than that of the window.")
 
-res_warning()
+
+warnings()
 routines()
 
 # -----------------------------------------------------------------[ Boot ]-------------------------------------------------------------------------- #
@@ -57,7 +58,7 @@ def start_boot():
 if Is_FAIL == True:
     RSOD(Os)
     print_error("The system has failed.")
-    
+
     # Stop the program after 8 secs.
     Os.after(8000, Os.destroy)
 
@@ -86,7 +87,7 @@ elif Is_Boot == True:
     print_log("Starting from the normal boot")
 
 else:
-    print_error("Boot order not found or not assigned, STOPING...") 
+    print_error("Boot order not found or not assigned, STOPING...")
 
     # Stop the program
     Os.destroy()

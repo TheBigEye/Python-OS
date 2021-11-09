@@ -286,18 +286,27 @@ def CMD(entry, output):
     if command.startswith("time()"):
         time_command()
 
-
-    # python interpreter,(using eval and exec) When executing this command, python commands can be putted through Terminal_entry and executed there as if it were a real terminal and print in Terminal_screen the command result.
     if command.startswith(">>> "):
         command = command.replace(">>> ", "")
         command = command.replace("", "")
         command = command.replace("", "")
-        output.insert(INSERT, command + "\n")
+
+    # if command is empty, will print a new line.
+    if command == "":
+        output.insert(INSERT, ">>> " + "\n")
         output.see(END)
+
+        # if command is not empty, will print the command in Terminal_screen and execute it.
+    else:
+        output.insert(INSERT, ">>> " + command + "\n")
+        output.see(END)
+            
         try:
-            exec(command)
-        except Exception as e:
-            output.insert(INSERT, str(e) + "\n")
+            # Execute the command and use the variables
+            exec(command, globals())
+            
+        except Exception as error:
+            output.insert(INSERT, str(error) + "\n")
             output.see(END)
 
 
@@ -330,6 +339,19 @@ def CMD(entry, output):
     if command.startswith("cd("):
         cd_command(command)
 
+    # Tree command will print the directory tree of the current file, like: tree() , > tree.
+    def tree_command():
+        """Tree command"""
+
+        output.insert(INSERT, "Directory tree: " + "\n")
+        output.see(END)
+        for root, dirs, files in os.walk("."):
+            level = root.replace(".", "")
+            output.insert(INSERT, level + "\n")
+            output.see(END)
+
+    if command.startswith("tree()"):
+        tree_command()
 
     # help command will print the help menu, like: help() , > help - description.
     def help_command():

@@ -92,7 +92,6 @@ def Display_FileManager(master, tab, draggable = False):
         borderwidth="0",
     )    
 
-
     Close_FileManager_Button = Button(
         Control_pane,
         width=10,
@@ -207,17 +206,7 @@ def Display_FileManager(master, tab, draggable = False):
     Documents_button.place(x= 3, y= 192)
     Downloads_button.place(x= 3, y= 216)
 
-    def update_filemanager():
-        Control_pane.update()
-        This_PC_button.update()
-        Desktop_button.update()
-        Documents_button.update()
-        Downloads_button.update()
-        FileManager.update()
-        FileManager.after(10, update_filemanager)
 
-
-    update_filemanager()
 
 
 

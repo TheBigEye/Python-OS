@@ -116,6 +116,7 @@ def Display_Terminal(master, draggable=False):
 
     Terminal_entry.config(insertbackground="white")
     Terminal_entry.bind("<Return>", Command_handler)
+    Terminal_entry.focus_set()
 
     if draggable == True:
 
