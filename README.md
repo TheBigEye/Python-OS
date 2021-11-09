@@ -5,6 +5,7 @@
 - Start button
 - Start menu gui (For now there are only icons, then I will add buttons to run programs)
 - Taskbar
+- Terminal
 - Wallpaper
 - Draggable windows (Is bugged)
 - Right click menu
@@ -21,6 +22,5 @@
 
 ## Features less likely to implement:
 - Startup screen
-- Cmd Screen
 - Internet, screen resolution and file options
 - The love of her ._.
