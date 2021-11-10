@@ -47,86 +47,108 @@ def CMD(entry, output):
 
     # Commands ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-    # print command, typing it into terminal_entry and hitting enter should print the set string, like: print("hello") , > Hello.
-    def print_command(command):
-        """Print command"""
+    # print command output, like: print("something") , > something.
+    def print_command():
 
-        # Terminal_screen.insert(INSERT, command + "\n")
-        output.see(END)
+        if "(" in command and ")" in command:
+            if "\"" in command:
+                output.insert(INSERT, eval(command.replace("print(", "").replace(")", "")) + "\n")
 
-    if command.startswith("print"):
-        print_command(command)
+            else:
+                output.insert(INSERT, "Error: Quotation marks are needed." + "\n")
+                
+        else:
+            output.insert(INSERT, "Error: brackets are needed" + "\n")
+
+    if command.startswith("print("):
+        print_command()
 
 
-    # add command is a special command that will add the numbers in the command together, like: add(1,2,3,4,5) , > 15.
+    # add command is a special command that will add the numbers in the command together, like: add(1,2,3,4,5) , > 15, also can be used to add strings, like: add("hello", "world") , > helloworld, or add variables, like: add(a, b) , > a+b.
     def add_command(command):
-        """Sum command"""
+        """Add command"""
 
-        command = command.replace("add(", "")
-        command = command.replace(")", "")
-        command = command.split(",")
-        add = 0
-        for number in command:
-            add += int(number)
-        output.insert(INSERT, add)
-        output.insert(INSERT, "\n")
-        output.see(END)
+        # check if the command has brackets
+        if "(" in command and ")" in command:
 
+            # add strings, like: add("hello", "world") , > helloworld., or, like: add("hi", "this", "is", "a", "big", "text") , > hi this is a big text.
+            if "\"" in command:
+                command = command.replace("add(", "").replace(")", "")
+                command = command.replace("\"", "")
+                command = command.split(",")
+                for word in command:
+                    output.insert(INSERT, str(word) + "")
+                output.insert(INSERT, "\n")
+
+            else:
+                # add numbers. like: add(1,2), > 3, or add(1,2,3,4,5) , > 15.
+                command = command.replace("add(", "").replace(")", "")
+                command = command.split(",")
+                add = 0
+                for number in command:
+                    add += int(number)
+                output.insert(INSERT, add)
+                output.insert(INSERT, "\n")
+                output.see(END)
+
+        else:
+            # if the command doesn't have brackets, the command is invalid
+            output.insert(INSERT, "Error: doesn't have brackets" + "\n")
+        
     if command.startswith("add("):
         add_command(command)
 
 
     # subtract command is a special command that will subtract the numbers in the command together, like: rest(1,2,3,4,5) , > -14.
-    def subtract_command(command):
+    def sub_command(command):
         """Rest command"""
 
-        command = command.replace("subtract(", "")
+        command = command.replace("sub(", "")
         command = command.replace(")", "")
         command = command.split(",")
-        subtract = 0
+        sub = 0
         for number in command:
-            subtract -= int(number)
-        output.insert(INSERT, subtract)
+            sub -= int(number)
+        output.insert(INSERT, sub)
         output.insert(INSERT, "\n")
         output.see(END)
 
-    if command.startswith("subtract("):
-        subtract_command(command)
+    if command.startswith("sub("):
+        sub_command(command)
 
         
     # multiply command is a special command that will multiply the numbers in the command together, like: multiply(1,2,3,4,5) , > 120.
-    def multiply_command(command):
+    def mul_command(command):
         """Multiply command"""
 
-        command = command.replace("multiply(", "")
+        command = command.replace("mul(", "")
         command = command.replace(")", "")
         command = command.split(",")
-        multiply = 1
+        mul = 1
         for number in command:
-            multiply *= int(number)
-        output.insert(INSERT, multiply)
+            mul *= int(number)
+        output.insert(INSERT, mul)
         output.insert(INSERT, "\n")
         output.see(END)
 
-    if command.startswith("multiply("):
-        multiply_command(command)
+    if command.startswith("mul("):
+        mul_command(command)
 
 
     # divide command is a special command that will divide the numbers, like: divide(number_to_divide, number_by_which_it_is_divided) , > result, like: divide(10,2) , > 5.
-    def divide_command(command):
+    def div_command(command):
         """Divide command"""
 
-        command = command.replace("divide(", "")
+        command = command.replace("div(", "")
         command = command.replace(")", "")
         command = command.split(",")
-        divide = int(command[0]) / int(command[1])
-        output.insert(INSERT, divide)
+        div = int(command[0]) / int(command[1])
+        output.insert(INSERT, div)
         output.insert(INSERT, "\n")
         output.see(END)
 
-    if command.startswith("divide("):
-        divide_command(command)
-
+    if command.startswith("div("):
+        div_command(command)
 
 
     # clear command will clear the terminal, like: clear() , > .
@@ -135,7 +157,7 @@ def CMD(entry, output):
 
         output.delete(1.0, END)
 
-    if command.startswith("clear()"):
+    if command.startswith("clear") or command.startswith("cls"):
         clear_command()
 
 
@@ -145,16 +167,12 @@ def CMD(entry, output):
 
         output.destroy()
 
-    if command.startswith("exit()"):
+    if command.startswith("exit"):
         exit_command()
 
 
-    # print command output, like: print("something") , > something.
-    if command.startswith("print("):
-        command = command.replace("print(", "")
-        command = command.replace(")", "")
-        output.insert(INSERT, command)
-        output.see(END)
+
+
     # var command will create a variable, like: var(name, value) , > .
     def var_command(command):
         """Var command"""
@@ -171,6 +189,19 @@ def CMD(entry, output):
     if command.startswith("var("):
         var_command(command)
 
+    # print_value command will print the value of one or more variables, like: print_value(name) , > value, or print_value(name1, name2, name3) , > value1, value2, value3.
+    def print_value_command(command):
+        """Print value command"""
+
+        command = command.replace("print_value(", "")
+        command = command.replace(")", "")
+        command = command.split(",")
+        for name in command:
+            output.insert(INSERT, str(globals()[name]) + "\n")
+        output.see(END)
+
+    if command.startswith("print_value("):
+        print_value_command(command)
 
     # clear var command will clear the value of a variable, like: clear(var_name) , > .
     def clear_var_command(command):
@@ -286,29 +317,6 @@ def CMD(entry, output):
     if command.startswith("time()"):
         time_command()
 
-    if command.startswith(">>> "):
-        command = command.replace(">>> ", "")
-        command = command.replace("", "")
-        command = command.replace("", "")
-
-    # if command is empty, will print a new line.
-    if command == "":
-        output.insert(INSERT, ">>> " + "\n")
-        output.see(END)
-
-        # if command is not empty, will print the command in Terminal_screen and execute it.
-    else:
-        output.insert(INSERT, ">>> " + command + "\n")
-        output.see(END)
-            
-        try:
-            # Execute the command and use the variables
-            exec(command, globals())
-            
-        except Exception as error:
-            output.insert(INSERT, str(error) + "\n")
-            output.see(END)
-
 
     # dir command will print the directory of the current file, like: dir() , > dir.
     def dir_command():
@@ -353,25 +361,31 @@ def CMD(entry, output):
     if command.startswith("tree()"):
         tree_command()
 
-    # help command will print the help menu, like: help() , > help - description.
-    def help_command():
-        """Help command"""
+    def python_command(command):
 
-        output.insert(INSERT, "Terminal help menu" + "\n")
-        output.insert(INSERT, "clear(var_name) - clear the value of a variable" + "\n")
-        output.insert(INSERT, "if(condition) - check if a condition is true" + "\n")
-        output.insert(INSERT, "while(condition) - check if a condition is true and repeat the command" + "\n")
-        output.insert(INSERT, "repeat(command(args), number) - repeat a command a number of times" + "\n")
-        output.insert(INSERT, "delay(number) - delay the terminal for a number of seconds" + "\n")
-        output.insert(INSERT, "random(number) - generate a random number" + "\n")
-        output.insert(INSERT, "print_var_value(var_name) - print the value of a variable" + "\n")
-        output.insert(INSERT, "time() - print the current time" + "\n")
-        output.insert(INSERT, "dir() - print the directory of the current file" + "\n")
-        output.insert(INSERT, "cd(directory) - change the current directory" + "\n")
-        output.insert(INSERT, ">>> python_command - execute a python command" + "\n")
-        output.see(END)
+        command = command.replace(">>> ", "")
+        command = command.replace("", "")
+        command = command.replace("", "")
 
-    if command.startswith("help()"):
-        help_command()
-    
-    
+        # if command is empty, will print a new line.
+        if command == "":
+            output.insert(INSERT, ">>> " + "\n")
+            output.see(END)
+
+            # if command is not empty, will print the command in Terminal_screen and execute it.
+        else:
+            output.insert(INSERT, ">>> " + command + "\n")
+            output.see(END)
+                
+            try:
+                # Execute the command and use the variables
+                exec(command, globals())
+                
+            except Exception as error:
+                output.insert(INSERT, str(error) + "\n")
+                output.see(END)
+
+    if command.startswith(">>> "):
+        python_command(command)
+
+
