@@ -1,0 +1,41 @@
+[
+    {
+        "FolderName": "C:",
+        "FolderContent": [
+            {
+                "FileName": "lol",
+                "FileExtension": "lol",
+                "FileContent": "lol"
+            },
+            {
+                "FileName": "xd",
+                "FileExtension": "xd",
+                "FileContent": "xd"
+            },
+            {
+                "FileName": "f",
+                "FileExtension": "f",
+                "FileContent": "f"
+            },
+            {
+                "FileName": "b",
+                "FileExtension": "b",
+                "FileContent": "b"
+            },
+            {
+                "FileName": "w",
+                "FileExtension": "w",
+                "FileContent": "w"
+            },
+            {
+                "FileName": "catest",
+                "FileExtension": " cat",
+                "FileContent": " lol"
+            }
+        ]
+    },
+    {
+        "FolderName": "cat",
+        "FolderContent": []
+    }
+]

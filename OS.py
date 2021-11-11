@@ -7,6 +7,7 @@ from System.Core.Core import (
     Is_in_Desktop,
     Is_in_INSTALLER,
     Is_in_Login,
+    Load_FileSystem,
     routines,
 )
 
@@ -41,6 +42,7 @@ def warnings():
 
 warnings()
 routines()
+Load_FileSystem()
 
 # -----------------------------------------------------------------[ Boot ]-------------------------------------------------------------------------- #
 

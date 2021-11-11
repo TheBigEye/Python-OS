@@ -317,18 +317,7 @@ def CMD(entry, output):
     if command.startswith("time()"):
         time_command()
 
-
-    # dir command will print the directory of the current file, like: dir() , > dir.
-    def dir_command():
-        """Dir command"""
-
-        output.insert(INSERT, os.getcwd() + "\n")
-        output.see(END)
-
-    if command.startswith("dir()"):
-        dir_command()
-
-        
+ 
     # cd command will change the current directory, like: cd(directory) , > , or cd.. to go back one directory.
     def cd_command(command):
         """Cd command"""
@@ -387,5 +376,129 @@ def CMD(entry, output):
 
     if command.startswith(">>> "):
         python_command(command)
+
+
+    # mkfolder command will create a new folder, like: mkfolder(folder_name) , > .
+    def mkfolder_command(command):
+
+        from System.Core.Core import Create_folder, Save_FileSystem
+
+        command = command.replace("mkfolder(", "")
+        command = command.replace(")", "")
+        Create_folder(command)
+        Save_FileSystem()
+        output.insert(INSERT, "Folder " + command + " created" + "\n")
+        output.see(END)
+    
+    if command.startswith("mkfolder("):
+        mkfolder_command(command)
+    
+    
+    # mkfile command will create a new file, like: mkfile(file_name, content) , > .
+    # the content is optional, if not given, will create an empty file.
+    def mkfile_command(command):
+
+        from System.Core.Core import Create_file, Save_FileSystem, Move_file
+
+        command = command.replace("mkfile(", "")
+        command = command.replace(")", "")
+        command = command.split(",")
+        file_name = command[0]
+        extension = command[1]    
+        content = command[2]
+        Create_file(file_name, extension, content)  
+        Save_FileSystem()
+        output.insert(INSERT, "File " + file_name + extension + " created" + "\n")
+        output.see(END)
+
+
+        
+    if command.startswith("mkfile("):
+        mkfile_command(command)
+
+    
+    # dir command will print the directory of the current file (using the filesystem in core.py), like: dir() , > dir.
+    def dir_command():
+
+        from System.Core.Core import Get_FileSystem
+
+        output.insert(INSERT, "Directory tree: " + "\n")
+        output.insert(INSERT, Get_FileSystem() + "\n")
+
+        # print the number of files directory.
+        output.insert(INSERT, "Files: " + str(len(Get_FileSystem().split("\n"))) + "\n\n")
+
+        output.see(END)
+
+    if command.startswith("?"):
+        dir_command()
+    
+    # move_file command will move a file, like: move_file(file_name, extension, folder_name) , > .
+    def move_file_command(command):
+
+        from System.Core.Core import Move_file, Save_FileSystem
+
+        command = command.replace("move_file(", "")
+        command = command.replace(")", "")
+        command = command.split(",")
+        file_name = command[0]
+        extension = command[1]
+        folder_name = command[2]
+        Move_file(file_name, extension, folder_name)
+        Save_FileSystem()
+        output.insert(INSERT, "File " + file_name + extension + " moved to " + folder_name + "\n")
+        output.see(END)
+
+    if command.startswith("move_file("):
+        move_file_command(command)
+
+    
+    # delete_file command will delete a file, like: delete_file(file_name, extension) , > .
+    def delete_file_command(command):
+
+        from System.Core.Core import Delete_file, Save_FileSystem
+
+        command = command.replace("delete_file(", "")
+        command = command.replace(")", "")
+        command = command.split(",")
+        file_name = command[0]
+        extension = command[1]
+        Delete_file(file_name, extension)
+        Save_FileSystem()
+        output.insert(INSERT, "File " + file_name + extension + " deleted" + "\n")
+        output.see(END)
+
+    if command.startswith("delete_file("):
+        delete_file_command(command)
+    
+
+    # help command will print the help, like: help , >.
+    def help_command():
+        """Help command"""
+
+        output.insert(INSERT, "Help: " + "\n")
+        output.insert(INSERT, "cd(directory) - change the current directory" + "\n")
+        output.insert(INSERT, "mkfolder(folder_name) - create a new folder" + "\n")
+        output.insert(INSERT, "mkfile(file_name, extension, content) - create a new file" + "\n")
+        output.insert(INSERT, "move_file(file_name, extension, folder_name) - move a file" + "\n")
+        output.insert(INSERT, "dir() - print the directory of the current file" + "\n")
+        output.insert(INSERT, "time() - print the current time" + "\n")
+        output.insert(INSERT, "tree() - print the directory tree of the current file" + "\n")
+        output.insert(INSERT, "help() - print the help" + "\n")
+        output.insert(INSERT, "clear() - clear the terminal" + "\n")
+        output.insert(INSERT, "exit() - exit the terminal" + "\n")
+        output.insert(INSERT, "print_var_value(var_name) - print the value of a variable" + "\n")
+        output.insert(INSERT, ">>> python_command - execute a python command" + "\n")
+        output.insert(INSERT, "? - print the directory of the current file" + "\n")
+        output.see(END)
+
+    if command.startswith("help()"):
+        help_command()
+
+
+
+
+
+
 
 
