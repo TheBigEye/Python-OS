@@ -6,6 +6,7 @@
 - Start menu gui (For now there are only icons, then I will add buttons to run programs)
 - Taskbar
 - Terminal
+- File system
 - Wallpaper
 - Draggable windows (Is bugged)
 - Right click menu
