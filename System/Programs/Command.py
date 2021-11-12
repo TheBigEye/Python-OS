@@ -2,7 +2,7 @@
 __author__ = 'TheBigEye'
 __version__ = '1.0'
 
-def CMD(entry, output):
+def CMD(master, entry, output):
 
     """
     Summary:
@@ -151,26 +151,19 @@ def CMD(entry, output):
         div_command(command)
 
 
-    # clear command will clear the terminal, like: clear() , > .
-    def clear_command():
-        """Clear command"""
+    # random command will generate a random number, like: random(number) , > random number.
+    def random_command(command):
+        """Random command"""
 
-        output.delete(1.0, END)
+        command = command.replace("random(", "")
+        command = command.replace(")", "")
+        random_number = random.randint(1, int(command))
+        output.insert(INSERT, random_number)
+        output.insert(INSERT, "\n")
+        output.see(END)
 
-    if command.startswith("clear") or command.startswith("cls"):
-        clear_command()
-
-
-    # exit command will exit the terminal, like: exit() , > .
-    def exit_command():
-        """Exit command"""
-
-        output.destroy()
-
-    if command.startswith("exit"):
-        exit_command()
-
-
+    if command.startswith("random("):
+        random_command(command)
 
 
     # var command will create a variable, like: var(name, value) , > .
@@ -277,35 +270,19 @@ def CMD(entry, output):
 
     if command.startswith("delay("):
         delay_command(command)
-
-
-    # random command will generate a random number, like: random(number) , > random number.
-    def random_command(command):
-        """Random command"""
-
-        command = command.replace("random(", "")
-        command = command.replace(")", "")
-        random_number = random.randint(1, int(command))
-        output.insert(INSERT, random_number)
-        output.insert(INSERT, "\n")
-        output.see(END)
-
-    if command.startswith("random("):
-        random_command(command)
-
-
-    # print_var_value command will print the value of a variable, like: print_var_value(var_name) , > var_name = value.
-    def print_var_value_command(command):
-        """Print var value command"""
-
-        command = command.replace("print_var_value(", "")
-        command = command.replace(")", "")
-        output.insert(INSERT, command + " = " + str(globals()[command]) + "\n")
-        output.see(END)
-
-    if command.startswith("print_var_value("):
-        print_var_value_command(command)
         
+
+# -------------------------------------------------------------------------------------------------------------------------------------------------
+
+    # clear command will clear the terminal, like: clear() , > .
+    def clear_command():
+        """Clear command"""
+
+        output.delete(1.0, END)
+
+    if command.startswith("clear") or command.startswith("cls"):
+        clear_command()
+
 
     # time command will print the current time, like: time() , > time.
     def time_command():
@@ -314,41 +291,22 @@ def CMD(entry, output):
         output.insert(INSERT, time.strftime("%H:%M:%S", time.localtime()) + "\n")
         output.see(END)
 
-    if command.startswith("time()"):
+    if command.startswith("time"):
         time_command()
 
- 
-    # cd command will change the current directory, like: cd(directory) , > , or cd.. to go back one directory.
-    def cd_command(command):
-        """Cd command"""
 
-        command = command.replace("cd(", "")
-        command = command.replace(")", "")
+    # exit command will exit the terminal, like: exit() , > .
+    def exit_command():
+        """Exit command"""
 
-        if command == "..":
-            os.chdir(os.path.dirname(os.getcwd()))
-        else:
-            os.chdir(command)
+        master.destroy()
+        
 
-        output.insert(INSERT, os.getcwd() + "\n")
-        output.see(END)
+    if command.startswith("exit"):
+        exit_command()
 
-    if command.startswith("cd("):
-        cd_command(command)
 
-    # Tree command will print the directory tree of the current file, like: tree() , > tree.
-    def tree_command():
-        """Tree command"""
-
-        output.insert(INSERT, "Directory tree: " + "\n")
-        output.see(END)
-        for root, dirs, files in os.walk("."):
-            level = root.replace(".", "")
-            output.insert(INSERT, level + "\n")
-            output.see(END)
-
-    if command.startswith("tree()"):
-        tree_command()
+# -------------------------------------------------------------------------------------------------------------------------------------------------
 
     def python_command(command):
 
@@ -376,6 +334,28 @@ def CMD(entry, output):
 
     if command.startswith(">>> "):
         python_command(command)
+
+
+# -------------------------------------------------------------------------------------------------------------------------------------------------
+
+ 
+    # cd command will change the current directory, like: cd(directory) , > , or cd.. to go back one directory.
+    def cd_command(command):
+        """Cd command"""
+
+        command = command.replace("cd(", "")
+        command = command.replace(")", "")
+
+        if command == "..":
+            os.chdir(os.path.dirname(os.getcwd()))
+        else:
+            os.chdir(command)
+
+        output.insert(INSERT, os.getcwd() + "\n")
+        output.see(END)
+
+    if command.startswith("cd("):
+        cd_command(command)
 
 
     # mkfolder command will create a new folder, like: mkfolder(folder_name) , > .
@@ -408,7 +388,7 @@ def CMD(entry, output):
         content = command[2]
         Create_file(file_name, extension, content)  
         Save_FileSystem()
-        output.insert(INSERT, "File " + file_name + extension + " created" + "\n")
+        output.insert(INSERT, "File " + file_name + "." + extension + " created" + "\n")
         output.see(END)
 
 
@@ -417,22 +397,6 @@ def CMD(entry, output):
         mkfile_command(command)
 
     
-    # dir command will print the directory of the current file (using the filesystem in core.py), like: dir() , > dir.
-    def dir_command():
-
-        from System.Core.Core import Get_FileSystem
-
-        output.insert(INSERT, "Directory tree: " + "\n")
-        output.insert(INSERT, Get_FileSystem() + "\n")
-
-        # print the number of files directory.
-        output.insert(INSERT, "Files: " + str(len(Get_FileSystem().split("\n"))) + "\n\n")
-
-        output.see(END)
-
-    if command.startswith("?"):
-        dir_command()
-    
     # move_file command will move a file, like: move_file(file_name, extension, folder_name) , > .
     def move_file_command(command):
 
@@ -440,13 +404,20 @@ def CMD(entry, output):
 
         command = command.replace("move_file(", "")
         command = command.replace(")", "")
-        command = command.split(",")
+        command = command.split(", ")
         file_name = command[0]
         extension = command[1]
         folder_name = command[2]
         Move_file(file_name, extension, folder_name)
         Save_FileSystem()
-        output.insert(INSERT, "File " + file_name + extension + " moved to " + folder_name + "\n")
+
+        if file_name == "Index" and extension == "pfs":
+            output.insert(INSERT, "It is not possible to move file " + file_name + "." + extension + "\n")
+
+        else:
+            output.insert(INSERT, "File " + file_name + "." + extension + " moved to " + folder_name + "\n")
+
+        Save_FileSystem()
         output.see(END)
 
     if command.startswith("move_file("):
@@ -460,7 +431,7 @@ def CMD(entry, output):
 
         command = command.replace("delete_file(", "")
         command = command.replace(")", "")
-        command = command.split(",")
+        command = command.split(", ")
         file_name = command[0]
         extension = command[1]
         Delete_file(file_name, extension)
@@ -470,32 +441,197 @@ def CMD(entry, output):
 
     if command.startswith("delete_file("):
         delete_file_command(command)
+
     
+    def rename_file_command(command):
+
+        from System.Core.Core import Rename_file, Save_FileSystem
+
+        command = command.replace("rename_file(", "")
+        command = command.replace(")", "")
+        command = command.split(",")
+        file_name = command[0]
+        extension = command[1]
+        new_file_name = command[2]
+        new_extension = command[3]
+        Rename_file(file_name, extension, new_file_name, new_extension)
+        Save_FileSystem()
+        output.insert(INSERT, "File " + file_name + "." + extension + " renamed to " + new_file_name + "." + new_extension + "\n")
+        output.see(END)
+
+    if command.startswith("rename_file("):
+        rename_file_command(command)
+
+
+    # format command will format the filesystem, like: format() , > , this command is dangerous, the user, after entering the command, should confirm if he really wants to execute it or not.
+    def format_command(commnad):
+
+        import threading
+
+        global get_response
+        global answer
+            
+        from System.Core.Core import Format_FileSystem
+
+        answer = ""
+
+        output.insert(INSERT, "Are you sure you want to format the filesystem? (y/n)" + "\n")
+        output.see(END)
+
+        # Get the response from the user in the terminal, until a response is given in command, the following lines will not be executed.
+        answer = input()
+        
+        # If the user typed "y", the filesystem will be formatted.
+        if answer == "y":
+            Format_FileSystem()
+            output.insert(INSERT, "Filesystem formatted" + "\n")
+            output.see(END)
+
+        # If the user typed "n", the filesystem will not be formatted.
+        elif answer == "n":
+            output.insert(INSERT, "Filesystem not formatted" + "\n")
+            output.see(END)
+
+        # If the user typed something else, the filesystem will not be formatted.
+        else:
+            output.insert(INSERT, "Filesystem not formatted" + "\n")
+            output.see(END)
+                
+    if command.startswith("format"):
+        format_command(command)
+
+    
+    def import_file_command(command):
+
+        from System.Core.Core import Import_file, Save_FileSystem
+
+        command = command.replace("import_file(", "")
+        command = command.replace(")", "")
+        command = command.split(", ")
+        file_path = command[0]
+        folder_name = command[1]
+        Import_file(file_path, folder_name)
+        Save_FileSystem()
+        output.insert(INSERT, "File form path " + file_path + " imported to " + folder_name + "\n")
+        output.see(END)
+
+    
+    if command.startswith("import_file("):
+        import_file_command(command)
+    
+    
+    def execute_file(command):
+
+        from System.Core.Core import Execute_file, Save_FileSystem
+
+        command = command.replace("execute_file(", "")
+        command = command.replace(")", "")
+        command = command.split(", ")
+        file_name = command[0]
+        extension = command[1]
+        Execute_file(file_name, extension)
+        Save_FileSystem()
+        output.insert(INSERT, "File " + file_name + "." + extension + " executed" + "\n")
+        output.see(END)
+
+    if command.startswith("execute_file("):
+        execute_file(command)
+    
+
+    # dir command will print the directory of the current file (using the filesystem in core.py), like: dir() , > dir.
+    def dir_command():
+
+        from System.Core.Core import Get_FileSystem
+
+        output.insert(INSERT, "Directories: " + "\n")
+        output.insert(INSERT, Get_FileSystem() + "\n")
+
+        # print the number of files directory.
+        output.insert(INSERT, "Files: " + str(len(Get_FileSystem().split("\n"))) + "\n\n")
+
+        output.see(END)
+
+    if command.startswith("?") or command.startswith("dir"):
+        dir_command()
+
+
+    # Tree command will print the directory tree of the current file, like: tree() , > tree.
+    def tree_command():
+        from System.Core.Core import Tree_FileSystem_Advanced
+
+        output.insert(INSERT, "Directory tree: " + "\n")
+        output.insert(INSERT, Tree_FileSystem_Advanced() + "\n")
+
+        # print the number of files directory.
+        output.insert(INSERT, "[" + str(len(Tree_FileSystem_Advanced().split("\n"))) + "] " + "files indexed." +  "\n\n")
+
+        output.see(END)
+
+    if command.startswith("tree"):
+        tree_command()
+
+
+# -------------------------------------------------------------------------------------------------------------------------------------------------
+
+    # info command will print the info of system, like: info , > info.
+    def info_command():
+        """Info command"""
+
+        import platform
+
+        output.insert(INSERT, "Info: ---------------------------------------------------------------------" + "\n")
+        output.insert(INSERT, "Base-System: " + platform.system() + "\n")
+        output.insert(INSERT, "Release: " + platform.release() + "\n")
+        output.insert(INSERT, "Version: " + platform.version() + "\n")
+        output.insert(INSERT, "Machine: " + platform.machine() + "\n")
+        output.insert(INSERT, "Processor: " + platform.processor() + "\n")
+        output.insert(INSERT, "---------------------------------------------------------------------------" + "\n\n")
+        output.see(END)
+    
+    if command.startswith("info"):
+        info_command()
 
     # help command will print the help, like: help , >.
     def help_command():
         """Help command"""
 
-        output.insert(INSERT, "Help: " + "\n")
+        output.insert(INSERT, "Help: ---------------------------------------------------------------------" + "\n")
+        output.insert(INSERT, "print() - print a string" + "\n")
+        output.insert(INSERT, "add() - adds numbers or strings" + "\n")
+        output.insert(INSERT, "sub() - subtract numbers" + "\n")
+        output.insert(INSERT, "mul() - multiply numbers" + "\n")
+        output.insert(INSERT, "div() - divide numbers" + "\n")
+        output.insert(INSERT, "random(max_number) - generate a random number" + "\n")
+        output.insert(INSERT, "\n")
+        output.insert(INSERT, "var(variable_name, value) - make a variable" + "\n")
+        output.insert(INSERT, "print_value(variable_name) - print the variable value" + "\n")
+        output.insert(INSERT, "clear_var(variable_name) - clean the variable value" + "\n")
+        output.insert(INSERT, "\n")
+        output.insert(INSERT, "repeat(command(args), number) - repeats a command a number of times" + "\n")
+        output.insert(INSERT, "\n")
+        output.insert(INSERT, "? | dir - print the current directory" + "\n")
         output.insert(INSERT, "cd(directory) - change the current directory" + "\n")
         output.insert(INSERT, "mkfolder(folder_name) - create a new folder" + "\n")
         output.insert(INSERT, "mkfile(file_name, extension, content) - create a new file" + "\n")
-        output.insert(INSERT, "move_file(file_name, extension, folder_name) - move a file" + "\n")
-        output.insert(INSERT, "dir() - print the directory of the current file" + "\n")
-        output.insert(INSERT, "time() - print the current time" + "\n")
-        output.insert(INSERT, "tree() - print the directory tree of the current file" + "\n")
-        output.insert(INSERT, "help() - print the help" + "\n")
-        output.insert(INSERT, "clear() - clear the terminal" + "\n")
-        output.insert(INSERT, "exit() - exit the terminal" + "\n")
-        output.insert(INSERT, "print_var_value(var_name) - print the value of a variable" + "\n")
+        output.insert(INSERT, "move_file(file_name, extension, folder_name) - move a file to other folder" + "\n")
+        output.insert(INSERT, "Rename_file(file_name, extension, new_name, new_extension) - rename a file" + "\n")
+        output.insert(INSERT, "Import_file(file_path, folder_name) - import a real file from the Base-System to the File System" + "\n")
+        output.insert(INSERT, "Execute_file(file_name, extension) - execute a .pys file" + "\n")
+        output.insert(INSERT, "delete_file(file_name, extension) - delete a file" + "\n")
+        output.insert(INSERT, "\n")
+        output.insert(INSERT, "time - print the current time" + "\n")
+        output.insert(INSERT, "tree - print the directory tree of the current file" + "\n")
+        output.insert(INSERT, "help - print the help" + "\n")
+        output.insert(INSERT, "info - print the system information" + "\n")
+        output.insert(INSERT, "clear | cls - clear the terminal" + "\n")
+        output.insert(INSERT, "exit - exit the terminal" + "\n")
+        output.insert(INSERT, "\n")
         output.insert(INSERT, ">>> python_command - execute a python command" + "\n")
-        output.insert(INSERT, "? - print the directory of the current file" + "\n")
+        output.insert(INSERT, "---------------------------------------------------------------------------" + "\n\n")
         output.see(END)
 
-    if command.startswith("help()"):
+    if command.startswith("help"):
         help_command()
-
-
 
 
 

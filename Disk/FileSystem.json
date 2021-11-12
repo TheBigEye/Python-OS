@@ -3,39 +3,35 @@
         "FolderName": "C:",
         "FolderContent": [
             {
-                "FileName": "lol",
-                "FileExtension": "lol",
-                "FileContent": "lol"
+                "FileName": "Index",
+                "FileExtension": "pfs",
+                "FileContent": "0--"
             },
             {
-                "FileName": "xd",
-                "FileExtension": "xd",
-                "FileContent": "xd"
+                "FileName": "Test",
+                "FileExtension": "tst",
+                "FileContent": "This is a file test"
             },
             {
-                "FileName": "f",
-                "FileExtension": "f",
-                "FileContent": "f"
-            },
-            {
-                "FileName": "b",
-                "FileExtension": "b",
-                "FileContent": "b"
-            },
-            {
-                "FileName": "w",
-                "FileExtension": "w",
-                "FileContent": "w"
-            },
-            {
-                "FileName": "catest",
-                "FileExtension": " cat",
-                "FileContent": " lol"
+                "FileName": "example",
+                "FileExtension": "pys",
+                "FileContent": "\ndef main():\n\tprint(\"hi, this is a executable file example\")\n\nmain()\n"
             }
         ]
     },
     {
-        "FolderName": "cat",
-        "FolderContent": []
+        "FolderName": "D:",
+        "FolderContent": [
+            {
+                "FileName": "Index",
+                "FileExtension": "pfs",
+                "FileContent": "-0-"
+            },
+            {
+                "FileName": "Test2",
+                "FileExtension": "tst",
+                "FileContent": "Another test file"
+            }
+        ]
     }
 ]
