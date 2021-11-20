@@ -47,7 +47,9 @@ def Display_Terminal(master, draggable=False):
     def Command_handler(event):
         """Execute the commands"""
 
+        Terminal_screen.config(state="normal")
         CMD(Terminal, Terminal_entry, Terminal_screen)
+        Terminal_screen.config(state="disabled")
 
     Terminal = Label(
         master,
@@ -66,8 +68,8 @@ def Display_Terminal(master, draggable=False):
     )
 
     Terminal_screen.config(width=75, height=20, bg="#000000", fg="#dfdfdf", state="normal", insertbackground="#dfdfdf")
-    Terminal_screen.insert(INSERT, "Welcome to the terminal ──────────────────────────────────────────────────" + "\n\n" + ">/" + "\n\n")
-    Terminal_screen.focus()
+    Terminal_screen.insert(INSERT, "───────────────────────── Welcome to the terminal ─────────────────────────" + "\n\n" + ">/ Type a command, or use help for get commands" + "\n\n")
+    Terminal_screen.config(state="disabled")
 
     def Close_Terminal():
         """Close the Terminal"""
@@ -116,7 +118,7 @@ def Display_Terminal(master, draggable=False):
 
     Terminal_entry.config(insertbackground="white")
     Terminal_entry.bind("<Return>", Command_handler)
-    Terminal_entry.focus_set()
+    Terminal_entry.focus()
 
     if draggable == True:
 

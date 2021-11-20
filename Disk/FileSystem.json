@@ -1,37 +1,70 @@
 [
     {
-        "FolderName": "C:",
-        "FolderContent": [
+        "DriveContent": [
             {
-                "FileName": "Index",
-                "FileExtension": "pfs",
-                "FileContent": "0--"
+                "FolderContent": [
+                    {
+                        "FileContent": "\ndef main():\n\tprint(\"hi, this is a executable file example\")\n\nmain()\n",
+                        "FileExtension": "pys",
+                        "FileLastWriteTime": "4/11/2020     10:31",
+                        "FileName": "example"
+                    },
+                    {
+                        "FileContent": "this is a test",
+                        "FileExtension": "test",
+                        "FileLastWriteTime": "11/18/2021     13:07",
+                        "FileName": "Prueba"
+                    },
+                    {
+                        "FileContent": "print(\"Hello\"",
+                        "FileExtension": "pys",
+                        "FileLastWriteTime": "11/18/2021     15:59",
+                        "FileName": "excecutable"
+                    },
+                    {
+                        "FileContent": "%content%",
+                        "FileExtension": "pys",
+                        "FileLastWriteTime": "11/19/2021     14:54",
+                        "FileName": "test"
+                    }
+                ],
+                "FolderName": "Main"
             },
             {
-                "FileName": "Test",
-                "FileExtension": "tst",
-                "FileContent": "This is a file test"
+                "FolderContent": [
+                    {
+                        "FileContent": "---",
+                        "FileExtension": "pfs",
+                        "FileLastWriteTime": "4/11/2020     10:31",
+                        "FileName": "Index"
+                    },
+                    {
+                        "FileContent": "def main():\n\tprint(\"hi, this is a executable file example\")\n\nmain()",
+                        "FileExtension": "pys",
+                        "FileLastWriteTime": "4/11/2020     10:31",
+                        "FileName": "lol"
+                    }
+                ],
+                "FolderName": "Programs"
             },
             {
-                "FileName": "example",
-                "FileExtension": "pys",
-                "FileContent": "\ndef main():\n\tprint(\"hi, this is a executable file example\")\n\nmain()\n"
+                "FolderContent": [
+                    {
+                        "FileContent": "---",
+                        "FileExtension": "pfs",
+                        "FileLastWriteTime": "11-18-2021     12:23",
+                        "FileName": "Index"
+                    },
+                    {
+                        "FileContent": "xd",
+                        "FileExtension": "py",
+                        "FileLastWriteTime": "11/18/2021     13:16",
+                        "FileName": "nice"
+                    }
+                ],
+                "FolderName": "Pruebas"
             }
-        ]
-    },
-    {
-        "FolderName": "D:",
-        "FolderContent": [
-            {
-                "FileName": "Index",
-                "FileExtension": "pfs",
-                "FileContent": "-0-"
-            },
-            {
-                "FileName": "Test2",
-                "FileExtension": "tst",
-                "FileContent": "Another test file"
-            }
-        ]
+        ],
+        "DriveName": "C"
     }
 ]

@@ -4,47 +4,43 @@ import time
 from System.GUI.FileManager import Display_FileManager
 from System.GUI.MessageBox import Display_MessageBox
 from System.GUI.Terminal import Display_Terminal
+from System.Utils.Utils import print_log
 
-#from System.Utils.Utils import print_log
-
-__author__ = 'TheBigEye'
+__author__ = 'Nahuel senek'
 __version__ = '2.0'
 
 
 def Desktop(master):
 
- # Documentation ---------------------------------------------------------------------------------------------------------------
+ # Documentacion ---------------------------------------------------------------------------------------------------------------
 
     """
-    This function is used to create the desktop.
+    Esto crea el escritorio usando widgets.
 
-    Parameters
-    ----------
-    master : str
-        The Tkinter object which is the parent of all widgets.
+    Parametros:
+    master: es el objeto principal de la ventana.
 
-    Returns
-    -------
-        None
+    Retorna:
+    None
     """
 
-  # ------------------------------------------------------[ Desktop ]----------------------------------------------------------------
+ # ---------------------------------------------------------------[ Escritorio ]-------------------------------------------------------------------
 
-    #print_log("Desktop: Loaded desktop functions and running")    
+    print_log("Desktop: Escritorio cargado y ejecutandose")    
 
     global Wallpaper, Desktop_wallpaper
 
-
-    master.configure(background = "#000000")  # Sets the background to Blue
+    master.configure(background = "#000000")  # Establece el fondo a color azul
 
     Wallpaper = PhotoImage(file = "Assets/Wallpapers/BlissHill.png")
     Desktop_wallpaper = Label(master, image= Wallpaper, borderwidth="0.1")
-    Desktop_wallpaper.place(x=0, y=0)
+    Desktop_wallpaper.place(x=0, y=0) # Posiciona el fondo de escritorio en el centro
 
- # ------------------------------------------------------[ Error types ]------------------------------------------------------------
+ # -------------------------------------------------------------[ Tipos de errores ]----------------------------------------------------------------
 
     global Settings_error, Print_error, This_PC_error, FileManager_error
 
+    # Lista de los cuadros de dialogo que se usan, Error, advertencia, peligro, e info
     def Settings_error():
         Close_start_menu()
         Display_MessageBox(master, "Error", "Settings not found", draggable=False)
@@ -62,24 +58,29 @@ def Desktop(master):
         Display_MessageBox(master, "Error", "File Manager not found", draggable=False)
     
 
- # ------------------------------------------------------[ Programs ]---------------------------------------------------------------
+ # ----------------------------------------------------------------[ Programas ]--------------------------------------------------------------------
 
     global File_manager, Terminal
 
+    # LLama al metodo del Explorador de archivos en forma de aplicacion
     def File_manager():
-        Close_start_menu()
+
+        import threading # Crea un hilo por cada vez que abre, para evitar sobreposiciones
+        Close_start_menu() 
         Display_FileManager(master, "This PC", draggable=True)
 
+    # LLama a la terminal 
     def Terminal():
         Close_start_menu()
         Display_Terminal(master, draggable=True)
 
- # ------------------------------------------------------[ Taskbar ]----------------------------------------------------------------
+ # ------------------------------------------------------------[ Barra de tareas ]------------------------------------------------------------------
 
     global Taskbar_GUI_Image, Taskbar
 
     Taskbar_GUI_Image = PhotoImage(file = "Assets/GUI/Taskbar.png") 
 
+    # Barra de tareas
     Taskbar = Label(
         master,
         width = 1024,
@@ -94,9 +95,9 @@ def Desktop(master):
     Taskbar.place(x= 0, y= 571)
 
 
- # -----------------------------------------------------[ Clockbar ]----------------------------------------------------------------
+ # -------------------------------------------------------------[ Barra del reloj ]-----------------------------------------------------------------
 
-    global Clockbar
+    global Clockbar, times, clock
 
     Clockbar = Label(
         Taskbar,
@@ -109,6 +110,7 @@ def Desktop(master):
 
     Clockbar.place(x=950, y=1)
 
+    # El reloj
     def times():
 
         current_time = time.strftime("%H: %M")
@@ -120,16 +122,13 @@ def Desktop(master):
     clock.place(x=965, y=6)  
 
 
- # ----------------------------------------------------[Start menu]-----------------------------------------------------------------
+ # ------------------------------------------------------------[ Menu de inicio ]-------------------------------------------------------------------
 
-    global Start_menu, Open_start_button, Close_start_button
-    global Start_menu_GUI, Start_menu_button
-
+    # Widget base del menu de inicio
+    global Start_menu_GUI, Start_menu
     Start_menu_GUI = PhotoImage(file = "Assets/GUI/StartMenu.png")
-    Start_menu_button = PhotoImage(file = "Assets/Buttons/Start_Button.png")
 
     Start_menu = Label(
-
         master,
         width = 314,
         height = 440,
@@ -137,7 +136,10 @@ def Desktop(master):
         borderwidth = "0"
     )
 
-    # Open 
+    global Start_menu_button, Open_start_menu, Close_start_menu, Open_start_button, Close_start_button
+    Start_menu_button = PhotoImage(file = "Assets/Buttons/Start_Button.png")
+
+    # Abre
     def Open_start_menu():
         Start_menu.place(x=1, y=126)
         time.sleep(0.1)
@@ -145,7 +147,7 @@ def Desktop(master):
         Open_start_button.place_forget()
         Close_start_button.place(x=0, y=571)
 
-    # Close
+    # Cierra
     def Close_start_menu():
         Start_menu.place_forget()
         time.sleep(0.1)
@@ -153,6 +155,7 @@ def Desktop(master):
         Open_start_button.place(x=0, y=571)
         Close_start_button.place_forget()
 
+    # Los botones se van reemplazando uno al otro para usar diferentes funciones a la vez
     Open_start_button = Button(
         master,
         width=48,
@@ -177,11 +180,11 @@ def Desktop(master):
     )
     Close_start_button.place_forget()
 
- # ----------------------------------------------------[ Taskbar buttons ]------------------------------------------------------------
+ # ----------------------------------------------------[ Botones de la barra de tareas ]------------------------------------------------------------
 
-    global Terminal_taskbar_button, File_manager_taskbar_button, Browser_taskbar_button
-    global Terminal_taskbar_icon, File_manager_taskbar_icon, Browser_taskbar_icon
 
+    # Icono de la aplciacion de terminal en la barra de tareas
+    global Terminal_taskbar_icon, Terminal_taskbar_button
     Terminal_taskbar_icon = PhotoImage(file = "Assets/Buttons/TerminalTaskIcon.png")
 
     Terminal_taskbar_button = Button(
@@ -196,6 +199,8 @@ def Desktop(master):
     )
     Terminal_taskbar_button.place(x=40, y=2)
 
+    # Icono del explorador de archivos en la barra de tareas
+    global File_manager_taskbar_icon, File_manager_taskbar_button
     File_manager_taskbar_icon = PhotoImage(file = "Assets/Buttons/FileManagerTaskIcon.png")
 
     File_manager_taskbar_button = Button(
@@ -210,6 +215,8 @@ def Desktop(master):
     )
     File_manager_taskbar_button.place(x=80, y=2)
 
+    # Icono del navegador en la barra de tareas
+    global Browser_taskbar_icon, Browser_taskbar_button
     Browser_taskbar_icon = PhotoImage(file = "Assets/Buttons/BrowserTaskIcon.png")
 
     Browser_taskbar_button = Button(
@@ -225,6 +232,81 @@ def Desktop(master):
     Browser_taskbar_button.place(x=120, y=2)
 
 
+    # Widget base para los iconos de la barra del reloj
+    global Clokcbar_taskbar_icons, Clockbar_icons
+    Clockbar_taskbar_icons = PhotoImage(file="Assets/Taskbar_Icons.png")
+
+    Clockbar_icons = Label(
+        Taskbar,
+        width=100,
+        height=28,
+        borderwidth="0",
+        relief="raised",
+        bg="#080D11",
+        image = Clockbar_taskbar_icons
+    )
+    Clockbar_icons.place(x=864, y=1)
+
+
+    # Icono del estado de la bateria
+    global Battery_taskbar_icon, Batery_status_icon
+    Battery_taskbar_icon = PhotoImage(file="Assets/Images/Battery.png")
+
+    Battery_status_icon = Button(
+        Clockbar_icons,
+        width=20,
+        height=40,
+        borderwidth="0",
+        relief="flat",
+        bg="#080D11",
+        image=Battery_taskbar_icon,
+    )
+    Battery_status_icon.place(x=24, y=-6)
+
+
+    # Icono del estado del internet
+    global Internet_Warning_icon, Internet_Connected_icon, Internet_status_icon
+
+    # Estado desconectado
+    Internet_Warning_icon = PhotoImage(file="Assets/Images/Internet_Warning.png")
+
+    # Estado conectado
+    Internet_Connected_icon = PhotoImage(file="Assets/Images/Internet_Connected.png")
+
+    Internet_status_icon = Button(
+        Clockbar_icons,
+        width=20,
+        height=40,
+        borderwidth="0",
+        relief="flat",
+        bg="#080D11",
+        image=Internet_Connected_icon,
+    )
+    Internet_status_icon.place(x=48, y=-6)
+
+
+    # Icono de volumen del sonido
+    global Volume_icon, Volume_status_icon
+    Volume_icon = PhotoImage(file="Assets/Images/Volume.png")
+
+    Volume_status_icon = Button(
+        Clockbar_icons,
+        width=20,
+        height=40,
+        borderwidth="0",
+        relief="flat",
+        bg="#080D11",
+        image=Volume_icon,
+    )
+    Volume_status_icon.place(x=72, y=-6)
+
+
+ # ----------------------------------------------------------------- [ Iconos del menu de inicio ] --------------------------------------------------
+
+    # Icono de configuracion del menu de inicio
+    global Settings_Start_icon, Settings_Start_icon_2
+    Settings_Start_icon = PhotoImage(file="Assets/Images/Settings_Icon.png")
+    Settings_Start_icon_2 = PhotoImage(file="Assets/Images/Settings_Icon_2.png")
 
 
 

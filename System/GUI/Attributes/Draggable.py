@@ -9,7 +9,7 @@ def on_drag_start(event):
     widget._drag_start_x = event.x
     widget._drag_start_y = event.y
 
-    #widget['cursor'] = "hand2"
+    widget['cursor'] = "hand2"
 
 
 def on_drag_finish(event):
@@ -20,7 +20,7 @@ def on_drag_finish(event):
     widget._drag_start_x = 0
     widget._drag_start_y = 0
 
-    #widget['cursor'] = ""
+    widget['cursor'] = ""
 
 
 def on_drag_motion(event): 

@@ -35,41 +35,56 @@ def Logger_improved(Log_Message):
 
 
 # Print ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+class CHAR_colors:
+    FAIL = '\033[91m'
+    LOG = '\033[92m'
+    WARNING = '\033[93m'
+    INFO = '\033[94m'
+
+    HEADER = '\033[95m'
+    OKCYAN = '\033[96m'
+
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+
+
 def print_log(message):
-    print(message)
+    print(f"{CHAR_colors.LOG}[LOG] {CHAR_colors.ENDC}" + message)
     Logger_improved(message)
 
 
 def print_error(message):    
-    print("[ERROR] " + message)
+    print(f"{CHAR_colors.FAIL}[ERROR] {CHAR_colors.ENDC}" + message)
     Logger_improved("[ERROR] " + message)
 
 
 def print_warning(message):
-    print("[WARNING] " + message)
+    print(f"{CHAR_colors.WARNING}[WARNING] {CHAR_colors.ENDC}" + message)
     Logger_improved("[WARNING] " + message)
 
 
 def print_info(message):
-    print("[INFO] " + message)
+    print(f"{CHAR_colors.INFO}[INFO] {CHAR_colors.ENDC}" + message)
     Logger_improved("[INFO] " + message)
 
 
-# Time and date --------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# Tiempo  --------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-# A function that will return the current time in a string format.
+# Esta funcion retorna el tiempo como String.
 def Get_Current_Time():
     current_time = str(datetime.datetime.now())
     return current_time
 
 
-# A function that will return the current date in a string format.
+# Esta funcion retorna la fecha en un string.
 def Get_Current_Date():
     current_date = str(datetime.date.today())
     return current_date
 
 
-# A function that will return the current date and time in a string format.
+# Esta funcion retorna el tiempo y la fecha en un string.
 def Get_Current_Date_Time():
     current_date_time = str(datetime.datetime.now())
     return current_date_time

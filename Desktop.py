@@ -46,7 +46,7 @@ Start_Menu_image_BG_Color = "#ffffff"
 FileManager_BG_Color = "#ffffff"
 
 # Wallpaper
-Background_image = tk.PhotoImage(file = "Assets/Wallpapers/" + Wallpaper + ".png")
+Background_image = tk.PhotoImage(file = "Assets/Wallpapers/BlissHill.png")
 Background = tk.Label(Ventana, image = Background_image)
 Background.place(x = -1, y = -1, relwidth = 1, relheight = 1)
 

@@ -1,4 +1,3 @@
-
 __author__ = 'TheBigEye'
 __version__ = '1.0'
 
@@ -36,65 +35,77 @@ def CMD(master, entry, output):
     from tkinter.constants import END, INSERT
     import time
     import random
+    from System.Utils.Utils import print_log, print_error, print_warning, print_info
 
-    """Execute a command"""
-
-    # could execute python functions, such as: print("something")
-    # or could execute system commands, such as: os.system("ls")
 
     command = entry.get()
     entry.delete(0, END)
 
     # Commands ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-    # print command output, like: print("something") , > something.
+    # print, imprime un mensaje (string) en la terminal, print("algo"), > algo
     def print_command():
 
+        # si los argumentos de comando esta entre parentesis, entonces:
         if "(" in command and ")" in command:
+
+            # si los argumentos estan entre comillas (Obligatorio para que se lea como un string), entonces:
             if "\"" in command:
+
+                # Reemplaza el comando por comillas, estas se eliminan, y solo se imprime el string o mensaje declarado
                 output.insert(INSERT, eval(command.replace("print(", "").replace(")", "")) + "\n")
 
             else:
-                output.insert(INSERT, "Error: Quotation marks are needed." + "\n")
+                # En caso de que no se halla declarado con comillas, aparece un error
+                output.insert(INSERT, "Error: se necesitan comillas." + "\n")
                 
         else:
-            output.insert(INSERT, "Error: brackets are needed" + "\n")
+            # En caso de que el comando n otenga parentesis para declarar los argumentos, se mostrara un error
+            output.insert(INSERT, "Error: se necesitan parentesis" + "\n")
 
+    # Si la terminal detecta el comando print, ejecuta el comando solicitado
     if command.startswith("print("):
         print_command()
 
 
-    # add command is a special command that will add the numbers in the command together, like: add(1,2,3,4,5) , > 15, also can be used to add strings, like: add("hello", "world") , > helloworld, or add variables, like: add(a, b) , > a+b.
+    # add, suma 2 o mas numeros y puede juntar 2 palabras, ejemplo: add(2, 2), > 4
     def add_command(command):
         """Add command"""
 
-        # check if the command has brackets
+        # Comprueba si los argumentos estan entre parentesis
         if "(" in command and ")" in command:
 
-            # add strings, like: add("hello", "world") , > helloworld., or, like: add("hi", "this", "is", "a", "big", "text") , > hi this is a big text.
-            if "\"" in command:
+            # une palabras, como: add("hello", "world") , > hello world., o, como: add("hi", "this", "is", "a", "big", "text") , > hi this is a big text.
+            if "\"" in command: # comprueba de que cada palabra este dentro de comillas.
+
                 command = command.replace("add(", "").replace(")", "")
                 command = command.replace("\"", "")
                 command = command.split(",")
+
                 for word in command:
                     output.insert(INSERT, str(word) + "")
+
                 output.insert(INSERT, "\n")
 
+            # en caso de que se detecte numeros, los suma
             else:
-                # add numbers. like: add(1,2), > 3, or add(1,2,3,4,5) , > 15.
+                # suma numeros. como: add(1,2), > 3, o add(1,2,3,4,5) , > 15.
                 command = command.replace("add(", "").replace(")", "")
                 command = command.split(",")
+
                 add = 0
                 for number in command:
                     add += int(number)
+
                 output.insert(INSERT, add)
                 output.insert(INSERT, "\n")
                 output.see(END)
 
         else:
-            # if the command doesn't have brackets, the command is invalid
-            output.insert(INSERT, "Error: doesn't have brackets" + "\n")
+            # si el comando no tiene parentesis, aparece un error
+            output.insert(INSERT, "Error: no tiene parentesis" + "\n")
         
+    # Si el comando ingresado en la terminal comienza por add(, entonces ejecuta el comando add(numero_o_palabra)
     if command.startswith("add("):
         add_command(command)
 
@@ -365,34 +376,37 @@ def CMD(master, entry, output):
 
         command = command.replace("mkfolder(", "")
         command = command.replace(")", "")
+
         Create_folder(command)
         Save_FileSystem()
-        output.insert(INSERT, "Folder " + command + " created" + "\n")
+
+        output.insert(INSERT, "Carpeta " + command + " creada" + "\n")
+        print_log("[mkfolder]" + " Carpeta " + command + " creada")
         output.see(END)
     
     if command.startswith("mkfolder("):
         mkfolder_command(command)
     
-    
-    # mkfile command will create a new file, like: mkfile(file_name, content) , > .
-    # the content is optional, if not given, will create an empty file.
+
     def mkfile_command(command):
 
         from System.Core.Core import Create_file, Save_FileSystem, Move_file
 
         command = command.replace("mkfile(", "")
         command = command.replace(")", "")
-        command = command.split(",")
+        command = command.split(", ")
+
         file_name = command[0]
         extension = command[1]    
         content = command[2]
+
         Create_file(file_name, extension, content)  
         Save_FileSystem()
-        output.insert(INSERT, "File " + file_name + "." + extension + " created" + "\n")
+
+        output.insert(INSERT, "Archivo " + file_name + "." + extension + " creado" + "\n")
+        print_log("[mkfile]" + " Archivo " + file_name + "." + extension + " creado")
         output.see(END)
 
-
-        
     if command.startswith("mkfile("):
         mkfile_command(command)
 
@@ -407,17 +421,19 @@ def CMD(master, entry, output):
         command = command.split(", ")
         file_name = command[0]
         extension = command[1]
-        folder_name = command[2]
-        Move_file(file_name, extension, folder_name)
+        from_folder_name = command[2]
+        to_folder_name = command[3]
+        Move_file(file_name, extension, from_folder_name, to_folder_name)
         Save_FileSystem()
 
         if file_name == "Index" and extension == "pfs":
-            output.insert(INSERT, "It is not possible to move file " + file_name + "." + extension + "\n")
+            output.insert(INSERT, "No es posible mover el archivo " + file_name + "." + extension + "\n")
+            print_error("[move_file]" + " No es posible mover el archivo " + file_name + "." + extension)
 
         else:
-            output.insert(INSERT, "File " + file_name + "." + extension + " moved to " + folder_name + "\n")
+            output.insert(INSERT, "Archivo " + file_name + "." + extension + " movido desde " + from_folder_name + " hacia " + to_folder_name + "\n")
+            print_log("[move_file]" + " File " + file_name + "." + extension + " movido desde " + from_folder_name + " hacia " + to_folder_name)
 
-        Save_FileSystem()
         output.see(END)
 
     if command.startswith("move_file("):
@@ -432,15 +448,38 @@ def CMD(master, entry, output):
         command = command.replace("delete_file(", "")
         command = command.replace(")", "")
         command = command.split(", ")
-        file_name = command[0]
-        extension = command[1]
-        Delete_file(file_name, extension)
+
+        folder_name = command[0]
+        file_name = command[1]
+        extension = command[2]
+
+        Delete_file(folder_name, file_name, extension)
         Save_FileSystem()
-        output.insert(INSERT, "File " + file_name + extension + " deleted" + "\n")
+
+        output.insert(INSERT, "Archivo " + file_name + "." + extension + " borrado desde " + folder_name + "\n")
+        print_log("[delete_file]" + " Archivo " + file_name + "." + extension + " borrado desde " + folder_name)
         output.see(END)
 
     if command.startswith("delete_file("):
         delete_file_command(command)
+
+
+    def delete_folder_command(command):
+
+        from System.Core.Core import Delete_folder, Save_FileSystem
+
+        command = command.replace("delete_folder(", "")
+        command = command.replace(")", "")
+
+        Delete_folder(command)
+        Save_FileSystem()
+
+        output.insert(INSERT, "Carpeta " + command + " borrada" + "\n")
+        print_log("[mkfolder]" + " Carpeta " + command + " borrada")
+        output.see(END)
+
+    if command.startswith("delete_folder("):
+        delete_folder_command(command)
 
     
     def rename_file_command(command):
@@ -449,14 +488,19 @@ def CMD(master, entry, output):
 
         command = command.replace("rename_file(", "")
         command = command.replace(")", "")
-        command = command.split(",")
-        file_name = command[0]
-        extension = command[1]
-        new_file_name = command[2]
-        new_extension = command[3]
-        Rename_file(file_name, extension, new_file_name, new_extension)
+        command = command.split(", ")
+
+        folder_name = command[0]
+        file_name = command[1]
+        extension = command[2]
+        new_file_name = command[3]
+        new_extension = command[4]
+
+        Rename_file(folder_name, file_name, extension, new_file_name, new_extension)
         Save_FileSystem()
-        output.insert(INSERT, "File " + file_name + "." + extension + " renamed to " + new_file_name + "." + new_extension + "\n")
+
+        output.insert(INSERT, "Archivo " + file_name + "." + extension + " de " + folder_name + " renombrado como " + new_file_name + "." + new_extension + "\n")
+        print_log("[rename_file]" + " Archivo " + file_name + "." + extension + " de " + folder_name + " renombrado como " + new_file_name + "." + new_extension)
         output.see(END)
 
     if command.startswith("rename_file("):
@@ -508,18 +552,45 @@ def CMD(master, entry, output):
         command = command.replace("import_file(", "")
         command = command.replace(")", "")
         command = command.split(", ")
+
         file_path = command[0]
-        folder_name = command[1]
-        Import_file(file_path, folder_name)
+        to_folder_name = command[1]
+
+        Import_file(file_path, to_folder_name)
         Save_FileSystem()
-        output.insert(INSERT, "File form path " + file_path + " imported to " + folder_name + "\n")
+
+        output.insert(INSERT, "File form path " + file_path + " imported to " + to_folder_name + "\n")
+        print_log("[import_file]" + " File form path " + file_path + " imported to " + to_folder_name)
         output.see(END)
 
-    
     if command.startswith("import_file("):
         import_file_command(command)
     
-    
+
+    def export_file_command(command):
+
+        from System.Core.Core import Export_file, Save_FileSystem
+
+        command = command.replace("export_file(", "")
+        command = command.replace(")", "")
+        command = command.split(", ")
+
+        folder_name = command[0]
+        file_name = command[1]
+        extension = command[2]
+        file_path = command[3]
+
+        Export_file(folder_name, file_name, extension, file_path)
+        Save_FileSystem()
+
+        output.insert(INSERT, "Archivo " + file_name + "." + extension + " de " + folder_name + " exportado hacia " + file_path + "\n")
+        print_log("[export_file]" + " Archivo " + file_name + "." + extension + " de " + folder_name + " exportado hacia " + file_path)
+        output.see(END)
+
+    if command.startswith("export_file("):
+        export_file_command(command)
+
+
     def execute_file(command):
 
         from System.Core.Core import Execute_file, Save_FileSystem
@@ -527,11 +598,18 @@ def CMD(master, entry, output):
         command = command.replace("execute_file(", "")
         command = command.replace(")", "")
         command = command.split(", ")
-        file_name = command[0]
-        extension = command[1]
-        Execute_file(file_name, extension)
+
+        folder_name = command[0]
+        file_name = command[1]
+        extension = command[2]
+
         Save_FileSystem()
-        output.insert(INSERT, "File " + file_name + "." + extension + " executed" + "\n")
+
+        # insert the code result.
+        print_log("[execute_file]" + " Archivo " + file_name + "." + extension + " ejecutado")
+        output.insert(INSERT, Execute_file(folder_name, file_name, extension))
+        output.insert(INSERT,  "\n")
+
         output.see(END)
 
     if command.startswith("execute_file("):
@@ -541,13 +619,16 @@ def CMD(master, entry, output):
     # dir command will print the directory of the current file (using the filesystem in core.py), like: dir() , > dir.
     def dir_command():
 
-        from System.Core.Core import Get_FileSystem
+        from System.Core.Core import Get_FileSystem, Get_Files_Count
 
-        output.insert(INSERT, "Directories: " + "\n")
-        output.insert(INSERT, Get_FileSystem() + "\n")
+        output.insert(INSERT, "Directorios: " + "\n")
+        output.insert(INSERT, Get_FileSystem())
+        output.insert(INSERT,  "\n")
 
         # print the number of files directory.
-        output.insert(INSERT, "Files: " + str(len(Get_FileSystem().split("\n"))) + "\n\n")
+        output.insert(INSERT, "Archivos: ")
+        output.insert(INSERT,  Get_Files_Count())
+        output.insert(INSERT,  "\n\n")
 
         output.see(END)
 
@@ -555,15 +636,19 @@ def CMD(master, entry, output):
         dir_command()
 
 
-    # Tree command will print the directory tree of the current file, like: tree() , > tree.
+    # Tree imprime el contenido del directorio actual en forma de arbol, como: tree() , > tree.
     def tree_command():
-        from System.Core.Core import Tree_FileSystem_Advanced
+        from System.Core.Core import Get_Files_Count, Get_Fils_size, Get_Tree
 
-        output.insert(INSERT, "Directory tree: " + "\n")
-        output.insert(INSERT, Tree_FileSystem_Advanced() + "\n")
+        output.insert(INSERT, "Arbol de directorios: " + "\n")
+        output.insert(INSERT, Get_Tree() + "\n")
 
-        # print the number of files directory.
-        output.insert(INSERT, "[" + str(len(Tree_FileSystem_Advanced().split("\n"))) + "] " + "files indexed." +  "\n\n")
+        # imprime el numero de archivos en el directorio.
+        output.insert(INSERT, "[")
+        output.insert(INSERT, Get_Files_Count() )
+        output.insert(INSERT, "]" + " archivos indexados, con un tamaño de ")
+        output.insert(INSERT, Get_Fils_size() )
+        output.insert(INSERT, " bytes." +  "\n\n")
 
         output.see(END)
 
@@ -573,68 +658,62 @@ def CMD(master, entry, output):
 
 # -------------------------------------------------------------------------------------------------------------------------------------------------
 
-    # info command will print the info of system, like: info , > info.
+    # info, imprime la informacion del sistema base
     def info_command():
         """Info command"""
 
         import platform
 
         output.insert(INSERT, "Info: ---------------------------------------------------------------------" + "\n")
-        output.insert(INSERT, "Base-System: " + platform.system() + "\n")
+        output.insert(INSERT, "Sistema base: " + platform.system() + "\n")
         output.insert(INSERT, "Release: " + platform.release() + "\n")
         output.insert(INSERT, "Version: " + platform.version() + "\n")
-        output.insert(INSERT, "Machine: " + platform.machine() + "\n")
-        output.insert(INSERT, "Processor: " + platform.processor() + "\n")
+        output.insert(INSERT, "Maquina: " + platform.machine() + "\n")
+        output.insert(INSERT, "Procesador: " + platform.processor() + "\n")
         output.insert(INSERT, "---------------------------------------------------------------------------" + "\n\n")
         output.see(END)
     
     if command.startswith("info"):
         info_command()
 
-    # help command will print the help, like: help , >.
+    # help, va a imprimir la ayuda acerca de todos los comandos, como: help , >.
     def help_command():
         """Help command"""
 
-        output.insert(INSERT, "Help: ---------------------------------------------------------------------" + "\n")
-        output.insert(INSERT, "print() - print a string" + "\n")
-        output.insert(INSERT, "add() - adds numbers or strings" + "\n")
-        output.insert(INSERT, "sub() - subtract numbers" + "\n")
-        output.insert(INSERT, "mul() - multiply numbers" + "\n")
-        output.insert(INSERT, "div() - divide numbers" + "\n")
-        output.insert(INSERT, "random(max_number) - generate a random number" + "\n")
+        output.insert(INSERT, "Ayuda: --------------------------------------------------------------------" + "\n")
+        output.insert(INSERT, "print() - imprime un string" + "\n")
+        output.insert(INSERT, "add() - suma numeros o une strings" + "\n")
+        output.insert(INSERT, "sub() - reta numeros" + "\n")
+        output.insert(INSERT, "mul() - multiplica numeros" + "\n")
+        output.insert(INSERT, "div() - divide numeros" + "\n")
+        output.insert(INSERT, "random(max_number) - genera un numero aleatorio" + "\n")
         output.insert(INSERT, "\n")
-        output.insert(INSERT, "var(variable_name, value) - make a variable" + "\n")
-        output.insert(INSERT, "print_value(variable_name) - print the variable value" + "\n")
-        output.insert(INSERT, "clear_var(variable_name) - clean the variable value" + "\n")
+        output.insert(INSERT, "var(variable_name, value) - crea una variable" + "\n")
+        output.insert(INSERT, "print_value(variable_name) - imprime el valor de una variable" + "\n")
+        output.insert(INSERT, "clear_var(variable_name) - establece el valor de una variable a 0" + "\n")
         output.insert(INSERT, "\n")
-        output.insert(INSERT, "repeat(command(args), number) - repeats a command a number of times" + "\n")
+        output.insert(INSERT, "repeat(command(args), number) - repite un comando o funcion un numero de veces" + "\n")
         output.insert(INSERT, "\n")
-        output.insert(INSERT, "? | dir - print the current directory" + "\n")
-        output.insert(INSERT, "cd(directory) - change the current directory" + "\n")
-        output.insert(INSERT, "mkfolder(folder_name) - create a new folder" + "\n")
-        output.insert(INSERT, "mkfile(file_name, extension, content) - create a new file" + "\n")
-        output.insert(INSERT, "move_file(file_name, extension, folder_name) - move a file to other folder" + "\n")
-        output.insert(INSERT, "Rename_file(file_name, extension, new_name, new_extension) - rename a file" + "\n")
-        output.insert(INSERT, "Import_file(file_path, folder_name) - import a real file from the Base-System to the File System" + "\n")
-        output.insert(INSERT, "Execute_file(file_name, extension) - execute a .pys file" + "\n")
-        output.insert(INSERT, "delete_file(file_name, extension) - delete a file" + "\n")
+        output.insert(INSERT, "? | dir - imprime el directorio actual" + "\n")
+        output.insert(INSERT, "cd(directory) - cambia el directorio actual" + "\n")
+        output.insert(INSERT, "mkfolder(folder_name) - crea una nueva carpeta" + "\n")
+        output.insert(INSERT, "mkfile(file_name, extension, content) - crea un nuevo archivo" + "\n")
+        output.insert(INSERT, "move_file(file_name, extension, from_folder, to_folder) - mueve un archivo a otra carpeta" + "\n")
+        output.insert(INSERT, "Rename_file(folder_name, file_name, extension, new_name, new_extension) - renombra un archivo, ademas de su extension" + "\n")
+        output.insert(INSERT, "Import_file(file_path, folder_name) - importa un archivo real del sistema base hasta el sistema de archivos" + "\n")
+        output.insert(INSERT, "Execute_file(folder_name, file_name, extension) - ejecuta un archivo .pys (python script)" + "\n")
+        output.insert(INSERT, "delete_file(file_name, extension) - borra un archivo" + "\n")
         output.insert(INSERT, "\n")
-        output.insert(INSERT, "time - print the current time" + "\n")
-        output.insert(INSERT, "tree - print the directory tree of the current file" + "\n")
-        output.insert(INSERT, "help - print the help" + "\n")
-        output.insert(INSERT, "info - print the system information" + "\n")
-        output.insert(INSERT, "clear | cls - clear the terminal" + "\n")
-        output.insert(INSERT, "exit - exit the terminal" + "\n")
+        output.insert(INSERT, "time - imprime la hora actual" + "\n")
+        output.insert(INSERT, "tree - imprime un directorio de arbol de todos los archivos y carpetas" + "\n")
+        output.insert(INSERT, "help - imprime esta ayuda" + "\n")
+        output.insert(INSERT, "info - imprime la informacion basica del sistema" + "\n")
+        output.insert(INSERT, "clear | cls - limpia la pantalla de la terminal" + "\n")
+        output.insert(INSERT, "exit - ale de la terminal" + "\n")
         output.insert(INSERT, "\n")
-        output.insert(INSERT, ">>> python_command - execute a python command" + "\n")
+        output.insert(INSERT, ">>> python_command - ejecuta funciones de python" + "\n")
         output.insert(INSERT, "---------------------------------------------------------------------------" + "\n\n")
         output.see(END)
 
     if command.startswith("help"):
         help_command()
-
-
-
-
-
-
