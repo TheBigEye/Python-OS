@@ -3,7 +3,7 @@ from tkinter.constants import DISABLED, INSERT, NORMAL
 from System.Programs.Command import CMD
 from System.Utils.Colormap import Black
 
-__author__ = 'Nahuel senek'
+__author__ = 'TheBigEye'
 __version__ = '1.5'
 
 def Os_Installer(master):  # Display the Post-Bios window (coming soon the OOBE)
