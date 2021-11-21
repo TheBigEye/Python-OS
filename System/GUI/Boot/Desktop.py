@@ -6,7 +6,7 @@ from System.GUI.MessageBox import Display_MessageBox
 from System.GUI.Terminal import Display_Terminal
 from System.Utils.Utils import print_log
 
-__author__ = 'Nahuel senek'
+__author__ = 'TheBigEye'
 __version__ = '2.0'
 
 
