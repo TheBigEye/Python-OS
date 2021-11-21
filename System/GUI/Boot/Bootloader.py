@@ -2,7 +2,7 @@ from tkinter import Label, PhotoImage
 from System.Utils.Colormap import Black
 from System.Utils.Utils import print_log
 
-__author__ = 'Nahuel senek'
+__author__ = 'TheBigEye'
 __version__ = '1.5'
 
 def Boot_loader(master): 
