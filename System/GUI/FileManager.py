@@ -1,7 +1,7 @@
 from tkinter import Label, Button, PhotoImage
 from System.GUI.Attributes.Draggable import make_draggable_efficient
 
-__author__ = 'Nahuel senek'
+__author__ = 'TheBigEye'
 __version__ = '1.1'
 
 def Display_FileManager(master, tab, draggable = False):
