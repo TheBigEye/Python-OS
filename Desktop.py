@@ -27,7 +27,7 @@
 from System.GUI.Terminal import Display_Terminal
 from System.GUI.MessageBox import Display_MessageBox # MessageBox package
 from System.GUI.FileManager import Display_FileManager # FileManager package
-from tkinter import Button, Label  
+from tkinter import Button, Label
 import tkinter as tk
 import time
 

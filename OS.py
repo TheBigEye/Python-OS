@@ -43,7 +43,6 @@ def warnings():
         print_warning("La resolucion de la pantalla es menor al de la ventana.")
 
 
-print_log("--- Comenzando la ejecucion del sistema ---")
 warnings() # Muestra las advertencias antes de la ejecucion
 routines() # Ejecuta las rutinas del programa (En este caso nada, ya que no se ejecuta sobre un sistema en blanco)
 Load_FileSystem() # Carga el sistema de archivos desde el archivo .JSON
@@ -59,15 +58,6 @@ def start_boot():
 
     # Despues de 12 segundos (o cuando todo este cargado), inicia el escritorio.
     Os.after(12000, Desktop, Os)
-
-def stop_system():
-
-    # Para la ejecucion del sistema
-    print_log(" ---------- Cerrando el sistema ---------- ")
-    Os.destroy()
-
-# En caso de que el usuario cierre la ventana, se cierra el sistema
-Os.protocol("WM_DELETE_WINDOW", lambda: stop_system())
 
 
 # Aqui se comprueba las variables del orden de arranque y se ejecuta la funcion correspondiente:

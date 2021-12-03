@@ -1,5 +1,7 @@
 import json
 
+from System.Utils.Utils import print_log
+
 Kernel_lvl = 6  # Variable principal de nucleo o kernel
 
 # Cada pantalla tiene un ID
@@ -38,10 +40,8 @@ elif Kernel_lvl == 6:
 # Rutinas
 def routines():
 
-    # Debido a que se ejecuta sobre un sistema base, no es necesario crear una funcion que adapte el programa
-    # sobre un sistema en blanco ya que este es proveido por el sistema base
+    print_log("--- Comenzando la ejecucion del sistema ---")
 
-    pass
 
 def delete_logs():
     # Borra los archivos dentro de la carpeta Logs usando el modulo os

@@ -3,7 +3,7 @@ import time
 
 from System.GUI.Browser import Display_Browser
 from System.GUI.FileManager import Display_FileManager
-from System.GUI.MessageBox import Display_MessageBox
+from System.GUI.MessageBox import MessageBox
 from System.GUI.Terminal import Terminal
 from System.Utils.Utils import get_asset, print_log, Execute
 
@@ -44,19 +44,19 @@ def Desktop(master):
     # Lista de los cuadros de dialogo que se usan, Error, advertencia, peligro, e info
     def Settings_error():
         Close_start_menu()
-        Display_MessageBox(master, "Error", "Settings not found", draggable=False)
+        MessageBox(master, "Error", "Troubleshoting.py" ,"Settings not found", False)
 
     def Print_error():
         Close_start_menu()
-        Display_MessageBox(master, "Info", "Printing not found", draggable=False)
+        MessageBox(master, "Info", "Info", "Printing not found", False)
 
     def This_PC_error():
         Close_start_menu()
-        Display_MessageBox(master, "Warning", "This PC not found", draggable=False)
+        MessageBox(master, "Warning", "This PC", "This PC not found", True)
 
     def FileManager_error():
         Close_start_menu()
-        Display_MessageBox(master, "Error", "File Manager not found", draggable=False)
+        MessageBox(master, "Error", "Explorer.py", "File Manager not found", False)
 
 
  # ----------------------------------------------------------------[ Programas ]--------------------------------------------------------------------
