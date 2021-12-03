@@ -90,7 +90,7 @@ def Desktop(master):
     # Barra de tareas
     Taskbar = Label(
         master,
-        width = 1024,
+        width = 915,
         height = 29,
         borderwidth = "0",
         image = Taskbar_GUI_Image,
@@ -99,7 +99,27 @@ def Desktop(master):
         relief = "raised",
     )
 
-    Taskbar.place(x= 0, y= 571)
+    Taskbar.place(x= 109, y= 571)
+
+
+
+    global Startbar_GUI_Image, Startbar
+    Startbar_GUI_Image = get_asset("Assets/GUI/Taskbar/Startbar.png")
+
+    # Barra de inicio
+    Startbar = Label(
+        master,
+        width = 109,
+        height = 29,
+        borderwidth = "0",
+        image = Startbar_GUI_Image,
+        background = "white",
+        foreground = "gray",
+        relief = "raised",
+    )
+
+    Startbar.place(x= 0, y= 571)
+
 
 
  # -------------------------------------------------------------[ Barra del reloj ]-----------------------------------------------------------------
@@ -115,7 +135,7 @@ def Desktop(master):
         bg="#080D11",
     )
 
-    Clockbar.place(x=950, y=1)
+    Clockbar.place(x=850, y=1)
 
     # El reloj
     def times():
@@ -126,7 +146,7 @@ def Desktop(master):
 
     clock = Label(Taskbar, borderwidth="0", relief="raised")
     clock.after(1, times)
-    clock.place(x=965, y=6)
+    clock.place(x=865, y=6)
 
 
  # ------------------------------------------------------------[ Menu de inicio ]-------------------------------------------------------------------
@@ -154,19 +174,19 @@ def Desktop(master):
         time.sleep(0.1)
 
         Open_start_button.place_forget()
-        Close_start_button.place(x=6, y=573)
+        Close_start_button.place(x=6, y=2)
 
     # Cierra
     def Close_start_menu():
         Start_menu.place_forget()
         time.sleep(0.1)
 
-        Open_start_button.place(x=6, y=573)
+        Open_start_button.place(x=6, y=2)
         Close_start_button.place_forget()
 
     # Los botones se van reemplazando uno al otro para usar diferentes funciones a la vez
     Open_start_button = Button(
-        master,
+        Startbar,
         width=28,
         height=25,
         borderwidth="0",
@@ -175,10 +195,10 @@ def Desktop(master):
         command=Open_start_menu,
         image= Start_menu_button
     )
-    Open_start_button.place(x=6, y=573)
+    Open_start_button.place(x=6, y=2)
 
     Close_start_button = Button(
-        master,
+        Startbar,
         width=28,
         height=25,
         borderwidth="0",
@@ -194,6 +214,50 @@ def Desktop(master):
 
     Close_start_button.bind("<Enter>", lambda event: Close_start_button.config(image = Start_menu_active_button))
     Close_start_button.bind("<Leave>", lambda event: Close_start_button.config(image = Start_menu_button))
+
+ # ----------------------------------------------------[ Botones de la barra de inicio ]------------------------------------------------------------
+
+
+    # Icono de modulos
+    global Modules_startbar_icon, Modules_startbar_active_icon, Modules_startbar_button
+    Modules_startbar_icon = get_asset("Assets/GUI/Taskbar/Modules_button.png")
+    Modules_startbar_active_icon = get_asset("Assets/GUI/Taskbar/Modules_button_active.png")
+
+    Modules_startbar_button = Button(
+        Startbar,
+        width=28,
+        height=25,
+        borderwidth="0",
+        relief="raised",
+        bg = "#070E11",
+        image= Modules_startbar_icon,
+        command=Terminal_programm
+    )
+    Modules_startbar_button.place(x=42, y=2)
+
+    Modules_startbar_button.bind("<Enter>", lambda event: Modules_startbar_button.config(image = Modules_startbar_active_icon))
+    Modules_startbar_button.bind("<Leave>", lambda event: Modules_startbar_button.config(image = Modules_startbar_icon))
+
+
+    # icono de busqueda
+    global Search_startbar_icon, Search_startbar_active_icon, Search_startbar_button
+    Search_startbar_icon = get_asset("Assets/GUI/Taskbar/Search_button.png")
+    Search_startbar_active_icon = get_asset("Assets/GUI/Taskbar/Search_button_active.png")
+
+    Search_startbar_button = Button(
+        Startbar,
+        width=28,
+        height=25,
+        borderwidth="0",
+        relief="raised",
+        bg = "#070E11",
+        image= Search_startbar_icon,
+        command=Terminal_programm
+    )
+    Search_startbar_button.place(x=76, y=2)
+
+    Search_startbar_button.bind("<Enter>", lambda event: Search_startbar_button.config(image = Search_startbar_active_icon))
+    Search_startbar_button.bind("<Leave>", lambda event: Search_startbar_button.config(image = Search_startbar_icon))
 
  # ----------------------------------------------------[ Botones de la barra de tareas ]------------------------------------------------------------
 
@@ -213,7 +277,7 @@ def Desktop(master):
         command=Terminal_programm,
         image = Terminal_taskbar_icon
     )
-    Terminal_taskbar_button.place(x=48, y=2)
+    Terminal_taskbar_button.place(x=8, y=2) #48
 
     Terminal_taskbar_button.bind("<Enter>", lambda event: Terminal_taskbar_button.config(image = Terminal_taskbar_active_icon))
     Terminal_taskbar_button.bind("<Leave>", lambda event: Terminal_taskbar_button.config(image = Terminal_taskbar_icon))
@@ -234,7 +298,7 @@ def Desktop(master):
         command=File_manager,
         image = File_manager_taskbar_icon
     )
-    File_manager_taskbar_button.place(x=82, y=2)
+    File_manager_taskbar_button.place(x=42, y=2)#82
 
     File_manager_taskbar_button.bind("<Enter>", lambda event: File_manager_taskbar_button.config(image = File_manager_taskbar_active_icon))
     File_manager_taskbar_button.bind("<Leave>", lambda event: File_manager_taskbar_button.config(image = File_manager_taskbar_icon))
@@ -255,7 +319,7 @@ def Desktop(master):
         command = Browser,
         image = Browser_taskbar_icon
     )
-    Browser_taskbar_button.place(x=116, y=2)
+    Browser_taskbar_button.place(x=76, y=2)#116
 
     Browser_taskbar_button.bind("<Enter>", lambda event: Browser_taskbar_button.config(image = Browser_taskbar_active_icon))
     Browser_taskbar_button.bind("<Leave>", lambda event: Browser_taskbar_button.config(image = Browser_taskbar_icon))
@@ -274,7 +338,7 @@ def Desktop(master):
         bg="#070E11",
         image = Clockbar_taskbar_icons
     )
-    Clockbar_icons.place(x=864, y=1)
+    Clockbar_icons.place(x=755, y=1)
 
 
     # Icono del estado de la bateria
