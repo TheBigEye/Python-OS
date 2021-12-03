@@ -52,7 +52,7 @@ class MessageBox(Label):
 
             global Error_Title_bg, Error_Message_bg
             self.Error_Title_bg = "#CF3325"
-            self.Error_Message_bg = "#DE4142"
+            self.Error_Message_bg = "#ffffff"
 
 
             global Error_MessageBox_GUI_Image, Error_MessageBox
@@ -86,7 +86,7 @@ class MessageBox(Label):
                 width = 32,
                 height = 1,
                 bg = self.Error_Message_bg,
-                fg = "#FFFFFF",
+                fg = "#000000",
                 text = self.message,
                 font=(Font, 8)
             )
@@ -117,8 +117,8 @@ class MessageBox(Label):
 
             self.Error_Ok_button = Button(
                 self.Error_MessageBox,
-                width=26,
-                height=20,
+                width=28,
+                height=22,
                 bg= self.Error_Message_bg,
                 image=self.Error_Ok_MessageBox_Image,
                 borderwidth="0",
@@ -149,8 +149,8 @@ class MessageBox(Label):
                 make_draggable(self.Error_MessageBox)
 
             self.Error_Title_label.place(x= 4, y= 5)
-            self.Error_Message_label.place(x= 28, y= 44)
-            self.Error_Logo.place(x= 12, y= 44)
+            self.Error_Message_label.place(x= 20, y= 44)
+            self.Error_Logo.place(x= 18, y= 44)
 
             self.Error_MessageBox.place(x= 320, y= 240)
 
@@ -161,7 +161,7 @@ class MessageBox(Label):
 
             global Info_Title_bg, Info_Message_bg
             self.Info_Title_bg = "#388499"
-            self.Info_Message_bg = "#44A0BA"
+            self.Info_Message_bg = "#ffffff"
 
 
             global Info_MessageBox_GUI_Image, Info_MessageBox
@@ -193,7 +193,7 @@ class MessageBox(Label):
                 width = 32,
                 height = 1,
                 bg = self.Info_Message_bg,
-                fg = "#FFFFFF",
+                fg = "#000000",
                 text = self.message,
                 font=(Font, 8)
             )
@@ -224,8 +224,8 @@ class MessageBox(Label):
 
             self.Info_Ok_button = Button(
                 self.Info_MessageBox,
-                width=26,
-                height=20,
+                width=28,
+                height=22,
                 bg= self.Info_Message_bg,
                 image=self.Info_Ok_MessageBox_Image,
                 borderwidth="0",
@@ -257,8 +257,8 @@ class MessageBox(Label):
 
 
             self.Info_Title_label.place(x= 4, y= 5)
-            self.Info_Message_label.place(x= 28, y= 44)
-            self.Info_Logo.place(x= 12, y= 44)
+            self.Info_Message_label.place(x= 20, y= 44)
+            self.Info_Logo.place(x= 18, y= 44)
 
             self.Info_MessageBox.place(x= 320, y= 240)
 
@@ -270,7 +270,7 @@ class MessageBox(Label):
 
             global Warning_Title_bg, Warning_Message_bg
             self.Warning_Title_bg = "#CC6A14"
-            self.Warning_Message_bg = "#F98118"
+            self.Warning_Message_bg = "#Ffffff"
 
 
             global Warning_MessageBox_GUI_Image, Warning_MessageBox
@@ -300,7 +300,7 @@ class MessageBox(Label):
                 width = 32,
                 height = 1,
                 bg = self.Warning_Message_bg,
-                fg = "#FFFFFF",
+                fg = "#000000",
                 text = self.message,
                 font=(Font, 8)
             )
@@ -331,8 +331,8 @@ class MessageBox(Label):
 
             self.Warning_Ok_button = Button(
                 self.Warning_MessageBox,
-                width=26,
-                height=20,
+                width=28,
+                height=22,
                 bg= self.Warning_Message_bg,
                 image=self.Warning_Ok_MessageBox_Image,
                 borderwidth="0",
@@ -362,7 +362,7 @@ class MessageBox(Label):
                 make_draggable(self.Warning_MessageBox)
 
             self.Warning_Title_label.place(x= 4, y= 5)
-            self.Warning_Message_label.place(x= 28, y= 44)
-            self.Warning_Logo.place(x= 12, y= 44)
+            self.Warning_Message_label.place(x= 20, y= 44)
+            self.Warning_Logo.place(x= 18, y= 44)
 
             self.Warning_MessageBox.place(x= 320, y= 240)

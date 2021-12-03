@@ -289,6 +289,7 @@ def Desktop(master):
         relief="flat",
         bg="#070E11",
         image=Battery_taskbar_icon,
+        command = Settings_error
     )
     Battery_status_icon.place(x=24, y=-6)
 
@@ -310,6 +311,7 @@ def Desktop(master):
         relief="flat",
         bg="#080D11",
         image=Internet_Connected_icon,
+        command = Print_error
     )
     Internet_status_icon.place(x=48, y=-6)
 
@@ -326,6 +328,7 @@ def Desktop(master):
         relief="flat",
         bg="#080D11",
         image=Volume_icon,
+        command = This_PC_error
     )
     Volume_status_icon.place(x=72, y=-6)
 
