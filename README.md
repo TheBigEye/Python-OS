@@ -1,27 +1,27 @@
-# Python-OS
-(Work in progress)A simulator of the operating system (inspired in windows) made in python using the Tkinter module
+# Python OS
+(Desarollo en progreso) Un simulador de un sistema operativo(inspirado en Windows) hecho en python usando el modulo Tkinter
 
-## Features implemented:
-- Start button
-- Start menu gui (For now there are only icons, then I will add buttons to run programs)
-- Taskbar
-- Terminal
-- File system
-- Wallpaper
-- Draggable windows (Is bugged)
-- Right click menu
-- Clock
+## Caracteristicas implementadas:
+- Boton de inicio:
+- Interfaz del menu de inicio (Por ahora son solo iconos, luego agregare la capacidad de ejecutar y anclar programas alli)
+- Barra de tareas
+- Terminal (con comandos incluidos)
+- Navegador
+- Sistema de archivos (Se compone de un JSON)
+- Cargador de arranque
+- Fondo de escritorio
+- Ventanas arrastrables (Esta algo bugueado)
+- Reloj e iconos de internet, volumen, etc
+
+## Futuras caracteristicas:
+- Explorador de archivos
+- Pantalla de logueo
+- Antivirus (falso)
+- Panel de control
+- Iconos arrastrables
 - Theme Concept by Litorom1
 
-## Future features:
-- File Manager
-- Browser
-- Login screen
-- Antivirus (fake)
-- Control panel
-- Draggable desktop icons
+## Caracteristicas menos probables de implementar:
+- Pantalla de inicio
+- Internet, resolucion de pantalla y opciones de archivos
 
-## Features less likely to implement:
-- Startup screen
-- Internet, screen resolution and file options
-- The love of her ._.
