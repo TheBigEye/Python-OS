@@ -12,7 +12,7 @@ def CMD(master, entry, output):
         - Have owns functions and commands (e.g. "subtract(10, 20)", repeat(print("Hello"), 10) )
 
     Parameters:
-    ----------- 
+    -----------
         entry: str
             The command to be executed. (For better understanding, it can also be a tkinter widget that has input, like Entry)
         output: str
@@ -26,9 +26,9 @@ def CMD(master, entry, output):
     Example:
     --------
         CMD("ls", output) or, CMD(Entry_widget, Output_widget)
-                
+
     """
-    
+
     # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
     import os
@@ -58,9 +58,9 @@ def CMD(master, entry, output):
             else:
                 # En caso de que no se halla declarado con comillas, aparece un error
                 output.insert(INSERT, "Error: se necesitan comillas." + "\n")
-                
+
         else:
-            # En caso de que el comando n otenga parentesis para declarar los argumentos, se mostrara un error
+            # En caso de que el comando no tenga parentesis para declarar los argumentos, se mostrara un error
             output.insert(INSERT, "Error: se necesitan parentesis" + "\n")
 
     # Si la terminal detecta el comando print, ejecuta el comando solicitado
@@ -104,7 +104,7 @@ def CMD(master, entry, output):
         else:
             # si el comando no tiene parentesis, aparece un error
             output.insert(INSERT, "Error: no tiene parentesis" + "\n")
-        
+
     # Si el comando ingresado en la terminal comienza por add(, entonces ejecuta el comando add(numero_o_palabra)
     if command.startswith("add("):
         add_command(command)
@@ -127,7 +127,7 @@ def CMD(master, entry, output):
     if command.startswith("sub("):
         sub_command(command)
 
-        
+
     # multiply command is a special command that will multiply the numbers in the command together, like: multiply(1,2,3,4,5) , > 120.
     def mul_command(command):
         """Multiply command"""
@@ -168,7 +168,12 @@ def CMD(master, entry, output):
 
         command = command.replace("random(", "")
         command = command.replace(")", "")
-        random_number = random.randint(1, int(command))
+        command = command.split(",")
+
+        min_number = command[0]
+        max_number = command[1]
+
+        random_number = random.randint(int(min_number), int(max_number))
         output.insert(INSERT, random_number)
         output.insert(INSERT, "\n")
         output.see(END)
@@ -281,7 +286,7 @@ def CMD(master, entry, output):
 
     if command.startswith("delay("):
         delay_command(command)
-        
+
 
 # -------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -311,7 +316,7 @@ def CMD(master, entry, output):
         """Exit command"""
 
         master.destroy()
-        
+
 
     if command.startswith("exit"):
         exit_command()
@@ -334,11 +339,11 @@ def CMD(master, entry, output):
         else:
             output.insert(INSERT, ">>> " + command + "\n")
             output.see(END)
-                
+
             try:
                 # Execute the command and use the variables
                 exec(command, globals())
-                
+
             except Exception as error:
                 output.insert(INSERT, str(error) + "\n")
                 output.see(END)
@@ -349,7 +354,7 @@ def CMD(master, entry, output):
 
 # -------------------------------------------------------------------------------------------------------------------------------------------------
 
- 
+
     # cd command will change the current directory, like: cd(directory) , > , or cd.. to go back one directory.
     def cd_command(command):
         """Cd command"""
@@ -383,10 +388,10 @@ def CMD(master, entry, output):
         output.insert(INSERT, "Carpeta " + command + " creada" + "\n")
         print_log("[mkfolder]" + " Carpeta " + command + " creada")
         output.see(END)
-    
+
     if command.startswith("mkfolder("):
         mkfolder_command(command)
-    
+
 
     def mkfile_command(command):
 
@@ -397,10 +402,10 @@ def CMD(master, entry, output):
         command = command.split(", ")
 
         file_name = command[0]
-        extension = command[1]    
+        extension = command[1]
         content = command[2]
 
-        Create_file(file_name, extension, content)  
+        Create_file(file_name, extension, content)
         Save_FileSystem()
 
         output.insert(INSERT, "Archivo " + file_name + "." + extension + " creado" + "\n")
@@ -410,7 +415,7 @@ def CMD(master, entry, output):
     if command.startswith("mkfile("):
         mkfile_command(command)
 
-    
+
     # move_file command will move a file, like: move_file(file_name, extension, folder_name) , > .
     def move_file_command(command):
 
@@ -439,7 +444,7 @@ def CMD(master, entry, output):
     if command.startswith("move_file("):
         move_file_command(command)
 
-    
+
     # delete_file command will delete a file, like: delete_file(file_name, extension) , > .
     def delete_file_command(command):
 
@@ -481,7 +486,7 @@ def CMD(master, entry, output):
     if command.startswith("delete_folder("):
         delete_folder_command(command)
 
-    
+
     def rename_file_command(command):
 
         from System.Core.Core import Rename_file, Save_FileSystem
@@ -514,7 +519,7 @@ def CMD(master, entry, output):
 
         global get_response
         global answer
-            
+
         from System.Core.Core import Format_FileSystem
 
         answer = ""
@@ -524,7 +529,7 @@ def CMD(master, entry, output):
 
         # Get the response from the user in the terminal, until a response is given in command, the following lines will not be executed.
         answer = input()
-        
+
         # If the user typed "y", the filesystem will be formatted.
         if answer == "y":
             Format_FileSystem()
@@ -533,18 +538,18 @@ def CMD(master, entry, output):
 
         # If the user typed "n", the filesystem will not be formatted.
         elif answer == "n":
-            output.insert(INSERT, "Filesystem not formatted" + "\n")
+            output.insert(INSERT, "Filesystem not be formatted" + "\n")
             output.see(END)
 
         # If the user typed something else, the filesystem will not be formatted.
         else:
             output.insert(INSERT, "Filesystem not formatted" + "\n")
             output.see(END)
-                
+
     if command.startswith("format"):
         format_command(command)
 
-    
+
     def import_file_command(command):
 
         from System.Core.Core import Import_file, Save_FileSystem
@@ -565,7 +570,7 @@ def CMD(master, entry, output):
 
     if command.startswith("import_file("):
         import_file_command(command)
-    
+
 
     def export_file_command(command):
 
@@ -614,7 +619,7 @@ def CMD(master, entry, output):
 
     if command.startswith("execute_file("):
         execute_file(command)
-    
+
 
     # dir command will print the directory of the current file (using the filesystem in core.py), like: dir() , > dir.
     def dir_command():
@@ -656,6 +661,19 @@ def CMD(master, entry, output):
         tree_command()
 
 
+    # delete_logs
+    def delete_logs_command():
+        from System.Core.Core import delete_logs
+
+        delete_logs()
+
+        output.insert(INSERT, "Logs eliminados" + "\n")
+        output.see(END)
+
+    if command.startswith("delete_logs"):
+        delete_logs_command()
+
+
 # -------------------------------------------------------------------------------------------------------------------------------------------------
 
     # info, imprime la informacion del sistema base
@@ -664,15 +682,15 @@ def CMD(master, entry, output):
 
         import platform
 
-        output.insert(INSERT, "Info: ---------------------------------------------------------------------" + "\n")
+        output.insert(INSERT, "Info: ─────────────────────────────────────────────────────────────────────" + "\n")
         output.insert(INSERT, "Sistema base: " + platform.system() + "\n")
         output.insert(INSERT, "Release: " + platform.release() + "\n")
         output.insert(INSERT, "Version: " + platform.version() + "\n")
         output.insert(INSERT, "Maquina: " + platform.machine() + "\n")
         output.insert(INSERT, "Procesador: " + platform.processor() + "\n")
-        output.insert(INSERT, "---------------------------------------------------------------------------" + "\n\n")
+        output.insert(INSERT, "───────────────────────────────────────────────────────────────────────────" + "\n\n")
         output.see(END)
-    
+
     if command.startswith("info"):
         info_command()
 
@@ -680,13 +698,13 @@ def CMD(master, entry, output):
     def help_command():
         """Help command"""
 
-        output.insert(INSERT, "Ayuda: --------------------------------------------------------------------" + "\n")
+        output.insert(INSERT, "Ayuda: ────────────────────────────────────────────────────────────────────" + "\n")
         output.insert(INSERT, "print() - imprime un string" + "\n")
         output.insert(INSERT, "add() - suma numeros o une strings" + "\n")
         output.insert(INSERT, "sub() - reta numeros" + "\n")
         output.insert(INSERT, "mul() - multiplica numeros" + "\n")
         output.insert(INSERT, "div() - divide numeros" + "\n")
-        output.insert(INSERT, "random(max_number) - genera un numero aleatorio" + "\n")
+        output.insert(INSERT, "random(min_number, max_number) - genera un numero aleatorio" + "\n")
         output.insert(INSERT, "\n")
         output.insert(INSERT, "var(variable_name, value) - crea una variable" + "\n")
         output.insert(INSERT, "print_value(variable_name) - imprime el valor de una variable" + "\n")
@@ -712,7 +730,7 @@ def CMD(master, entry, output):
         output.insert(INSERT, "exit - ale de la terminal" + "\n")
         output.insert(INSERT, "\n")
         output.insert(INSERT, ">>> python_command - ejecuta funciones de python" + "\n")
-        output.insert(INSERT, "---------------------------------------------------------------------------" + "\n\n")
+        output.insert(INSERT, "───────────────────────────────────────────────────────────────────────────" + "\n\n")
         output.see(END)
 
     if command.startswith("help"):

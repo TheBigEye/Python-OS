@@ -1,0 +1,20 @@
+06:44:48 |  ---------- Cerrando el sistema ---------- 
+23:49:15 | --- Comenzando la ejecucion del sistema ---
+23:49:15 | [INFO] Sistema de archivos cargado
+23:49:15 | Bootloader: Iniciado...
+23:49:16 | Empezando desde el arranque normal
+23:49:20 |  ---------- Cerrando el sistema ---------- 
+23:50:13 | --- Comenzando la ejecucion del sistema ---
+23:50:13 | [INFO] Sistema de archivos cargado
+23:50:13 | Bootloader: Iniciado...
+23:50:14 | Empezando desde el arranque normal
+23:50:23 | Bootloader: Terminando...
+23:50:25 | Desktop: Escritorio cargado y ejecutandose
+23:50:28 |  ---------- Cerrando el sistema ---------- 
+23:50:43 | --- Comenzando la ejecucion del sistema ---
+23:50:43 | [INFO] Sistema de archivos cargado
+23:50:43 | Bootloader: Iniciado...
+23:50:44 | Empezando desde el arranque normal
+23:50:54 | Bootloader: Terminando...
+23:50:56 | Desktop: Escritorio cargado y ejecutandose
+23:51:38 |  ---------- Cerrando el sistema ---------- 

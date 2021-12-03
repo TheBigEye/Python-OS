@@ -1,5 +1,6 @@
-from tkinter import Button, Label, PhotoImage  
+from tkinter import Button, Label
 from System.GUI.Attributes.Draggable import make_draggable
+from System.Utils.Utils import get_asset
 
 __author__ = 'TheBigEye'
 __version__ = '1.1'
@@ -52,10 +53,10 @@ def Display_MessageBox(master, type, title, message, draggable = False):
 
     if (type == "Error"):
 
-        Error_MessageBox_GUI_Image = PhotoImage(file = "Assets/GUI/Messagebox/Error_MessageBox.png")
-        Error_Close_MessageBox_Image = PhotoImage(file="Assets/GUI/Messagebox/Close_Error_Button.png")
-        Error_Logo_Image = PhotoImage(file="Assets/GUI/Messagebox/Error.png")
-        Error_Ok_MessageBox_Image = PhotoImage(file="Assets/GUI/Messagebox/OK_Error_Button.png")
+        Error_MessageBox_GUI_Image = get_asset("Assets/GUI/Messagebox/Error_MessageBox.png")
+        Error_Close_MessageBox_Image = get_asset("Assets/GUI/Messagebox/Close_Error_Button.png")
+        Error_Logo_Image = get_asset("Assets/GUI/Messagebox/Error.png")
+        Error_Ok_MessageBox_Image = get_asset("Assets/GUI/Messagebox/OK_Error_Button.png")
 
         Error_Title_bg = "#CF3325"
         Error_Message_bg = "#DE4142"
@@ -143,10 +144,10 @@ def Display_MessageBox(master, type, title, message, draggable = False):
 
     if (type == "Info"):
 
-        Info_MessageBox_GUI_Image = PhotoImage(file = "Assets/GUI/Messagebox/Info_MessageBox.png")
-        Info_Close_MessageBox_Image = PhotoImage(file="Assets/GUI/Messagebox/Close_Info_Button.png")
-        Info_Logo_Image = PhotoImage(file="Assets/GUI/Messagebox/Info.png")
-        Info_Ok_MessageBox_Image = PhotoImage(file="Assets/GUI/Messagebox/OK_Info_Button.png")
+        Info_MessageBox_GUI_Image = get_asset("Assets/GUI/Messagebox/Info_MessageBox.png")
+        Info_Close_MessageBox_Image = get_asset("Assets/GUI/Messagebox/Close_Info_Button.png")
+        Info_Logo_Image = get_asset("Assets/GUI/Messagebox/Info.png")
+        Info_Ok_MessageBox_Image = get_asset("Assets/GUI/Messagebox/OK_Info_Button.png")
 
         Info_Title_bg = "#388499"
         Info_Message_bg = "#44A0BA"
@@ -234,10 +235,10 @@ def Display_MessageBox(master, type, title, message, draggable = False):
 
     if (type == "Warning"):
 
-        Warning_MessageBox_GUI_Image = PhotoImage(file = "Assets/GUI/Messagebox/Warning_MessageBox.png")
-        Warning_Close_MessageBox_Image = PhotoImage(file="Assets/GUI/Messagebox/Close_Warning_Button.png")
-        Warning_Logo_Image = PhotoImage(file="Assets/GUI/Messagebox/Warning.png")
-        Warning_Ok_MessageBox_Image = PhotoImage(file="Assets/GUI/Messagebox/OK_Warning_Button.png")
+        Warning_MessageBox_GUI_Image = get_asset("Assets/GUI/Messagebox/Warning_MessageBox.png")
+        Warning_Close_MessageBox_Image = get_asset("Assets/GUI/Messagebox/Close_Warning_Button.png")
+        Warning_Logo_Image = get_asset("Assets/GUI/Messagebox/Warning.png")
+        Warning_Ok_MessageBox_Image = get_asset("Assets/GUI/Messagebox/OK_Warning_Button.png")
 
         Warning_Title_bg = "#CC6A14"
         Warning_Message_bg = "#F98118"
@@ -319,8 +320,3 @@ def Display_MessageBox(master, type, title, message, draggable = False):
         Warning_Logo.place(x= 12, y= 44)
 
         Warning_MessageBox.place(x= 320, y= 240)
-
-# Print the module info
-# print("Author: " + str(__author__))
-# print("Module version: " + str(__version__))
-# print(Display_MessageBox.__doc__)

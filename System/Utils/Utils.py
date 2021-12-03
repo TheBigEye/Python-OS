@@ -1,6 +1,9 @@
 import inspect
 import os
 import datetime
+from tkinter import PhotoImage
+
+from System.Utils.Vars import Assets_dir
 
 # Loggers ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -19,7 +22,7 @@ def Logger(Log_Message):
 
 # Improved version.
 def Logger_improved(Log_Message):
-    
+
     # If the file does not exist, it creates it in the path where this project is, inside the Logs folder.
     if not os.path.exists("Logs"):
         os.makedirs("Logs")
@@ -28,7 +31,7 @@ def Logger_improved(Log_Message):
     current_date = str(datetime.date.today())
     # Get the current time, only hours, minutes and seconds.
     current_time = str(datetime.datetime.now())[11:19]
-    
+
     # Open the file and write the message.
     with open("Logs/Log_" + current_date + ".txt", "a") as Log_File:
         Log_File.write(current_time + " | " + Log_Message + "\n")
@@ -36,7 +39,7 @@ def Logger_improved(Log_Message):
 
 # Print ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-class CHAR_colors:
+class CharColors:
     FAIL = '\033[91m'
     LOG = '\033[92m'
     WARNING = '\033[93m'
@@ -51,22 +54,22 @@ class CHAR_colors:
 
 
 def print_log(message):
-    print(f"{CHAR_colors.LOG}[LOG] {CHAR_colors.ENDC}" + message)
+    print(f"{CharColors.LOG}[LOG] {CharColors.ENDC}" + message)
     Logger_improved(message)
 
 
-def print_error(message):    
-    print(f"{CHAR_colors.FAIL}[ERROR] {CHAR_colors.ENDC}" + message)
+def print_error(message):
+    print(f"{CharColors.FAIL}[ERROR] {CharColors.ENDC}" + message)
     Logger_improved("[ERROR] " + message)
 
 
 def print_warning(message):
-    print(f"{CHAR_colors.WARNING}[WARNING] {CHAR_colors.ENDC}" + message)
+    print(f"{CharColors.WARNING}[WARNING] {CharColors.ENDC}" + message)
     Logger_improved("[WARNING] " + message)
 
 
 def print_info(message):
-    print(f"{CHAR_colors.INFO}[INFO] {CHAR_colors.ENDC}" + message)
+    print(f"{CharColors.INFO}[INFO] {CharColors.ENDC}" + message)
     Logger_improved("[INFO] " + message)
 
 
@@ -88,6 +91,36 @@ def Get_Current_Date():
 def Get_Current_Date_Time():
     current_date_time = str(datetime.datetime.now())
     return current_date_time
+
+
+def Execute(master, Loading_time: float, Function, *args):
+    global Open, Loading_cursor, Normal_cursor
+
+    # the Display_Terminal() function will run in different threads, so we need to use the tkinter.after() method to call it
+    # after the start_menu is closed
+    def Open():
+        Function(*args)
+
+    def Loading_cursor():
+            master.config(cursor="wait")
+
+    def Normal_cursor():
+            master.config(cursor="")
+
+    master.after(100, Loading_cursor)
+    master.after(Loading_time, Open)
+    master.after(1512, Normal_cursor)
+
+
+def get_asset(path):
+
+    path = path.replace("Assets/", "/")
+    Asset = PhotoImage(file= Assets_dir + path)
+
+    return Asset
+
+
+
 
 
 

@@ -1,0 +1,5 @@
+00:41:39 | --- Comenzando la ejecucion del sistema ---
+00:41:40 | [INFO] Sistema de archivos cargado
+00:41:40 | Bootloader: Iniciado...
+00:41:40 | Empezando desde el arranque normal
+00:41:42 |  ---------- Cerrando el sistema ---------- 

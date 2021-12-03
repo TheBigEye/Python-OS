@@ -1,8 +1,17 @@
 import tkinter as tk
 
-from System.Core.Core import (Is_Boot, Is_FAIL, Is_in_BIOS, Is_in_Boot,
-                              Is_in_Desktop, Is_in_INSTALLER, Is_in_Login,
-                              Load_FileSystem, routines)
+from System.Core.Core import (
+    Is_Boot,
+    Is_FAIL,
+    Is_in_BIOS,
+    Is_in_Boot,
+    Is_in_Desktop,
+    Is_in_INSTALLER,
+    Is_in_Login,
+    Load_FileSystem,
+    routines
+)
+
 from System.GUI.Boot.BIOS import BIOS
 from System.GUI.Boot.Bootloader import Boot_loader
 from System.GUI.Boot.Desktop import Desktop
@@ -10,19 +19,19 @@ from System.GUI.Boot.Installer import Os_Installer
 from System.GUI.Boot.Login import Login
 from System.GUI.Boot.RSOD import RSOD
 from System.Utils.Colormap import Black
-from System.Utils.Utils import (print_error, print_info, print_log,
-                                print_warning)
+from System.Utils.Utils import (print_error, print_info, print_log, print_warning)
+from System.Utils.Vars import Assets_dir
 
 # -----------------------------------------------------------------[ Main ]----------------------------------------------------------------------- #
 
 
 Os = tk.Tk()  # Crea la ventana que sera la base del programa
 Os.title("PythonOS")  # El titulo de la ventana
-Os.iconbitmap("Assets/Images/icon.ico")  # Icono de la ventana
+Os.iconbitmap(Assets_dir + "/Images/icon.ico")  # Icono de la ventana
 
 Os.geometry("1024x600")  # Resolucion de la pantalla
 Os.resizable(False, False)  # No se puede agarandar o achicar
-Os.configure(background=Black)  # El negro es el color base
+Os.configure(background = Black)  # El negro es el color base
 
 
 #  Advertencias.
@@ -34,10 +43,11 @@ def warnings():
         print_warning("La resolucion de la pantalla es menor al de la ventana.")
 
 
+print_log("--- Comenzando la ejecucion del sistema ---")
 warnings() # Muestra las advertencias antes de la ejecucion
-routines() # Ejecuta las rutinas del programa (En este caso nada, ya que no se ejcuta sobre un sistema en blanco)
-Load_FileSystem() # Carga el sitema de archivos desde el archivo .JSON
-print_info("Sistema de archivos cargado...")
+routines() # Ejecuta las rutinas del programa (En este caso nada, ya que no se ejecuta sobre un sistema en blanco)
+Load_FileSystem() # Carga el sistema de archivos desde el archivo .JSON
+print_info("Sistema de archivos cargado")
 
 # -----------------------------------------------------------------[ Boot ]-------------------------------------------------------------------------- #
 
@@ -49,6 +59,15 @@ def start_boot():
 
     # Despues de 12 segundos (o cuando todo este cargado), inicia el escritorio.
     Os.after(12000, Desktop, Os)
+
+def stop_system():
+
+    # Para la ejecucion del sistema
+    print_log(" ---------- Cerrando el sistema ---------- ")
+    Os.destroy()
+
+# En caso de que el usuario cierre la ventana, se cierra el sistema
+Os.protocol("WM_DELETE_WINDOW", lambda: stop_system())
 
 
 # Aqui se comprueba las variables del orden de arranque y se ejecuta la funcion correspondiente:
@@ -73,7 +92,7 @@ elif Is_in_Boot == True:
 
 elif Is_in_Login == True:
     Login(Os) # Inicia el login
-    print_log("Empezando des de la pantalla de logueo") # sin utilizar
+    print_log("Empezando desde Login") # Sin utilizar
 
 elif Is_in_Desktop == True:
     Desktop(Os) # Inicia el escritorio
@@ -81,7 +100,7 @@ elif Is_in_Desktop == True:
 
 elif Is_Boot == True:
     start_boot() # Inicia el arranque en general
-    print_log("Emepzando desde el arranque normal")
+    print_log("Empezando desde el arranque normal")
 
 # En caso de que el orden que arranque falle, detiene el programa y se escribe lo siguiente:
 else:
@@ -89,7 +108,6 @@ else:
 
     # detiene el programa destruyendo la ventana
     Os.destroy()
-
 
 
 Os.mainloop() # Bucle principal de tkinter

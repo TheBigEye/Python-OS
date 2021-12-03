@@ -1,132 +1,176 @@
-import os
-from tkinter import Entry, Label, Button, PhotoImage, Text, Tk
-from tkinter.constants import END, INSERT
-import time
-import random
+from tkinter import Button, Entry, Label, Text
+from tkinter.constants import INSERT
 
-from System.GUI.Attributes.Draggable import make_draggable
+from System.GUI.Attributes.Draggable import drag_n_drop
 from System.Programs.Command import CMD
+from System.Utils.Utils import get_asset
 
 __author__ = "TheBigEye"
 __version__ = "1.8"
 
-
-def Display_Terminal(master, draggable=False):
+class Terminal(Label):
     """
-    Summary:
-    -------
-        This function creates a terminal window.
-
-    Parameters:
-    ----------
-        master: Tkinter.Tk()
-            The main window.
-
-        draggable: bool
-            If the window is draggable.
-
-    Returns:
-    -------
-        None
-
-    Example:
-    -------
-        Display_Terminal(master, True)
-
+    Clase Terminal
     """
 
-    global Terminal_GUI_Image, Close_Terminal_image, Maximize_Terminal_image, Minimize_Terminal_image
-    global Terminal, Terminal_screen, Terminal_entry, Close_Terminal_Button, Maximize_Terminal_Button, Minimize_Terminal_Button
-    global Close_Terminal, cmd
+    def __init__(self, master, draggable=True):
+        """
+        Constructor de la clase Terminal
+        """
 
-    Terminal_GUI_Image = PhotoImage(file="Assets/GUI/Terminal/Terminal.png")  # Terminal image base
-    Close_Terminal_image = PhotoImage(file="Assets/GUI/Terminal/Close_Terminal_Button.png")  # Terminal close button
-    Maximize_Terminal_image = PhotoImage(file="Assets/GUI/Terminal/Maximize_Terminal_Button.png")  # Terminal close button
-    Minimize_Terminal_image = PhotoImage(file="Assets/GUI/Terminal/Minimize_Terminal_Button.png")  # Terminal close button
+        Label.__init__(self, master)
 
-    def Command_handler(event):
-        """Execute the commands"""
+        self.master = master
+        self.draggable = draggable
 
-        Terminal_screen.config(state="normal")
-        CMD(Terminal, Terminal_entry, Terminal_screen)
-        Terminal_screen.config(state="disabled")
 
-    Terminal = Label(
-        master,
-        bg="#CCCCCC",
-        image=Terminal_GUI_Image,
-        borderwidth="0",
-    )
+        global Command_handler, Terminal_GUI_Image, Terminal, Terminal_screen
+        self.Terminal_GUI_Image = get_asset("Assets/GUI/Terminal/Terminal.png")  # Terminal image base
 
-    Terminal_screen = Text(
-        Terminal,
-        bd=2,
-        relief="flat",
-        font=("Consolas", 10),
-        undo=True,
-        wrap="word",
-    )
+        global Command_handler
+        def Command_handler(event):
+            """Execute the commands"""
 
-    Terminal_screen.config(width=75, height=20, bg="#000000", fg="#dfdfdf", state="normal", insertbackground="#dfdfdf")
-    Terminal_screen.insert(INSERT, "───────────────────────── Welcome to the terminal ─────────────────────────" + "\n\n" + ">/ Type a command, or use help for get commands" + "\n\n")
-    Terminal_screen.config(state="disabled")
+            self.Terminal_screen.config(state="normal")
+            CMD(self.Terminal, self.Terminal_entry, self.Terminal_screen)
+            self.Terminal_screen.config(state="disabled")
 
-    def Close_Terminal():
-        """Close the Terminal"""
+        self.Terminal = Label(
+            self.master,
+            bg="#CCCCCC",
+            image=self.Terminal_GUI_Image,
+            borderwidth="0",
+        )
 
-        Terminal.place_forget()
+        self.Terminal_screen = Text(
+            self.Terminal,
+            bd=2,
+            relief="flat",
+            font=("Consolas", 10),
+            undo=True,
+            wrap="word"
+        )
 
-    Close_Terminal_Button = Button(
-        Terminal,
-        width=8,
-        height=8,
-        bg="#CCCCCC",
-        image=Close_Terminal_image,
-        borderwidth="0",
-        command=Close_Terminal,
-    )
+        self.Terminal_screen.config(width=75, height=20, bg="#000000", fg="#dfdfdf", state="normal", insertbackground="#dfdfdf")
+        self.Terminal_screen.insert(INSERT, "═════════════════════════ Welcome to the terminal ═════════════════════════" + "\n\n" + ">/ Type a command, or use help for get commands" + "\n\n")
+        self.Terminal_screen.config(state="disabled")
 
-    Maximize_Terminal_Button = Button(
-        Terminal,
-        width=8,
-        height=8,
-        bg="#CCCCCC",
-        image=Maximize_Terminal_image,
-        borderwidth="0",
-        command=Close_Terminal,
-    )
+        self.Terminal.place(x=225, y=148)
+        self.Terminal_screen.place(x=3.5, y=25.5)
 
-    Minimize_Terminal_Button = Button(
-        Terminal,
-        width=8,
-        height=8,
-        bg="#CCCCCC",
-        image=Minimize_Terminal_image,
-        borderwidth="0",
-        command=Close_Terminal,
-    )
 
-    Terminal_entry = Entry(
-        Terminal,
-        width=75,
-        # height=4,
-        borderwidth="0",
-        fg="white",
-        bg="#000000",
-        font=("Consolas", 10),
-    )
+        # ----------------------------------------------------------------- [Boton de cerrar terminal] -------------------------------------------------------------------------
 
-    Terminal_entry.config(insertbackground="white")
-    Terminal_entry.bind("<Return>", Command_handler)
-    Terminal_entry.focus()
+        global Close_Terminal_image, Close_Terminal_Red_image, Close_Terminal, Close_Terminal_Button
+        self.Close_Terminal_image = get_asset("Assets/GUI/Terminal/Close_Terminal_Button.png")  # Terminal close button
+        self.Close_Terminal_Red_image = get_asset("Assets/GUI/Terminal/Close_Terminal_Button_Red.png")  # Terminal close red button
 
-    if draggable == True:
+        def Close_Terminal():
+            """Close the Terminal"""
 
-        make_draggable(Terminal)
-    Terminal.place(x=225, y=148)
-    Terminal_screen.place(x=3.5, y=25.5)
+            self.Terminal.place_forget()
 
-    Close_Terminal_Button.place(x=520, y=8)
-    Maximize_Terminal_Button.place(x=490, y=8)
-    Minimize_Terminal_Button.place(x=460, y=8)
-    Terminal_entry.place(x=5.5, y=330)
+        self.Close_Terminal_Button = Button(
+            self.Terminal,
+            width=16,
+            height=16,
+            bg="#283238",
+            image=self.Close_Terminal_image,
+            borderwidth="0",
+            command=Close_Terminal
+        )
+
+        self.Close_Terminal_Button.bind("<Enter>", lambda event: self.Close_Terminal_Button.config(image = self.Close_Terminal_Red_image))
+        self.Close_Terminal_Button.bind("<Leave>", lambda event: self.Close_Terminal_Button.config(image = self.Close_Terminal_image))
+
+        self.Close_Terminal_Button.place(x=517, y=4)
+
+
+        # ----------------------------------------------------------------- [Boton de maximizar terminal] ----------------------------------------------------------------------
+
+        global Maximize_Terminal_image, Maximize_Terminal_light_image, Maximize_Terminal, Maximize_Terminal_Button
+        self.Maximize_Terminal_image = get_asset("Assets/GUI/Terminal/Maximize_Terminal_Button.png")  # Terminal maximize button
+        self.Maximize_Terminal_light_image = get_asset("Assets/GUI/Terminal/Maximize_Terminal_Button_light.png")  # Terminal maximize button light
+
+        def Maximize_Terminal():
+            """Maximize the Terminal"""
+
+            self.Terminal.place(x=0, y=0)
+            self.Terminal.config(image=self.Terminal_GUI_Image)
+
+        self.Maximize_Terminal_Button = Button(
+            self.Terminal,
+            width=16,
+            height=16,
+            bg="#283238",
+            image=self.Maximize_Terminal_image,
+            borderwidth="0",
+            command=Maximize_Terminal,
+        )
+
+        self.Maximize_Terminal_Button.bind("<Enter>", lambda event: self.Maximize_Terminal_Button.config(image = self.Maximize_Terminal_light_image))
+        self.Maximize_Terminal_Button.bind("<Leave>", lambda event: self.Maximize_Terminal_Button.config(image = self.Maximize_Terminal_image))
+
+        self.Maximize_Terminal_Button.place(x=483, y=4)
+
+
+        # ----------------------------------------------------------------- [Boton de minimizar terminal] ----------------------------------------------------------------------
+
+        global Minimize_Terminal_image, Minimize_Terminal_light_image, Minimize_Terminal, Minimize_Terminal_Button
+        self.Minimize_Terminal_image = get_asset("Assets/GUI/Terminal/Minimize_Terminal_Button.png")  # Terminal minimize button
+        self.Minimize_Terminal_light_image = get_asset("Assets/GUI/Terminal/Minimize_Terminal_Button_light.png")  # Terminal minimize button light
+
+        def Minimize_Terminal():
+            """Minimize the Terminal"""
+
+            self.Terminal.place(x=0, y=0)
+            self.Terminal.config(image=self.Terminal_GUI_Image)
+
+        self.Minimize_Terminal_Button = Button(
+            self.Terminal,
+            width=16,
+            height=16,
+            bg="#283238",
+            image=self.Minimize_Terminal_image,
+            borderwidth="0",
+            command=Minimize_Terminal,
+        )
+
+        self.Minimize_Terminal_Button.bind("<Enter>", lambda event: self.Minimize_Terminal_Button.config(image = self.Minimize_Terminal_light_image))
+        self.Minimize_Terminal_Button.bind("<Leave>", lambda event: self.Minimize_Terminal_Button.config(image = self.Minimize_Terminal_image))
+
+        self.Minimize_Terminal_Button.place(x=451, y=4)
+
+
+        # ---------------------------------------------------------------------- [Entry de terminal] ---------------------------------------------------------------------------
+
+        self.Terminal_entry = Entry(
+            self.Terminal,
+            width=75,
+            borderwidth="0",
+            fg="white",
+            bg="#000000",
+            font=("Consolas", 10)
+        )
+
+        self.Terminal_entry.config(insertbackground="white")
+        self.Terminal_entry.bind("<Return>", Command_handler)
+        self.Terminal_entry.focus()
+
+        self.Terminal_entry.place(x=5.5, y=330)
+
+
+        # --------------------------------------------------------------------------- [Final] ----------------------------------------------------------------------------------
+
+        if draggable == True:
+
+            drag_n_drop(self.Terminal)
+
+
+
+
+
+
+
+
+

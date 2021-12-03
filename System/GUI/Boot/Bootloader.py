@@ -1,11 +1,13 @@
 from tkinter import Label, PhotoImage
 from System.Utils.Colormap import Black
-from System.Utils.Utils import print_log
 
-__author__ = 'TheBigEye'
+from System.Utils.Utils import get_asset, print_log
+from System.Utils.Vars import Assets_dir
+
+__author__ = 'Nahuel senek'
 __version__ = '1.5'
 
-def Boot_loader(master): 
+def Boot_loader(master):
 
     print_log("Bootloader: Iniciado...")
 
@@ -13,16 +15,16 @@ def Boot_loader(master):
 
     master.configure(background=Black)  #   Establece el fondo a negro
 
-    Logon = PhotoImage(file="Assets/logon.png")
+    Logon = get_asset("Assets/logon.png")
     Boot_Logo = Label(master, image=Logon, borderwidth=0.1)
     Boot_Logo.place(x= 400, y= 160)
 
-    # Animacion 
+    # Animacion
     frameCnt = 60 # Frames por segundo
 
     # Crea una lista de cada frame del gif
     frames = [
-        PhotoImage(file="Assets/Loading.gif", format="gif -index %i" % (i))
+        PhotoImage(file= Assets_dir + "/Loading.gif", format="gif -index %i" % (i))
         for i in range(frameCnt)
     ]
 
@@ -40,7 +42,7 @@ def Boot_loader(master):
 
     loading = Label(master, borderwidth=0.1)
     loading.place(x= 480, y= 400)
-  
+
     def End_bootloader():
 
         Boot_Logo.place_forget()

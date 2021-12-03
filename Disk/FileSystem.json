@@ -1,70 +1,53 @@
 [
     {
+        "DriveName": "C",
         "DriveContent": [
             {
+                "FolderName": "Main",
                 "FolderContent": [
                     {
-                        "FileContent": "\ndef main():\n\tprint(\"hi, this is a executable file example\")\n\nmain()\n",
-                        "FileExtension": "pys",
+                        "FileName": "example",
                         "FileLastWriteTime": "4/11/2020     10:31",
-                        "FileName": "example"
+                        "FileExtension": "pys",
+                        "FileContent": "\ndef main():\n\tprint(\"hi, this is a executable file example\")\n\nmain()\n"
                     },
                     {
-                        "FileContent": "this is a test",
-                        "FileExtension": "test",
+                        "FileName": "Prueba",
                         "FileLastWriteTime": "11/18/2021     13:07",
-                        "FileName": "Prueba"
+                        "FileExtension": "test",
+                        "FileContent": "this is a test"
                     },
                     {
-                        "FileContent": "print(\"Hello\"",
-                        "FileExtension": "pys",
+                        "FileName": "excecutable",
                         "FileLastWriteTime": "11/18/2021     15:59",
-                        "FileName": "excecutable"
+                        "FileExtension": "pys",
+                        "FileContent": "print(\"Hello\""
                     },
                     {
-                        "FileContent": "%content%",
-                        "FileExtension": "pys",
+                        "FileName": "test",
                         "FileLastWriteTime": "11/19/2021     14:54",
-                        "FileName": "test"
-                    }
-                ],
-                "FolderName": "Main"
-            },
-            {
-                "FolderContent": [
-                    {
-                        "FileContent": "---",
-                        "FileExtension": "pfs",
-                        "FileLastWriteTime": "4/11/2020     10:31",
-                        "FileName": "Index"
-                    },
-                    {
-                        "FileContent": "def main():\n\tprint(\"hi, this is a executable file example\")\n\nmain()",
                         "FileExtension": "pys",
-                        "FileLastWriteTime": "4/11/2020     10:31",
-                        "FileName": "lol"
+                        "FileContent": "%content%"
                     }
-                ],
-                "FolderName": "Programs"
+                ]
             },
             {
+                "FolderName": "Programs",
                 "FolderContent": [
                     {
-                        "FileContent": "---",
+                        "FileName": "Index",
+                        "FileLastWriteTime": "4/11/2020     10:31",
                         "FileExtension": "pfs",
-                        "FileLastWriteTime": "11-18-2021     12:23",
-                        "FileName": "Index"
+                        "FileContent": "---"
                     },
                     {
-                        "FileContent": "xd",
-                        "FileExtension": "py",
-                        "FileLastWriteTime": "11/18/2021     13:16",
-                        "FileName": "nice"
+                        "FileName": "lol",
+                        "FileLastWriteTime": "4/11/2020     10:31",
+                        "FileExtension": "pys",
+                        "FileContent": "def main():\n\tprint(\"hi, this is a executable file example\")\n\nmain()"
                     }
-                ],
-                "FolderName": "Pruebas"
+                ]
             }
-        ],
-        "DriveName": "C"
+        ]
     }
 ]

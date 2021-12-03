@@ -12,7 +12,3 @@ def read_BIN_sl(File, line):
 
     print(File)
     print(Data)
-
-
-# Test
-read_BIN_sl("Disk\Disk", 0)

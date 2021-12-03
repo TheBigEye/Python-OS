@@ -14,12 +14,12 @@ CAPS_LOCK = "<CapsLock>"
 # Number keys
 NUM_0 = "<KP_0>"
 NUM_1 = "<KP_1>"
-NUM_2 = "<KP_2>"    
+NUM_2 = "<KP_2>"
 NUM_3 = "<KP_3>"
 NUM_4 = "<KP_4>"
 NUM_5 = "<KP_5>"
-NUM_6 = "<KP_6>"    
-NUM_7 = "<KP_7>"    
+NUM_6 = "<KP_6>"
+NUM_7 = "<KP_7>"
 NUM_8 = "<KP_8>"
 NUM_9 = "<KP_9>"
 NUM_PERIOD = "<KP_Decimal>"
@@ -31,7 +31,7 @@ NUM_ENTER = "<KP_Enter>"
 NUM_EQUAL = "<KP_Equal>"
 
 
-# Function keys 
+# Function keys
 F1 = "<F1>"
 F2 = "<F2>"
 F3 = "<F3>"
@@ -89,7 +89,7 @@ KEY_Z = "<Key-z>"
 
 # mouse
 MOUSE_LEFT = "<Button-1>"
-MOUSE_MIDDLE = "<Button-2>" 
+MOUSE_MIDDLE = "<Button-2>"
 MOUSE_RIGHT = "<Button-3>"
 
 

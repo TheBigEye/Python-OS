@@ -21,7 +21,7 @@ def read_32_sl(File, line):
         The line of the file to be read to decode the information.
 
     Then the function prints the information in the console along with the file name
-        
+
     """
 
 # Decode Base32 ---------------------------------------------------------------------------------------------------------------
@@ -53,7 +53,7 @@ def read_64_sl(File, line):
         The line of the file to be read to decode the information.
 
     Then the function prints the information in the console along with the file name
-        
+
     """
 
 # Decode Base64 ---------------------------------------------------------------------------------------------------------------
@@ -68,7 +68,3 @@ def read_64_sl(File, line):
     print(Data)
 
 
-# Print the module info
-#print("Author: " + str(__author__))
-#print("Module version: " + str(__version__))
-#print("Cropped version of Python Base64 module :)")
