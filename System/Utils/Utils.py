@@ -16,7 +16,7 @@ def Logger(Log_Message):
     current_time = str(datetime.datetime.now())
 
     # Open the file and write the message.
-    with open("Logs/Log.txt", "a") as Log_File:
+    with open("Logs/Log.log", "a") as Log_File:
         Log_File.write(current_time + " | " + Log_Message + "\n")
 
 
@@ -33,7 +33,7 @@ def Logger_improved(Log_Message):
     current_time = str(datetime.datetime.now())[11:19]
 
     # Open the file and write the message.
-    with open("Logs/Log_" + current_date + ".txt", "a") as Log_File:
+    with open("Logs/Log_" + current_date + ".log", "a") as Log_File:
         Log_File.write(current_time + " | " + Log_Message + "\n")
 
 
