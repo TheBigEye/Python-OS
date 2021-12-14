@@ -10,5 +10,8 @@ def read_BIN_sl(File, line):
     Data_bytes = base64.b64decode(File_bytes)
     Data = Data_bytes.decode("ascii")
 
+    # close for open
+    File_get_data.close()
+
     print(File)
     print(Data)
