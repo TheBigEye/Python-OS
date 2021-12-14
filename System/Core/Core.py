@@ -1,3 +1,5 @@
+import datetime
+from System.Core.FileSystem import fs_routines
 import json
 
 from System.Utils.Utils import print_log
@@ -37,10 +39,14 @@ elif Kernel_lvl == 6:
     Is_Boot = True
 
 
-# Rutinas
+# Rutinas, son las primeras tareas que se ejecutan en los primeros segundos del arranque del sistema
 def routines():
 
-    print_log("--- Comenzando la ejecucion del sistema ---")
+    print_log("\n" + "--- Comenzando la ejecucion del sistema ---")
+
+
+    # Carga el sistema de archivos
+    fs_routines()
 
 
 def delete_logs():
@@ -63,455 +69,221 @@ def delete_logs():
         print(os.path.join(Logs_path, file))
 
 
-
-# Sistema de archivos ---------------------------------------------------------------------------------------------------------------------
-
-FileSystem_directory = "Disk/FileSystem.json"
-
-FileSystem = []
-Index_file_extension = "pfs"
-Python_script_extension = "pys"
-
-# El sistema de archivos tiene esta estructura (No es muy avanzada, pero funciona)
-#[
-#    {
-#        "DriveName": "C:",
-#        "DriveContent": [
-#            {
-#                "FolderContent": [
-#                    {
-#                        "FileName": "",
-#                        "FileExtension": "",
-#                        "FileContent": ""
-#                    }
-#                ]
-#            },
-#            {
-#                "FolderName": "",
-#                "FolderContent": [
-#                    {
-#                        "SubFolderName": "",
-#                        "SubFolderContent": [
-#                            {
-#                                "SubFileName": "",
-#                                "SubFileExtension": "",
-#                                "SubFileContent": ""
-#                            }
-#                        ]
-#                    },
-#                    {
-#                        "FileName": "",
-#                        "FileExtension": "",
-#                        "FileContent": ""
-#                    }
-#                ]
-#            }
-#        ]
-#    }
-#]
-
-def save_file():
-     with open(FileSystem_directory, "w") as file:
-        json.dump(FileSystem, file)
-
-
-def save_folder():
-    with open(FileSystem_directory, "w") as folder:
-        json.dump(FileSystem, folder)
-
-
-def Create_folder(FolderName):
-
-    # Obtiene la fecha de la ultima modificacion y la retorna como LastWriteTime
-    import time
-    LastWriteTime = time.strftime("%m-%d-%Y     %H:%M")
-
-
-    # Crea una carpeta en el contenido del disco
-    for drive in FileSystem:
-        drive["DriveContent"].append({
-            "FolderName": FolderName,
-            "FolderContent": [
-                {
-                    # Crea un archivo index.pfs, servira para identificar un archivo de una carpeta
-                    "FileName": "Index",
-                    "FileExtension": Index_file_extension,
-                    "FileLastWriteTime": LastWriteTime,
-                    "FileContent": "---"
-                }
-            ]
-        })
-
-    # Guarda la carpeta en el sistema de archivos en FileSystem
-    save_folder()
-
-
-def Create_file(FileName, FileExtension, FileContent):
-
-    # Obtiene la fecha y la hora de la ultima modificacion
-    import time
-    LastWriteTime = time.strftime("%m/%d/%Y     %H:%M")
-
-    # por defecto, crea el archivo dentro de la carpeta "Main".
-    for drive in FileSystem:
-        for folder in drive["DriveContent"]:
-            if folder["FolderName"] == "Main":
-                folder["FolderContent"].append({
-                    "FileName": FileName,
-                    "FileExtension": FileExtension,
-                    "FileLastWriteTime": LastWriteTime,
-                    "FileContent": FileContent
-                })
-
-    # Guarda el archivo dentro del sistema de archivos en FileSystem
-    save_file()
-
-
-def Read_file(FolderName, FileName, FileExtension):
-    # Obtiene el contenido del archivo.
-    for drive in FileSystem:
-        for folder in drive["FolderContent"]:
-            if folder["FolderName"] == FolderName:
-                for file in folder["FolderContent"]:
-                    if file["FileName"] == FileName and file["FileExtension"] == FileExtension:
-                        return file["FileContent"]
-
-
-def Delete_file(FolderName, FileName, FileExtension):
-    for drive in FileSystem:
-        for folder in drive["DriveContent"]:
-            if folder["FolderName"] == FolderName:
-                for file in folder["FolderContent"]:
-                    if file["FileName"] == FileName and file["FileExtension"] == FileExtension:
-                        folder["FolderContent"].remove(file)
-
-    # Guarda el archivo dentro del sistema de archivos en FileSystem
-    save_file()
-
-
-def Delete_folder(FolderName):
-    for drive in FileSystem:
-        for folder in drive["DriveContent"]:
-            if folder["FolderName"] == FolderName:
-                drive["DriveContent"].remove(folder)
-
-    # save the folder in FileSystem
-    save_folder()
-
-
-def Rename_file(FolderName, FileName, FileExtension, NewFileName, NewFileExtension):
-    for drive in FileSystem:
-        for folder in drive["DriveContent"]:
-            if folder["FolderName"] == FolderName:
-                for file in folder["FolderContent"]:
-                    if file["FileName"] == FileName and file["FileExtension"] == FileExtension:
-                        file["FileName"] = NewFileName
-                        file["FileExtension"] = NewFileExtension
-
-    # save the file in FileSystem
-    save_file()
-
-
-def Rename_folder(FolderName, NewFolderName):
-    for drive in FileSystem:
-        for folder in drive["DriveContent"]:
-            if folder["FolderName"] == FolderName:
-                folder["FolderName"] = NewFolderName
-
-    # save the folder in FileSystem
-    save_folder()
-
-
-def Clear_file(FolderName, FileName, FileExtension):
-    for drive in FileSystem:
-        for folder in drive["DriveContent"]:
-            if folder["FolderName"] == FolderName:
-                for file in folder["FolderContent"]:
-                    if file["FileName"] == FileName and file["FileExtension"] == FileExtension:
-                        file["FileContent"] = ""
-
-    # save the file in FileSystem
-    save_file()
-
-
-def Move_file(FileName, FileExtension, FromFolderName, ToFolderName):
-
-    import time
-    LastWriteTime = time.strftime("%m/%d/%Y     %H:%M")
-
-    for drive in FileSystem:
-        for folder in drive["DriveContent"]:
-            if folder["FolderName"] == FromFolderName:
-                for file in folder["FolderContent"]:
-                    if file["FileName"] == FileName and file["FileExtension"] == FileExtension:
-                        file_content = file["FileContent"]
-                        file_name = file["FileName"]
-                        file_extension = file["FileExtension"]
-                        break
-
-    # make the file in the destination folder.
-    for drive in FileSystem:
-        for folder in drive["DriveContent"]:
-            if folder["FolderName"] == ToFolderName:
-                folder["FolderContent"].append({
-                    "FileName": file_name,
-                    "FileExtension": file_extension,
-                    "FileLastWriteTime": LastWriteTime,
-                    "FileContent": file_content
-                })
-
-    # delete the old file
-    for drive in FileSystem:
-        for folder in drive["DriveContent"]:
-            if folder["FolderName"] == FromFolderName:
-                for file in folder["FolderContent"]:
-                    if file["FileName"] == FileName and file["FileExtension"] == FileExtension:
-                        folder["FolderContent"].remove(file)
-
-    # Guarda los cambios
-    save_file()
-
-
-def Copy_file(FileName, FileExtension, Folder):
-    FileSystem[Folder]["FolderContent"].append(FileName)
-
-    # Guarda los cambios
-    save_file()
-
-
-def Copy_folder(FolderName, NewFolderName):
-    FileSystem[NewFolderName]["FolderContent"].append(FolderName)
-
-    # Guarda los cambios
-    save_folder()
-
-
-def Open_file( FileName, FileExtension):
-    # Obtiene el contenido del archivo
-    for drive in FileSystem:
-        for folder in drive["DriveContent"]:
-            if folder["FolderName"] == "Main":
-                for file in folder["FolderContent"]:
-                    if file["FileName"] == FileName and file["FileExtension"] == FileExtension:
-                        return file["FileContent"]
-
-
-def Open_folder(FolderName):
-    # Obtiene el contenido de la carpeta
-    for drive in FileSystem:
-        for folder in drive["DriveContent"]:
-            if folder["FolderName"] == FolderName:
-                return folder["FolderContent"]
-
-
-# Guarda todos los cambios del sistema de archivos a FileSsystem.json usando la lista FileSystem[]
-def Save_FileSystem():
-    with open("Disk/FileSystem.json", "w") as file:
-        json.dump(FileSystem, file, sort_keys=False, indent=4)
-
-
-# Carga el sistema de archivos desde FileSystem.json
-def Load_FileSystem():
-
-    # global para que pueda ser leido
-    global FileSystem
-
-    with open("Disk/FileSystem.json", "r") as file:
-        FileSystem = json.load(file)
-
-
-def Get_FileSystem():
-
-    # Carga el sistema de archivos para no tener que reiniciar.
-    Load_FileSystem()
-
-    # Variable donde se almacena la informacion
-    FileSystem_string = ""
-
-    # Calcula el tamaño del archivo en bytes según el número de caracteres dentro del contenido del archivo.
-    def file_size(FileContent):
-        FileSize_string = str(len(FileContent)) + " bytes"
-        return FileSize_string
-
-    # Retorna el contenido del sistema de archivos dentro de un string por cada carpeta y archivo dentro.
-    for drive in FileSystem:
-        for folder in drive["DriveContent"]:
-            FileSystem_string += "    " + folder["FolderName"] + "/" + "\n"
-            for file in folder["FolderContent"]:
-                FileSystem_string += "        " + file["FileLastWriteTime"] + "     " + file_size(file["FileContent"]) + "    " + file["FileName"] + "." + file["FileExtension"] + "\n"
-
-    return FileSystem_string
-
-
-# Obtiene el recuento de archivos y carpetas.
-def Get_Files_Count():
-    Load_FileSystem()
-
-    Files_Count = 0
-
-    for drive in FileSystem:
-        for folder in drive["DriveContent"]:
-            for files in folder["FolderContent"]:
-                Files_Count += 1
-
-                if Files_Count == -1:
-                    print(files)
-
-    return Files_Count
-
-
-# Calcula el tamaño total del archivo en bytes de todo el sistema de archivos en función del número de caracteres dentro del contenido del archivo.
-def Get_Fils_size():
-    Load_FileSystem()
-
-    FileSize = 0
-
-    for drive in FileSystem:
-        for folder in drive["DriveContent"]:
-            for file in folder["FolderContent"]:
-                FileSize += len(file["FileContent"])
-
-    return FileSize
-
-
-def Get_Tree():
-
-    Load_FileSystem()
-
-    Tree_string = ""
-
-    for drive in FileSystem:
-        Tree_string += drive["DriveName"] + ":\n"
-        for folder in drive["DriveContent"]:
-
-            # si es la última carpeta en la unidad, agrega un salto de línea.
-            if folder == drive["DriveContent"][-1]:
-                Tree_string += "└─── " + folder["FolderName"] + "\n"
-
-                for file in folder["FolderContent"]:
-                    # si es el último archivo de la carpeta, agrega un salto de línea.
-                    if file == folder["FolderContent"][-1]:
-                        Tree_string += "     └─── " + file["FileName"] + "." + file["FileExtension"] + "\n"
-                    else:
-                        Tree_string += "     ├─── " + file["FileName"] + "." + file["FileExtension"] + "\n"
-            else:
-                Tree_string += "├─── " + folder["FolderName"] + "\n"
-
-                for file in folder["FolderContent"]:
-                    # si es el último archivo de la carpeta, agrega un salto de línea.
-                    if file == folder["FolderContent"][-1]:
-                        Tree_string += "│    └─── " + file["FileName"] + "." + file["FileExtension"] + "\n"
-                    else:
-                        Tree_string += "│    ├─── " + file["FileName"] + "." + file["FileExtension"] + "\n"
-
-    return Tree_string
-
-
-def Tree_FileSystem_Advanced():
-
-    FileSystem_string = ""
-
-    for drive in FileSystem:
-        FileSystem_string += drive["DriveName"] + ">──┐" + "\n"
-
-        for folder in drive["DriveContent"]:
-
-            # si es la última carpeta del directorio, se pone un └─, si no un ├─
-            if folder == drive["DriveContent"][-1]:
-                FileSystem_string += " └─ " + folder["FolderName"] + "/" + "\n"
-            else:
-                FileSystem_string += " ├─ " + folder["FolderName"] + "/" + "\n"
-
-            for file in folder["FolderContent"]:
-                if file["FileName"] == "Index" and file["FileExtension"] == Index_file_extension:
-                    FileSystem_string += "    ├─ Index" + "." + Index_file_extension + "\n"
-                else:
-
-                    # si es el ultimo archivo de la carpeta, se pone un └─, si no un ├─
-                    if file == folder["FolderContent"][-1]:
-                        FileSystem_string += "    └─ " + file["FileName"] + "." + file["FileExtension"] + "\n"
-                    else:
-                        FileSystem_string += "    ├─ " + file["FileName"] + "." + file["FileExtension"] + "\n"
-
-    return FileSystem_string
-
-
-def Format_FileSystem():
-    global FileSystem
-
-    # Borra todo el contenido del sistema de archivos.
-    FileSystem = []
-
-    # save the file in FileSystem
-    save_file()
-
-
-# Import_file, importa un archivo real y su contenido al sistema de archivos, ejemplo: import_file(C:/Users/User/Desktop/file.txt, "txt", "Main")
-def Import_file(FilePath, ToFolderName):
-    global FileSystem
-
-    # obtiene el nombre del archivo sin la extensión.
-    FileName = FilePath.split("/")[-1].split(".")[0]
-
-    # obtiene la extension del archivo.
-    FileExtension = FilePath.split("/")[-1].split(".")[1]
-
-    # obtiene el contenido del archivo.
-    with open(FilePath, "r") as file:
-        FileContent = file.read()
-
-    # crea un nuevo archivo en el sistema de archivos, con el nombre, extension y contenido del archivo. importado
-    for drive in FileSystem:
-        for folder in drive["DriveContent"]:
-            if folder["FolderName"] == ToFolderName:
-                folder["FolderContent"].append({"FileName": FileName, "FileExtension": FileExtension, "FileContent": FileContent, "FileLastWriteTime": "Invalido"})
+# Sistema de procesos ----------------------------------------------------------------------------------------------------
+
+Processes = []
+
+# Los procesos tienen la siguiente extructura:
+# {
+#     "ProcessName": "",
+#     "ProcessStatus": "",
+#     "ProcessPriority": "",
+#     "ProcessMemory": "",
+#     "ProcessCPU": "",
+#     "ProcessStartTime": "",
+#     "ProcessEndTime": "",
+#     "ProcessDuration": "",
+#     "ProcessProgram": ""
+# },
+# {
+#     "ProcessName": "",
+#     "ProcessStatus": "",
+#     "ProcessPriority": "",
+#     "ProcessMemory": "",
+#     "ProcessCPU": "",
+#     "ProcessStartTime": "",
+#     "ProcessEndTime": "",
+#     "ProcessDuration": "",
+#     "ProcessProgram": ""
+# }
+
+def Save_Process():
+    global Processes
+
+    # Guarda loss procesos en Processes.json
+    with open("Disk/Processes.json", "w") as file:
+        json.dump(Processes, file)
+
+
+def Start_process(ProcessName, ProcessProgram, ProcessPriority):
+    global Processes
+
+    time = datetime.datetime.now()
+    # GET THE TIME AAS INT
+    current_time = int(time.strftime("%H%M%S"))
+
+    # crea un nuevo proceso
+    Processes.append({
+        "ProcessName": ProcessName,
+        "ProcessStatus": "Running",
+        "ProcessPriority": ProcessPriority,
+        "ProcessMemory": 0,
+        "ProcessCPU": 0,
+        "ProcessStartTime": current_time,
+        "ProcessEndTime": 0,
+        "ProcessDuration": 0,
+        "ProcessProgram": ProcessProgram
+    })
 
     # guarda los cambios
-    save_file()
+    Save_Process()
 
 
-# Execute_file, si el archivo tiene la extensión pys, ejecutará el código que tiene como contenido en python.
-def Execute_file(FolderName, FileName, FileExtension):
-    # obtiene el contenido
-    for drive in FileSystem:
-        for folder in drive["DriveContent"]:
-            if folder["FolderName"] == FolderName:
-                for file in folder["FolderContent"]:
-                    if file["FileName"] == FileName and file["FileExtension"] == FileExtension:
-                        if file["FileExtension"] == Python_script_extension:
-                            exec(file["FileContent"])
-                        else:
-                            print("This file can not be executed.")
+def Stop_process(ProcessName):
+    global Processes
+    import datetime
 
-    # obtiene el resultado o la salida (exec) del código ejecutado en un String.
-    def get_result():
-        result = ""
+    time = datetime.datetime.now()
+    # GET THE TIME AAS INT
+    current_time = int(time.strftime("%H%M%S"))
 
-        for drive in FileSystem:
-            for folder in drive["DriveContent"]:
-                if folder["FolderName"] == FolderName:
-                    for file in folder["FolderContent"]:
-                        if file["FileName"] == FileName and file["FileExtension"] == FileExtension:
-                            result = file["FileContent"]
-        return result
+    # obtiene el proceso
+    for process in Processes:
+        if process["ProcessName"] == ProcessName:
+            # cambia el estado del proceso
+            process["ProcessStatus"] = "Terminated"
 
-    return get_result()
+            # obtiene el tiempo de inicio y finalización del proceso
+            process["ProcessEndTime"] = current_time
+            process["ProcessDuration"] = process["ProcessEndTime"] - process["ProcessStartTime"]
+
+            # guarda los cambios
+            Save_Process()
 
 
+def Update_Process_Status(ProcessName, ProcessStatus):
+    global Processes
 
-# Export_file, export a file from the file system to a real file.
-def Export_file(FolderName, FileName, FileExtension, ToPath):
-    # get the file content.
-    for drive in FileSystem:
-        for folder in drive["DriveContent"]:
-            if folder["FolderName"] == FolderName:
-                for file in folder["FolderContent"]:
-                    if file["FileName"] == FileName and file["FileExtension"] == FileExtension:
-                        with open(ToPath, "w") as file:
-                            file.write(file["FileContent"])
+    # obtiene el proceso
+    for process in Processes:
+        if process["ProcessName"] == ProcessName:
+            # cambia el estado del proceso
+            process["ProcessStatus"] = ProcessStatus
 
-    # save the file in FileSystem
-    save_file()
+            # guarda los cambios
+            Save_Process()
+
+
+def Update_Process_Memory(ProcessName, ProcessMemory):
+    global Processes
+
+    # obtiene el proceso
+    for process in Processes:
+        if process["ProcessName"] == ProcessName:
+            # cambia el estado del proceso
+            process["ProcessMemory"] = ProcessMemory
+
+            # guarda los cambios
+            Save_Process()
+
+
+def Update_Process_CPU(ProcessName, ProcessCPU):
+    global Processes
+
+    # obtiene el proceso
+    for process in Processes:
+        if process["ProcessName"] == ProcessName:
+            # cambia el estado del proceso
+            process["ProcessCPU"] = ProcessCPU
+
+            # guarda los cambios
+            Save_Process()
+
+
+def Get_Processes():
+    global Processes
+
+    # Retorna como un String con la siguiente estructura pro ejemplo:
+    # Processes:
+    #     - ProcessName: "Proceso1"
+    #       ProcessStatus: "Running"
+    #       ProcessPriority: "Normal"
+    #       ProcessMemory: "0"
+    #       ProcessCPU: "0"
+    #       ProcessStartTime: "Invalido"
+    #       ProcessEndTime: "Invalido"
+    #       ProcessDuration: "Invalido"
+    #       ProcessProgram: "Proceso1.py"
+    #
+    #     - ProcessName: "Proceso2"
+    #       ProcessStatus: "Running"
+    #       ProcessPriority: "Normal"
+    #       ProcessMemory: "0"
+    #       ProcessCPU: "0"
+    #       ProcessStartTime: "Invalido"
+    #       ProcessEndTime: "Invalido"
+    #       ProcessDuration: "Invalido"
+    #       ProcessProgram: "Proceso2.py"
+
+    # obtiene los procesos
+    processes_list = ""
+
+    for process in Processes:
+        processes_list += "- ProcessName: " + process["ProcessName"] + "\n"
+        processes_list += "  ProcessStatus: " + process["ProcessStatus"] + "\n"
+        processes_list += "  ProcessPriority: " + process["ProcessPriority"] + "\n"
+        processes_list += "  ProcessMemory: " + str(process["ProcessMemory"]) + "\n"
+        processes_list += "  ProcessCPU: " + str(process["ProcessCPU"]) + "\n"
+        processes_list += "  ProcessStartTime: " + str(process["ProcessStartTime"]) + "\n"
+        processes_list += "  ProcessEndTime: " + str(process["ProcessEndTime"]) + "\n"
+        processes_list += "  ProcessDuration: " + str(process["ProcessDuration"]) + "\n"
+        processes_list += "  ProcessProgram: " + process["ProcessProgram"] + "\n"
+
+    return processes_list
+
+
+def Get_Process(ProcessName):
+    global Processes
+
+    # Retorna como un String con la siguiente estructura pro ejemplo:
+    # Processes:
+    #     - ProcessName: "Proceso1"
+    #       ProcessStatus: "Running"
+    #       ProcessPriority: "Normal"
+    #       ProcessMemory: "0"
+    #       ProcessCPU: "0"
+    #       ProcessStartTime: "Invalido"
+    #       ProcessEndTime: "Invalido"
+    #       ProcessDuration: "Invalido"
+    #       ProcessProgram: "Proceso1.py"
+    #
+    #     - ProcessName: "Proceso2"
+    #       ProcessStatus: "Running"
+    #       ProcessPriority: "Normal"
+    #       ProcessMemory: "0"
+    #       ProcessCPU: "0"
+    #       ProcessStartTime: "Invalido"
+    #       ProcessEndTime: "Invalido"
+    #       ProcessDuration: "Invalido"
+    #       ProcessProgram: "Proceso2.py"
+
+    # obtiene los procesos
+    processes_list = ""
+
+    for process in Processes:
+        if process["ProcessName"] == ProcessName:
+            processes_list += "- ProcessName: " + process["ProcessName"] + "\n"
+            processes_list += "  ProcessStatus: " + process["ProcessStatus"] + "\n"
+            processes_list += "  ProcessPriority: " + process["ProcessPriority"] + "\n"
+            processes_list += "  ProcessMemory: " + process["ProcessMemory"] + "\n"
+            processes_list += "  ProcessCPU: " + process["ProcessCPU"] + "\n"
+            processes_list += "  ProcessStartTime: " + process["ProcessStartTime"] + "\n"
+            processes_list += "  ProcessEndTime: " + process["ProcessEndTime"] + "\n"
+            processes_list += "  ProcessDuration: " + process["ProcessDuration"] + "\n"
+            processes_list += "  ProcessProgram: " + process["ProcessProgram"] + "\n"
+
+    return processes_list
+
+
+def Clear_processes():
+    global Processes
+
+    # limpia los procesos
+    Processes = ""
+
+    # guarda los cambios
+    Save_Process()
+
 
 
 

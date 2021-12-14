@@ -1,4 +1,5 @@
 from tkinter import Button, Label
+from typing import Literal
 from System.GUI.Attributes.Draggable import make_draggable
 from System.Utils.Utils import get_asset
 
@@ -12,7 +13,7 @@ class MessageBox(Label):
     Clase MessageBox
     """
 
-    def __init__(self, master, type, title, message, draggable = True):
+    def __init__(self, master, type: Literal['Error', 'Info', 'Warning'], title: str, message: str, draggable: bool = True):
 
         """
         Create and display a Message box with title and personalized message.

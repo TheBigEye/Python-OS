@@ -1,6 +1,7 @@
 from tkinter import Button, Entry, Label, Text
 from tkinter.constants import INSERT
 
+from System.Core.Core import Start_process, Stop_process
 from System.GUI.Attributes.Draggable import drag_n_drop
 from System.Programs.Command import CMD
 from System.Utils.Utils import get_asset
@@ -13,7 +14,7 @@ class Terminal(Label):
     Clase Terminal
     """
 
-    def __init__(self, master, draggable=True):
+    def __init__(self, master, draggable: bool = True):
         """
         Constructor de la clase Terminal
         """
@@ -23,8 +24,9 @@ class Terminal(Label):
         self.master = master
         self.draggable = draggable
 
+        Start_process("xterm", Terminal.__name__, "normal")
 
-        global Command_handler, Terminal_GUI_Image, Terminal, Terminal_screen
+        global Terminal_GUI_Image, Terminal_screen
         self.Terminal_GUI_Image = get_asset("Assets/GUI/Terminal/Terminal.png")  # Terminal image base
 
         global Command_handler
@@ -68,7 +70,11 @@ class Terminal(Label):
         def Close_Terminal():
             """Close the Terminal"""
 
+            # Termina el  proceso
+            Stop_process("xterm")
+
             self.Terminal.place_forget()
+
 
         self.Close_Terminal_Button = Button(
             self.Terminal,

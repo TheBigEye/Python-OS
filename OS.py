@@ -1,6 +1,7 @@
 import tkinter as tk
 
 from System.Core.Core import (
+    Clear_processes,
     Is_Boot,
     Is_FAIL,
     Is_in_BIOS,
@@ -8,7 +9,6 @@ from System.Core.Core import (
     Is_in_Desktop,
     Is_in_INSTALLER,
     Is_in_Login,
-    Load_FileSystem,
     routines
 )
 
@@ -44,9 +44,7 @@ def warnings():
 
 
 warnings() # Muestra las advertencias antes de la ejecucion
-routines() # Ejecuta las rutinas del programa (En este caso nada, ya que no se ejecuta sobre un sistema en blanco)
-Load_FileSystem() # Carga el sistema de archivos desde el archivo .JSON
-print_info("Sistema de archivos cargado")
+routines() # Ejecuta las rutinas del sistema
 
 # -----------------------------------------------------------------[ Boot ]-------------------------------------------------------------------------- #
 
