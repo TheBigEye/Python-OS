@@ -84,9 +84,7 @@ def CMD(master, entry, output):
                 # add numbers. like: add(1,2), > 3, or add(1,2,3,4,5) , > 15.
                 command = command.replace("add(", "").replace(")", "")
                 command = command.split(",")
-                add = 0
-                for number in command:
-                    add += int(number)
+                add = sum(int(number) for number in command)
                 output.insert(INSERT, add)
                 output.insert(INSERT, "\n")
                 output.see(END)
@@ -106,9 +104,7 @@ def CMD(master, entry, output):
         command = command.replace("sub(", "")
         command = command.replace(")", "")
         command = command.split(",")
-        sub = 0
-        for number in command:
-            sub -= int(number)
+        sub = 0 - sum(int(number) for number in command)
         output.insert(INSERT, sub)
         output.insert(INSERT, "\n")
         output.see(END)
@@ -218,10 +214,10 @@ def CMD(master, entry, output):
         command = command.replace(")", "")
         if eval(command):
             output.insert(INSERT, "True" + "\n")
-            output.see(END)
         else:
             output.insert(INSERT, "False" + "\n")
-            output.see(END)
+
+        output.see(END)
 
     if command.startswith("if("):
         if_command(command)
@@ -250,7 +246,7 @@ def CMD(master, entry, output):
         command = command.split(",")
         repeat_command = command[0]
         repeat_number = command[1]
-        for i in range(int(repeat_number)):
+        for _ in range(int(repeat_number)):
             output.insert(INSERT, repeat_command + "\n")
             output.see(END)
 
@@ -470,7 +466,7 @@ def CMD(master, entry, output):
 
         global get_response
         global answer
-            
+
         from System.Core.Core import Format_FileSystem
 
         answer = ""
@@ -480,22 +476,14 @@ def CMD(master, entry, output):
 
         # Get the response from the user in the terminal, until a response is given in command, the following lines will not be executed.
         answer = input()
-        
+
         # If the user typed "y", the filesystem will be formatted.
         if answer == "y":
             Format_FileSystem()
             output.insert(INSERT, "Filesystem formatted" + "\n")
-            output.see(END)
-
-        # If the user typed "n", the filesystem will not be formatted.
-        elif answer == "n":
-            output.insert(INSERT, "Filesystem not formatted" + "\n")
-            output.see(END)
-
-        # If the user typed something else, the filesystem will not be formatted.
         else:
             output.insert(INSERT, "Filesystem not formatted" + "\n")
-            output.see(END)
+        output.see(END)
                 
     if command.startswith("format"):
         format_command(command)

@@ -59,20 +59,17 @@ def print_info(message):
 
 # A function that will return the current time in a string format.
 def Get_Current_Time():
-    current_time = str(datetime.datetime.now())
-    return current_time
+    return str(datetime.datetime.now())
 
 
 # A function that will return the current date in a string format.
 def Get_Current_Date():
-    current_date = str(datetime.date.today())
-    return current_date
+    return str(datetime.date.today())
 
 
 # A function that will return the current date and time in a string format.
 def Get_Current_Date_Time():
-    current_date_time = str(datetime.datetime.now())
-    return current_date_time
+    return str(datetime.datetime.now())
 
 
 

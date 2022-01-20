@@ -60,8 +60,7 @@ class Console(tk.Frame):
         pass
 
     def readline(self):
-        line = self.stdin_buffer.get()
-        return line
+        return self.stdin_buffer.get()
 
 
 if __name__ == '__main__':

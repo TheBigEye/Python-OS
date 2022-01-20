@@ -89,10 +89,7 @@ def Create_file(FileName, FileExtension, FileContent):
 
 
 def Read_file(FileName, FileExtension):
-    # get the file content
-    FileContent = FileSystem[FileName]["FileContent"]
-
-    return FileContent
+    return FileSystem[FileName]["FileContent"]
 
 
 def Delete_file(FileName, FileExtension):
@@ -201,17 +198,11 @@ def Copy_folder(FolderName, NewFolderName):
 
 
 def Open_file( FileName, FileExtension):
-    # get the file content
-    FileContent = FileSystem[FileName]["FileContent"]
-
-    return FileContent
+    return FileSystem[FileName]["FileContent"]
 
 
 def Open_folder(FolderName):
-    # get the folder content
-    FolderContent = FileSystem[FolderName]["FolderContent"]
-
-    return FolderContent
+    return FileSystem[FolderName]["FolderContent"]
 
 
 def Save_FileSystem():
@@ -259,17 +250,14 @@ def Tree_FileSystem_Advanced():
 
     for folder in FileSystem:
         FileSystem_string += folder["FolderName"] + ">──┐" + "\n"
-        
+
         for file in folder["FolderContent"]: 
             if file["FileName"] == "Index" and file["FileExtension"] == "pfs":
                 FileSystem_string += "     ├─ Index.pfs\n"
+            elif file == folder["FolderContent"][-1]:
+                FileSystem_string += "     └─ " + file["FileName"] + "." + file["FileExtension"] + "\n"
             else:
-                
-                # if it is the last file in the directory, put └.
-                if file == folder["FolderContent"][-1]:
-                    FileSystem_string += "     └─ " + file["FileName"] + "." + file["FileExtension"] + "\n"
-                else:
-                    FileSystem_string += "     ├─ " + file["FileName"] + "." + file["FileExtension"] + "\n"
+                FileSystem_string += "     ├─ " + file["FileName"] + "." + file["FileExtension"] + "\n"
 
     return FileSystem_string
 
