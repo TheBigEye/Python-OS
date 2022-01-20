@@ -84,16 +84,12 @@ def CMD(master, entry, output):
 
                 output.insert(INSERT, "\n")
 
-            # en caso de que se detecte numeros, los suma
             else:
                 # suma numeros. como: add(1,2), > 3, o add(1,2,3,4,5) , > 15.
                 command = command.replace("add(", "").replace(")", "")
                 command = command.split(",")
 
-                add = 0
-                for number in command:
-                    add += int(number)
-
+                add = sum(int(number) for number in command)
                 output.insert(INSERT, add)
                 output.insert(INSERT, "\n")
                 output.see(END)
@@ -114,9 +110,7 @@ def CMD(master, entry, output):
         command = command.replace("sub(", "")
         command = command.replace(")", "")
         command = command.split(",")
-        sub = 0
-        for number in command:
-            sub -= int(number)
+        sub = 0 - sum(int(number) for number in command)
         output.insert(INSERT, sub)
         output.insert(INSERT, "\n")
         output.see(END)
@@ -231,10 +225,10 @@ def CMD(master, entry, output):
         command = command.replace(")", "")
         if eval(command):
             output.insert(INSERT, "True" + "\n")
-            output.see(END)
         else:
             output.insert(INSERT, "False" + "\n")
-            output.see(END)
+
+        output.see(END)
 
     if command.startswith("if("):
         if_command(command)
@@ -264,7 +258,7 @@ def CMD(master, entry, output):
         command = command.split(",")
         repeat_command = command[0]
         repeat_number = command[1]
-        for i in range(int(repeat_number)):
+        for _ in range(int(repeat_number)):
             output.insert(INSERT, repeat_command + "\n")
             output.see(END)
 

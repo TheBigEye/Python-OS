@@ -73,25 +73,23 @@ def Create_folder(Drive, FolderName):
     LastWriteTime = time.strftime("%m/%d/%Y     %H:%M")
 
 
-    # Si la carpeta ya existe no se crea, en cambio si existe se crea
     if Exist_folder(Drive, FolderName) == True:
         return
-    else:
-        for drive in FileSystem:
-            if drive["DriveName"] == Drive:
-                drive["DriveContent"].append({
-                    "FolderName": FolderName,
-                    "LastWriteTime": LastWriteTime,
-                    "FolderContent": [
-                        {
-                            # Crea un archivo index.pfs, servira para identificar un archivo de una carpeta
-                            "FileName": "Index",
-                            "FileExtension": Index_file_ext,
-                            "FileLastWriteTime": LastWriteTime,
-                            "FileContent": "---"
-                        }
-                    ],
-                })
+    for drive in FileSystem:
+        if drive["DriveName"] == Drive:
+            drive["DriveContent"].append({
+                "FolderName": FolderName,
+                "LastWriteTime": LastWriteTime,
+                "FolderContent": [
+                    {
+                        # Crea un archivo index.pfs, servira para identificar un archivo de una carpeta
+                        "FileName": "Index",
+                        "FileExtension": Index_file_ext,
+                        "FileLastWriteTime": LastWriteTime,
+                        "FileContent": "---"
+                    }
+                ],
+            })
 
     # Guarda la carpeta en el sistema de archivos en FileSystem
     save_folder()
@@ -367,8 +365,7 @@ def Get_FileSystem():
 
     # Calcula el tamaño del archivo en bytes según el número de caracteres dentro del contenido del archivo.
     def file_size(FileContent):
-        FileSize_string = str(len(FileContent)) + " bytes"
-        return FileSize_string
+        return str(len(FileContent)) + " bytes"
 
     # Retorna el contenido del sistema de archivos dentro de un string por cada carpeta y archivo dentro.
     for drive in FileSystem:
@@ -463,13 +460,10 @@ def Tree_FileSystem_Advanced():
             for file in folder["FolderContent"]:
                 if file["FileName"] == "Index" and file["FileExtension"] == Index_file_ext:
                     FileSystem_string += "    ├─ Index" + "." + Index_file_ext + "\n"
+                elif file == folder["FolderContent"][-1]:
+                    FileSystem_string += "    └─ " + file["FileName"] + "." + file["FileExtension"] + "\n"
                 else:
-
-                    # si es el ultimo archivo de la carpeta, se pone un └─, si no un ├─
-                    if file == folder["FolderContent"][-1]:
-                        FileSystem_string += "    └─ " + file["FileName"] + "." + file["FileExtension"] + "\n"
-                    else:
-                        FileSystem_string += "    ├─ " + file["FileName"] + "." + file["FileExtension"] + "\n"
+                    FileSystem_string += "    ├─ " + file["FileName"] + "." + file["FileExtension"] + "\n"
 
     return FileSystem_string
 

@@ -77,20 +77,17 @@ def print_info(message):
 
 # Esta funcion retorna el tiempo como String.
 def Get_Current_Time():
-    current_time = str(datetime.datetime.now())
-    return current_time
+    return str(datetime.datetime.now())
 
 
 # Esta funcion retorna la fecha en un string.
 def Get_Current_Date():
-    current_date = str(datetime.date.today())
-    return current_date
+    return str(datetime.date.today())
 
 
 # Esta funcion retorna el tiempo y la fecha en un string.
 def Get_Current_Date_Time():
-    current_date_time = str(datetime.datetime.now())
-    return current_date_time
+    return str(datetime.datetime.now())
 
 
 def Execute(master, Loading_time: float, Function, *args):
@@ -115,9 +112,7 @@ def Execute(master, Loading_time: float, Function, *args):
 def get_asset(path):
 
     path = path.replace("Assets/", "/")
-    Asset = PhotoImage(file= Assets_dir + path)
-
-    return Asset
+    return PhotoImage(file= Assets_dir + path)
 
 
 

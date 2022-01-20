@@ -9,7 +9,6 @@ __version__ = '1.1'
 
 
 def Display_Browser(master, draggable: bool = False):
-
 # Documentation ---------------------------------------------------------------------------------------------------------------
 
     """
@@ -24,7 +23,6 @@ def Display_Browser(master, draggable: bool = False):
     Returns:
     None
     """
-
 # Navegaador ---------------------------------------------------------------------------------------------------------------
 
     global Browser, Browser_GUI_Image
@@ -39,7 +37,7 @@ def Display_Browser(master, draggable: bool = False):
 
     Browser.place(x= 32, y= 32)
 
-    if (draggable == True):
+    if draggable:
 
         make_draggable(Browser)
 
