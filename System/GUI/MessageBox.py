@@ -1,326 +1,373 @@
-from tkinter import Button, Label, PhotoImage  
+from tkinter import Button, Label
+from typing import Literal
 from System.GUI.Attributes.Draggable import make_draggable
+from System.Utils.Utils import get_asset
 
 __author__ = 'TheBigEye'
 __version__ = '1.1'
 
 Font = "Segou UI"
 
-def Display_MessageBox(master, type, title, message, draggable = False):
-
-# Documentation -----------------------------------------------------------------------------------------------------------
-
+class MessageBox(Label):
     """
-    Create and display a Message box with title and personalized message.
-
-    Parameters
-    ----------
-    `master` : string
-        The parent where the Message box will be placed.
-
-    `type` : string
-        Type of Message box to be displayed: `Error`, `Warning`, `Info`, (this is obligatory for it to work).
-
-    `title` : string
-        The title that the Message box will show.
-
-    `message` : string
-        The message that the Message box will show.
-
-    `draggable` : boolean
-        Specifies whether or not the Message box can be moved with the mouse.
-
+    Clase MessageBox
     """
 
-# Error messagebox global variables ---------------------------------------------------------------------------------------
-    global Error_MessageBox_GUI_Image, Error_Close_MessageBox_Image, Error_Logo_Image, Error_Ok_MessageBox_Image # Images
-    global Error_Title_bg, Error_Message_bg # Colors
-    global Error_MessageBox, Error_Title_label, Error_Message_label, Error_Logo, Error_Close_MessageBox, Error_Ok_button, Error_Close_button # Functions
+    def __init__(self, master, type: Literal['Error', 'Info', 'Warning'], title: str, message: str, draggable: bool = True):
 
-# Info messagebox global variables ----------------------------------------------------------------------------------------
-    global Info_MessageBox_GUI_Image, Info_Close_MessageBox_Image, Info_Logo_Image, Info_Ok_MessageBox_Image
-    global Info_Title_bg, Info_Message_bg
-    global Info_MessageBox, Info_Title_label, Info_Message_label, Info_Logo, Info_Close_MessageBox, Info_Ok_button, Info_Close_button
+        """
+        Create and display a Message box with title and personalized message.
 
-# Warning messagebox global variables -------------------------------------------------------------------------------------
-    global Warning_MessageBox_GUI_Image, Warning_Close_MessageBox_Image, Warning_Logo_Image, Warning_Ok_MessageBox_Image
-    global Warning_Title_bg, Warning_Message_bg
-    global Warning_MessageBox, Warning_Title_label, Warning_Message_label, Warning_Logo, Warning_Close_MessageBox, Warning_Ok_button, Warning_Close_button
+        Parameters
+        ----------
+        `master` : string
+            The parent where the Message box will be placed.
 
+        `type` : string
+            Type of Message box to be displayed: `Error`, `Warning`, `Info`, (this is obligatory for it to work).
 
-# Error messagebox ------------------------------------------------------------------------------------------------------------
+        `title` : string
+            The title that the Message box will show.
 
-    if (type == "Error"):
+        `message` : string
+            The message that the Message box will show.
 
-        Error_MessageBox_GUI_Image = PhotoImage(file = "Assets/GUI/Messagebox/Error_MessageBox.png")
-        Error_Close_MessageBox_Image = PhotoImage(file="Assets/GUI/Messagebox/Close_Error_Button.png")
-        Error_Logo_Image = PhotoImage(file="Assets/GUI/Messagebox/Error.png")
-        Error_Ok_MessageBox_Image = PhotoImage(file="Assets/GUI/Messagebox/OK_Error_Button.png")
+        `draggable` : boolean
+            Specifies whether or not the Message box can be moved with the mouse.
 
-        Error_Title_bg = "#CF3325"
-        Error_Message_bg = "#DE4142"
+        """
 
-        Error_MessageBox = Label(
-            master,
-            width=382,
-            height=106,
-            bg="white",
-            image=Error_MessageBox_GUI_Image,
-            borderwidth="0",
-        )
+        Label.__init__(self, master)
 
-        Error_Title_label = Label (
-            Error_MessageBox,
-            width = 8,
-            height = 1,
-            bg = Error_Title_bg,
-            fg = "#FFFFFF",
-            text = title,
-            font=(Font, 9)
-        )
-
-        Error_Message_label = Label (
-            Error_MessageBox,
-            width = 32,
-            height = 1,
-            bg = Error_Message_bg,
-            fg = "#FFFFFF",
-            text = message,
-            font=(Font, 8)
-        )
-
-        Error_Logo = Label (
-            Error_MessageBox,
-            width = 32,
-            height = 32,
-            bg = Error_Message_bg ,
-            fg = "#FFFFFF",
-            image = Error_Logo_Image
-        )
-
-        def Error_Close_MessageBox():
-            """Close the Message box"""
-
-            Error_MessageBox.place_forget()
-
-        Error_Ok_button = Button(
-            Error_MessageBox,
-            width=26,
-            height=20,
-            bg= Error_Message_bg,
-            image=Error_Ok_MessageBox_Image,
-            borderwidth="0",
-            command=Error_Close_MessageBox,
-        )
-
-        Error_Ok_button.place(x=343, y=78)
+        self.master = master
+        self.type = type
+        self.title = title
+        self.message = message
+        self.draggable = draggable
 
 
-        Error_Close_button = Button(
-            Error_MessageBox,
-            width=7,
-            height=7,
-            bg= Error_Title_bg,
-            image= Error_Close_MessageBox_Image,
-            borderwidth="0",
-            command=Error_Close_MessageBox,
-        )
+        # Error messagebox ------------------------------------------------------------------------------------------------------------
 
-        Error_Close_button.place(x=359, y=11)
+        if (self.type == "Error"):
 
-        if (draggable == True):
-
-            make_draggable(Error_MessageBox)
-
-        Error_Title_label.place(x= 4, y= 5)
-        Error_Message_label.place(x= 28, y= 44)
-        Error_Logo.place(x= 12, y= 44)
-
-        Error_MessageBox.place(x= 320, y= 240)
+            self.Error_title_bg = "#F95352"
+            self.Error_message_bg = "#ffffff"
 
 
-# Info messagebox -------------------------------------------------------------------------------------------------------------
+            global Error_MessageBox_GUI_Image, Error_MessageBox
+            self.Error_MessageBox_GUI_Image = get_asset("Assets/GUI/Messagebox/Error_MessageBox.png")
 
-    if (type == "Info"):
-
-        Info_MessageBox_GUI_Image = PhotoImage(file = "Assets/GUI/Messagebox/Info_MessageBox.png")
-        Info_Close_MessageBox_Image = PhotoImage(file="Assets/GUI/Messagebox/Close_Info_Button.png")
-        Info_Logo_Image = PhotoImage(file="Assets/GUI/Messagebox/Info.png")
-        Info_Ok_MessageBox_Image = PhotoImage(file="Assets/GUI/Messagebox/OK_Info_Button.png")
-
-        Info_Title_bg = "#388499"
-        Info_Message_bg = "#44A0BA"
-
-        Info_MessageBox = Label(
-            master,
-            width=382,
-            height=106,
-            bg="white",
-            image=Info_MessageBox_GUI_Image,
-            borderwidth="0",
-        )
-
-        Info_Title_label = Label (
-            Info_MessageBox,
-            width = 8,
-            height = 1,
-            bg = Info_Title_bg,
-            fg = "#FFFFFF",
-            text = title,
-            font=(Font, 9)
-        )
-
-        Info_Message_label = Label (
-            Info_MessageBox,
-            width = 32,
-            height = 1,
-            bg = Info_Message_bg,
-            fg = "#FFFFFF",
-            text = message,
-            font=(Font, 8)
-        )
-
-        Info_Logo = Label (
-            Info_MessageBox,
-            width = 32,
-            height = 32,
-            bg = Info_Message_bg ,
-            fg = "#FFFFFF",
-            image = Info_Logo_Image
-        )
-
-        def Info_Close_MessageBox():
-            """Close the Message box"""
-
-            Info_MessageBox.place_forget()
-
-        Info_Ok_button = Button(
-            Info_MessageBox,
-            width=26,
-            height=20,
-            bg= Info_Message_bg,
-            image=Info_Ok_MessageBox_Image,
-            borderwidth="0",
-            command=Info_Close_MessageBox,
-        )
-
-        Info_Ok_button.place(x=343, y=78)
+            self.Error_MessageBox = Label(
+                self.master,
+                width=382,
+                height=106,
+                bg="white",
+                image=self.Error_MessageBox_GUI_Image,
+                borderwidth="0",
+            )
 
 
-        Info_Close_button = Button(
-            Info_MessageBox,
-            width=7,
-            height=7,
-            bg= Info_Title_bg,
-            image= Info_Close_MessageBox_Image,
-            borderwidth="0",
-            command=Info_Close_MessageBox,
-        )
-
-        Info_Close_button.place(x=359, y=11)
-
-        if (draggable == True):
-
-            make_draggable(Info_MessageBox)
-
-        Info_Title_label.place(x= 4, y= 5)
-        Info_Message_label.place(x= 28, y= 44)
-        Info_Logo.place(x= 12, y= 44)
-
-        Info_MessageBox.place(x= 320, y= 240)
+            self.Error_title_label = Label (
+                self.Error_MessageBox,
+                width = 8,
+                height = 1,
+                bg = self.Error_title_bg,
+                fg = "#FFFFFF",
+                text = self.title,
+                font="Tahoma 8 bold"
+            )
 
 
-# Warning messagebox ----------------------------------------------------------------------------------------------------------
-
-    if (type == "Warning"):
-
-        Warning_MessageBox_GUI_Image = PhotoImage(file = "Assets/GUI/Messagebox/Warning_MessageBox.png")
-        Warning_Close_MessageBox_Image = PhotoImage(file="Assets/GUI/Messagebox/Close_Warning_Button.png")
-        Warning_Logo_Image = PhotoImage(file="Assets/GUI/Messagebox/Warning.png")
-        Warning_Ok_MessageBox_Image = PhotoImage(file="Assets/GUI/Messagebox/OK_Warning_Button.png")
-
-        Warning_Title_bg = "#CC6A14"
-        Warning_Message_bg = "#F98118"
-
-        Warning_MessageBox = Label(
-            master,
-            width=382,
-            height=106,
-            bg="white",
-            image=Warning_MessageBox_GUI_Image,
-            borderwidth="0",
-        )
-
-        Warning_Title_label = Label (
-            Warning_MessageBox,
-            width = 8,
-            height = 1,
-            bg = Warning_Title_bg,
-            fg = "#FFFFFF",
-            text = title,
-            font=(Font, 9)
-        )
-
-        Warning_Message_label = Label (
-            Warning_MessageBox,
-            width = 32,
-            height = 1,
-            bg = Warning_Message_bg,
-            fg = "#FFFFFF",
-            text = message,
-            font=(Font, 8)
-        )
-
-        Warning_Logo = Label (
-            Warning_MessageBox,
-            width = 32,
-            height = 32,
-            bg = Warning_Message_bg ,
-            fg = "#FFFFFF",
-            image = Warning_Logo_Image
-        )
-
-        def Warning_Close_MessageBox():
-            """Close the Message box"""
-
-            Warning_MessageBox.place_forget()
-
-        Warning_Ok_button = Button(
-            Warning_MessageBox,
-            width=26,
-            height=20,
-            bg= Warning_Message_bg,
-            image=Warning_Ok_MessageBox_Image,
-            borderwidth="0",
-            command=Warning_Close_MessageBox,
-        )
-
-        Warning_Ok_button.place(x=343, y=78)
+            self.Error_message_label = Label (
+                self.Error_MessageBox,
+                width = 32,
+                height = 1,
+                bg = self.Error_message_bg,
+                fg = "#000000",
+                text = self.message,
+                font="Tahoma 8"
+            )
 
 
-        Warning_Close_button = Button(
-            Warning_MessageBox,
-            width=7,
-            height=7,
-            bg= Warning_Title_bg,
-            image= Warning_Close_MessageBox_Image,
-            borderwidth="0",
-            command=Warning_Close_MessageBox,
-        )
+            self.Error_logo_image = get_asset("Assets/GUI/Messagebox/Error.png")
 
-        Warning_Close_button.place(x=359, y=11)
+            self.Error_logo = Label (
+                self.Error_MessageBox,
+                width = 32,
+                height = 32,
+                bg = self.Error_message_bg ,
+                fg = "#FFFFFF",
+                image = self.Error_logo_image
+            )
 
-        if (draggable == True):
 
-            make_draggable(Warning_MessageBox)
+            def Error_close_messagebox():
+                """Close the Message box"""
 
-        Warning_Title_label.place(x= 4, y= 5)
-        Warning_Message_label.place(x= 28, y= 44)
-        Warning_Logo.place(x= 12, y= 44)
+                self.Error_MessageBox.place_forget()
 
-        Warning_MessageBox.place(x= 320, y= 240)
 
-# Print the module info
-# print("Author: " + str(__author__))
-# print("Module version: " + str(__version__))
-# print(Display_MessageBox.__doc__)
+            self.Error_OK_button_image = get_asset("Assets/GUI/Messagebox/OK_button.png")
+
+            self.Error_OK_button = Button(
+                self.Error_MessageBox,
+                width=28,
+                height=21,
+                bg= self.Error_message_bg,
+                image=self.Error_OK_button_image,
+                borderwidth="0",
+                command=Error_close_messagebox,
+            )
+
+            self.Error_OK_button.place(x=343, y=78)
+
+
+            self.Error_close_button_image = get_asset("Assets/GUI/Messagebox/Close_error_button.png")
+            self.Error_close_button_light_image = get_asset("Assets/GUI/Messagebox/Close_error_button_light.png")
+
+            self.Error_close_button = Button(
+                self.Error_MessageBox,
+                width=13,
+                height=13,
+                bg= self.Error_title_bg,
+                image= self.Error_close_button_image,
+                borderwidth="0",
+                command=Error_close_messagebox,
+            )
+
+            # Change the image when the mouse is over the button
+            self.Error_close_button.bind("<Enter>", lambda event: self.Error_close_button.config(image=self.Error_close_button_light_image))
+            self.Error_close_button.bind("<Leave>", lambda event: self.Error_close_button.config(image=self.Error_close_button_image))
+
+            self.Error_close_button.place(x=362, y=4)
+
+            if (self.draggable == True):
+
+                make_draggable(self.Error_MessageBox)
+
+            self.Error_title_label.place(x= 11, y= 1)
+            self.Error_message_label.place(x= 20, y= 32)
+            self.Error_logo.place(x= 18, y= 32)
+
+            self.Error_MessageBox.place(x= 320, y= 240)
+
+
+    # Info messagebox -------------------------------------------------------------------------------------------------------------
+
+        if (self.type == "Info"):
+
+            global Info_Title_bg, Info_Message_bg
+            self.Info_Title_bg = "#67B4C8"
+            self.Info_Message_bg = "#ffffff"
+
+
+            global Info_MessageBox_GUI_Image, Info_MessageBox
+            self.Info_MessageBox_GUI_Image = get_asset("Assets/GUI/Messagebox/Info_MessageBox.png")
+
+            self.Info_MessageBox = Label(
+                self.master,
+                width=382,
+                height=106,
+                bg="white",
+                image=self.Info_MessageBox_GUI_Image,
+                borderwidth="0",
+            )
+
+
+            self.Info_Title_label = Label (
+                self.Info_MessageBox,
+                width = 8,
+                height = 1,
+                bg = self.Info_Title_bg,
+                fg = "#FFFFFF",
+                text = self.title,
+                font="Tahoma 8 bold"
+            )
+
+
+            self.Info_Message_label = Label (
+                self.Info_MessageBox,
+                width = 32,
+                height = 1,
+                bg = self.Info_Message_bg,
+                fg = "#000000",
+                text = self.message,
+                font="Tahoma 8"
+            )
+
+
+            global Info_Logo_Image, Info_Logo
+            self.Info_Logo_Image = get_asset("Assets/GUI/Messagebox/Info.png")
+
+            self.Info_Logo = Label (
+                self.Info_MessageBox,
+                width = 32,
+                height = 32,
+                bg = self.Info_Message_bg ,
+                fg = "#FFFFFF",
+                image = self.Info_Logo_Image
+            )
+
+
+            global Info_Close_MessageBox
+            def Info_Close_MessageBox():
+                """Close the Message box"""
+
+                self.Info_MessageBox.place_forget()
+
+
+            global Info_Ok_MessageBox_Image, Info_Ok_button
+            self.Info_Ok_MessageBox_Image = get_asset("Assets/GUI/Messagebox/OK_button.png")
+
+            self.Info_Ok_button = Button(
+                self.Info_MessageBox,
+                width=28,
+                height=21,
+                bg= self.Info_Message_bg,
+                image=self.Info_Ok_MessageBox_Image,
+                borderwidth="0",
+                command=Info_Close_MessageBox,
+            )
+
+            self.Info_Ok_button.place(x=343, y=78)
+
+
+            self.Info_close_button_image = get_asset("Assets/GUI/Messagebox/Close_info_button.png")
+            self.Info_close_button_light_image = get_asset("Assets/GUI/Messagebox/Close_info_button_light.png")
+
+            self.Info_close_button = Button(
+                self.Info_MessageBox,
+                width=13,
+                height=13,
+                bg= self.Info_Title_bg,
+                image= self.Info_close_button_image,
+                borderwidth="0",
+                command=Info_Close_MessageBox,
+            )
+
+            # Change the image when the mouse is over the button
+            self.Info_close_button.bind("<Enter>", lambda event: self.Info_close_button.config(image=self.Info_close_button_light_image))
+            self.Info_close_button.bind("<Leave>", lambda event: self.Info_close_button.config(image=self.Info_close_button_image))
+
+            self.Info_close_button.place(x=362, y=4)
+
+
+            if (self.draggable == True):
+
+                make_draggable(self.Info_MessageBox)
+
+
+            self.Info_Title_label.place(x= 11, y= 1)
+            self.Info_Message_label.place(x= 20, y= 32)
+            self.Info_Logo.place(x= 18, y= 32)
+
+            self.Info_MessageBox.place(x= 320, y= 240)
+
+
+    # Warning messagebox ----------------------------------------------------------------------------------------------------------
+
+        if (self.type == "Warning"):
+
+
+            global Warning_Title_bg, Warning_Message_bg
+            self.Warning_Title_bg = "#F98052"
+            self.Warning_Message_bg = "#Ffffff"
+
+
+            global Warning_MessageBox_GUI_Image, Warning_MessageBox
+            self.Warning_MessageBox_GUI_Image = get_asset("Assets/GUI/Messagebox/Warning_MessageBox.png")
+
+            self.Warning_MessageBox = Label(
+                self.master,
+                width=382,
+                height=106,
+                bg="white",
+                image=self.Warning_MessageBox_GUI_Image,
+                borderwidth="0",
+            )
+
+            self.Warning_Title_label = Label (
+                self.Warning_MessageBox,
+                width = 8,
+                height = 1,
+                bg = self.Warning_Title_bg,
+                fg = "#FFFFFF",
+                text = self.title,
+                font="Tahoma 8 bold"
+            )
+
+            self.Warning_Message_label = Label (
+                self.Warning_MessageBox,
+                width = 32,
+                height = 1,
+                bg = self.Warning_Message_bg,
+                fg = "#000000",
+                text = self.message,
+                font="Tahoma 8"
+            )
+
+
+            global Warning_Logo_Image, Warning_Logo
+            self.Warning_Logo_Image = get_asset("Assets/GUI/Messagebox/Warning.png")
+
+            self.Warning_Logo = Label (
+                self.Warning_MessageBox,
+                width = 32,
+                height = 32,
+                bg = self.Warning_Message_bg ,
+                fg = "#FFFFFF",
+                image = self.Warning_Logo_Image
+            )
+
+
+            global Warning_Close_MessageBox
+            def Warning_Close_MessageBox():
+                """Close the Message box"""
+
+                self.Warning_MessageBox.place_forget()
+
+
+            global Warning_Ok_MessageBox_Image, Warning_Ok_button
+            self.Warning_Ok_MessageBox_Image = get_asset("Assets/GUI/Messagebox/OK_button.png")
+
+            self.Warning_Ok_button = Button(
+                self.Warning_MessageBox,
+                width=28,
+                height=21,
+                bg= self.Warning_Message_bg,
+                image=self.Warning_Ok_MessageBox_Image,
+                borderwidth="0",
+                command=Warning_Close_MessageBox,
+            )
+
+            self.Warning_Ok_button.place(x=343, y=78)
+
+
+            self.Warning_close_button_image = get_asset("Assets/GUI/Messagebox/Close_warning_button.png")
+            self.Warning_close_button_light_image = get_asset("Assets/GUI/Messagebox/Close_warning_button_light.png")
+
+            self.Warning_close_button= Button(
+                self.Warning_MessageBox,
+                width=13,
+                height=13,
+                bg= self.Warning_Title_bg,
+                image= self.Warning_close_button_image,
+                borderwidth="0",
+                command=Warning_Close_MessageBox,
+            )
+
+            # Change the image when the mouse is over the button
+            self.Warning_close_button.bind("<Enter>", lambda event: self.Warning_close_button.config(image=self.Warning_close_button_light_image))
+            self.Warning_close_button.bind("<Leave>", lambda event: self.Warning_close_button.config(image=self.Warning_close_button_image))
+
+            self.Warning_close_button.place(x=362, y=4)
+
+            if (draggable == True):
+
+                make_draggable(self.Warning_MessageBox)
+
+            self.Warning_Title_label.place(x= 11, y= 1)
+            self.Warning_Message_label.place(x= 20, y= 32)
+            self.Warning_Logo.place(x= 18, y= 32)
+
+            self.Warning_MessageBox.place(x= 320, y= 240)

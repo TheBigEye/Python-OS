@@ -1,36 +1,92 @@
 [
     {
-        "FolderName": "C:",
-        "FolderContent": [
+        "DriveName": "C:",
+        "DriveContent": [
             {
-                "FileName": "Index",
-                "FileExtension": "pfs",
-                "FileContent": "0--"
+                "FolderName": "System",
+                "FolderContent": [
+                    {
+                        "FileName": "excecutable",
+                        "FileLastWriteTime": "11/18/2021     15:59",
+                        "FileExtension": "pys",
+                        "FileContent": "print(\"Hello\")"
+                    },
+                    {
+                        "FileName": "example",
+                        "FileLastWriteTime": "4/11/2020     10:31",
+                        "FileExtension": "pys",
+                        "FileContent": "\ndef main():\n\tprint(\"hi, this is a executable file example\")\n\nmain()\n"
+                    },
+                    {
+                        "FileName": "example2",
+                        "FileLastWriteTime": "4/11/2020     10:31",
+                        "FileExtension": "pys",
+                        "FileContent": "\ndef main():\n\tprint(\"hi, this is a executable file example\")\n\nmain()\n"
+                    },
+                    {
+                        "FileName": "example3",
+                        "FileLastWriteTime": "4/11/2020     10:31",
+                        "FileExtension": "pys",
+                        "FileContent": "\ndef main():\n\tprint(\"hi, this is a executable file example\")\n\nmain()\n"
+                    }
+                ]
             },
             {
-                "FileName": "Test",
-                "FileExtension": "tst",
-                "FileContent": "This is a file test"
-            },
-            {
-                "FileName": "example",
-                "FileExtension": "pys",
-                "FileContent": "\ndef main():\n\tprint(\"hi, this is a executable file example\")\n\nmain()\n"
+                "FolderName": "Programs",
+                "FolderContent": [
+                    {
+                        "FileName": "Index",
+                        "FileLastWriteTime": "4/11/2020     10:31",
+                        "FileExtension": "pfs",
+                        "FileContent": "---"
+                    },
+                    {
+                        "FileName": "lol",
+                        "FileLastWriteTime": "4/11/2020     10:31",
+                        "FileExtension": "pys",
+                        "FileContent": "def main():\n\tprint(\"hi, this is a executable file example\")\n\nmain()"
+                    },
+                    {
+                        "FileName": "example72",
+                        "FileLastWriteTime": "4/11/2020     10:31",
+                        "FileExtension": "pys",
+                        "FileContent": "\ndef main():\n\tprint(\"hi, this is a executable file example\")\n\nmain()\n"
+                    },
+                    {
+                        "FileName": "example",
+                        "FileLastWriteTime": "4/11/2020     10:31",
+                        "FileExtension": "pys",
+                        "FileContent": "\ndef main():\n\tprint(\"hi, this is a executable file example\")\n\nmain()\n"
+                    }
+                ]
             }
         ]
     },
     {
-        "FolderName": "D:",
-        "FolderContent": [
+        "DriveName": "D:",
+        "DriveContent": [
             {
-                "FileName": "Index",
-                "FileExtension": "pfs",
-                "FileContent": "-0-"
+                "FolderName": "Data",
+                "FolderContent": [
+                    {
+                        "FileName": "data",
+                        "FileExtension": "db",
+                        "FileLastWriteTime": "12/13/2021     22:09",
+                        "FileContent": "this is a data"
+                    }
+                ]
             },
             {
-                "FileName": "Test2",
-                "FileExtension": "tst",
-                "FileContent": "Another test file"
+                "FolderName": "Tests",
+                "LastWriteTime": "01/21/2022     03:14",
+                "FolderContent": [
+                    {
+                        "FileName": "Index",
+                        "FileExtension": "pfs",
+                        "FileLastWriteTime": "01/21/2022     03:14",
+                        "FileContent": "---"
+                    }
+                ]
             }
         ]
     }
