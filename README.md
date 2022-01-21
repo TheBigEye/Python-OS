@@ -1,7 +1,9 @@
 # Python OS
 (Work in progress) Python OS is an operating system simulator written in Python, with a graphical interface made in Tkinter.
 
-![Logo](https://user-images.githubusercontent.com/63316583/150563082-4e33479f-2d5a-4ef7-b6a1-649f77bed270.png)
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/63316583/150563082-4e33479f-2d5a-4ef7-b6a1-649f77bed270.png" />
+</p>
 
 ## Features
 
