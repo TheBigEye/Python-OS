@@ -39,12 +39,11 @@
 First of all, it is necessary to have Python 9.10 for the right functioning (although with previous versions it works fine)
 
 The following modules must be installed:
-```bash
-  Module     Version
-  ---------- -------
-  Pillow     9.0.0
-  tkinterweb 3.10.7 
-```
+ 
+| Module     | Version |
+|------------| --------|
+| Pillow     | 9.0.0   |
+| tkinterweb | 3.10.7  |
 
 Download the code, unzip it and double click on OS.py file to run the project
 
