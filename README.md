@@ -36,7 +36,7 @@
 
 ## Installation
 
-First of all, it is necessary to have Python 9.10 for the right functioning (although with previous versions it works fine)
+First of all, it is necessary to have Python 3.10 for the right functioning (although with previous versions it works fine)
 
 The following modules must be installed:
  
