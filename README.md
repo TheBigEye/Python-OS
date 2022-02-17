@@ -27,7 +27,7 @@
 - Terminal mode.
 - File system.
 
-## Current ideas
+## Some current ideas...
 - Antivirus (fake)
 - Control panel
 - Draggable desktop icons
