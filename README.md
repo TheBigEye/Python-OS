@@ -21,7 +21,9 @@
 #### Miscellaneous:
 - Boot loader.
 - BIOS.
-- RSOD (Red Screen Of Death).
+- RSOD (Red Screen of Death)
+- BSOD (Black Screen of Death)
+- GSOD (Green Screen of death)
 - Login.
 - Desktop mode.
 - Terminal mode.
