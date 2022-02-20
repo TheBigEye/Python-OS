@@ -1,0 +1,51 @@
+[
+    {
+        "DriveName": "C:",
+        "DriveContent": [
+            {
+                "FolderName": "System",
+                "FolderContent": [
+                    {
+                        "FileName": "excecutable",
+                        "FileLastWriteTime": "11/18/2021     15:59",
+                        "FileExtension": "pys",
+                        "FileContent": "print(\"Hello\")"
+                    }
+                ]
+            },
+            {
+                "FolderName": "Programs",
+                "FolderContent": [
+                    {
+                        "FileName": "Index",
+                        "FileLastWriteTime": "4/11/2020     10:31",
+                        "FileExtension": "pfs",
+                        "FileContent": "---"
+                    },
+                    {
+                        "FileName": "lol",
+                        "FileLastWriteTime": "4/11/2020     10:31",
+                        "FileExtension": "pys",
+                        "FileContent": "def main():\n\tprint(\"hi, this is a executable file example\")\n\nmain()"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "DriveName": "D:",
+        "DriveContent": [
+            {
+                "FolderName": "Data",
+                "FolderContent": [
+                    {
+                        "FileName": "data",
+                        "FileExtension": "db",
+                        "FileLastWriteTime": "12/13/2021     22:09",
+                        "FileContent": "this is a data"
+                    }
+                ]
+            }
+        ]
+    }
+]

@@ -1,9 +1,11 @@
-import inspect
-import os
 import datetime
+import inspect
+import json
+import os
+import urllib.request
 from tkinter import PhotoImage
 
-from System.Utils.Vars import Assets_dir
+from System.Utils.Vars import Assets_directory
 
 # Loggers ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -17,7 +19,7 @@ def Logger(Log_Message):
     # Get the current date.
     current_date = str(datetime.date.today())
     # Get the current time, only hours, minutes and seconds.
-    current_time = str(datetime.datetime.now())[11:19]
+    current_time = str(datetime.datetime.now())
 
     # Open the file and write the message.
     with open("Logs/Log_" + current_date + ".log", "a") as Log_File:
@@ -41,8 +43,10 @@ class CharColors:
 
 
 def print_log(message):
-    print(f"{CharColors.LOG}[{inspect.stack()[1][3]}] {CharColors.ENDC}" + message)
-    Logger("[{}] {}".format(inspect.stack()[1][3], message))
+
+    # example: [LOG][module_name][line_number] message.
+    print(f"{CharColors.LOG}[LOG] [{inspect.stack()[1][3]}] {CharColors.ENDC}[{inspect.stack()[1][2]}] " + message)
+    Logger("[LOG][{}][{}] {}".format(inspect.stack()[1][3], inspect.stack()[1][2], message))
 
 
 def print_error(message):
@@ -60,31 +64,31 @@ def print_info(message):
     Logger("[INFO] " + message)
 
 
-# Tiempo  --------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# Time --------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-# Esta funcion retorna el tiempo como String.
+# This function returns the time as a String.
 def Get_Current_Time():
     current_time = str(datetime.datetime.now())
     return current_time
 
-
-# Esta funcion retorna la fecha en un string.
+# This function returns the date in a string.
 def Get_Current_Date():
     current_date = str(datetime.date.today())
     return current_date
 
 
-# Esta funcion retorna el tiempo y la fecha en un string.
+# This function returns the time and date in a string.
 def Get_Current_Date_Time():
     current_date_time = str(datetime.datetime.now())
     return current_date_time
 
 
+# Misc --------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+# This function will execute a function with a loading time.
 def Execute(master, Loading_time: float, Function, *args):
     global Open, Loading_cursor, Normal_cursor
 
-    # the Display_Terminal() function will run in different threads, so we need to use the tkinter.after() method to call it
-    # after the start_menu is closed
     def Open():
         Function(*args)
 
@@ -92,19 +96,44 @@ def Execute(master, Loading_time: float, Function, *args):
             master.config(cursor="wait")
 
     def Normal_cursor():
-            master.config(cursor="")
+            master.config(cursor = "")
 
     master.after(100, Loading_cursor)
     master.after(Loading_time, Open)
     master.after(1512, Normal_cursor)
 
 
-def get_asset(path):
+# This function will return the image file from the file name inside Assets folder.
+def Asset(file_name_and_extension):
 
-    path = path.replace("Assets/", "/")
-    Asset = PhotoImage(file= Assets_dir + path)
+    for root, dirs, files in os.walk(Assets_directory):
+        for file in files:
 
-    return Asset
+            if file.endswith(file_name_and_extension):
+                return PhotoImage(file = os.path.join(root, file))
+
+    return None
+
+
+# Check if the internet is on.
+def internet_on():
+    try:
+        response = urllib.request.urlopen('http://www.google.com', timeout=1)
+        if response.code == 200:
+            return True
+    except:
+        return False
+
+
+def json_get(json_file_path, key):
+    # get the key value from the json file as UTF8
+    with open(json_file_path, encoding="utf8") as json_file:
+        data = json.load(json_file)
+        return data[key]
+
+# --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
 
 
 

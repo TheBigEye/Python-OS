@@ -1,11 +1,13 @@
 from tkinter import Label, Button, PhotoImage
 import tkinterweb
 from System.GUI.Attributes.Draggable import make_draggable
-from System.Utils.Utils import get_asset
-from System.Utils.Vars import Assets_dir
+from System.Utils.Utils import Asset
+from System.Utils.Vars import Assets_directory
 
-__author__ = 'Nahuel senek'
+__author__ = 'TheBigEye'
 __version__ = '1.1'
+
+# TODO: remove and replace it with a more efficient fucntion.
 
 
 def Display_Browser(master, draggable: bool = False):
@@ -18,6 +20,7 @@ def Display_Browser(master, draggable: bool = False):
     Parameters:
     `master` : string
         The parent where the Browser will be placed.
+
     `draggable` : boolean
         If True, the browser will be draggable.
 
@@ -28,7 +31,7 @@ def Display_Browser(master, draggable: bool = False):
 # Navegaador ---------------------------------------------------------------------------------------------------------------
 
     global Browser, Browser_GUI_Image
-    Browser_GUI_Image = get_asset("Assets/GUI/Browser/Browser.png")
+    Browser_GUI_Image = Asset("Browser.png")
 
     Browser = Label(
         master,

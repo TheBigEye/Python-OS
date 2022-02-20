@@ -1,14 +1,10 @@
+import os
 import tkinter as tk
 
 from System.Core.Core import (
-    Is_Boot,
-    Is_FAIL,
-    Is_in_BIOS,
-    Is_in_Boot,
-    Is_in_Desktop,
-    Is_in_INSTALLER,
-    Is_in_Login,
-    routines
+    isBSOD, isRSOD, isGSOD, isBIOS,
+    isINSTALLER, isBootloader, isLogin,
+    isDesktop, isBoot, routines,
 )
 
 from System.GUI.Boot.BIOS import BIOS
@@ -17,17 +13,21 @@ from System.GUI.Boot.Desktop import Desktop
 from System.GUI.Boot.Installer import Os_Installer
 from System.GUI.Boot.Login import Login
 from System.GUI.Boot.RSOD import RSOD
+from System.GUI.Boot.BSOD import BSOD
 
 from System.Utils.Colormap import Black
-from System.Utils.Utils import (print_error, print_info, print_log, print_warning)
-from System.Utils.Vars import Assets_dir
+from System.Utils.Utils import print_error, print_log, print_warning
+from System.Utils.Vars import Assets_directory
 
 # -----------------------------------------------------------------[ Main ]----------------------------------------------------------------------- #
 
 
 Os = tk.Tk()  # Create the window that will be the base of the program
 Os.title("Python OS")  # Window title
-Os.iconbitmap(Assets_dir + "/Images/icon.ico")  # Window icon
+
+# If are in linux use the default tkinter icon, if are in windows use a .ico icon (and MaacOS??)
+if (os.name == "nt"):
+    Os.iconbitmap(Assets_directory + "/Icons/icon.ico")
 
 Os.geometry("1024x600")  # Window size
 Os.resizable(False, False)  # Window resizing
@@ -57,45 +57,61 @@ def start_boot():
     # After 12 seconds (or when everything is loaded), launch the desktop.
     Os.after(12000, Desktop, Os)
 
+def boot_check():
+    # Here the variables of the boot order are checked and the corresponding function is executed:
+    if (isBSOD):
+        BSOD(Os) # Black screen of death
+        print_error("The system has failed!.")
 
-# Here the variables of the boot order are checked and the corresponding function is executed:
-if (Is_FAIL == True):
-    RSOD(Os) # Red screen of death
-    print_error("The system has failed.")
+        # Stop the program after 15 seconds.
+        Os.after(15000, Os.destroy)
 
-    # Stop the program after 8 seconds.
-    Os.after(8000, Os.destroy)
+    elif (isRSOD):
+        RSOD(Os) # Red screen of death
+        print_error("The system has failed!!.")
 
-elif (Is_in_BIOS == True):
-    BIOS(Os) # Start BIOS
-    print_log("Starting from BIOS/UEFI")
+        # Stop the program after 8 seconds.
+        Os.after(8000, Os.destroy)
 
-elif (Is_in_INSTALLER == True):
-    Os_Installer(Os) # Start the installer (For now it is non-graphical mode)
-    print_log("Starting from non-graphical mode")
+    elif (isGSOD):
+        BSOD(Os) # Green screen of death
+        print_error("The system has failed?.")
 
-elif (Is_in_Boot == True):
-    Boot_loader(Os) # Starts the boot loader
-    print_log("Starting from bootloader")
+        # Stop the program after 8 seconds.
+        Os.after(8000, Os.destroy)
 
-elif (Is_in_Login == True):
-    Login(Os) # Start the login
-    print_log("Starting from Login") # Not used
+    elif (isBIOS):
+        BIOS(Os) # Start BIOS
+        print_log("Starting from BIOS/UEFI")
 
-elif (Is_in_Desktop == True):
-    Desktop(Os) # Start the desktop
-    print_log("Starting from desktop")
+    elif (isINSTALLER):
+        Os_Installer(Os) # Start the installer (For now it is non-graphical mode)
+        print_log("Starting from non-graphical mode")
 
-elif (Is_Boot == True):
-    start_boot() # Start the general boot
-    print_log("Starting from normal boot")
+    elif (isBootloader):
+        Boot_loader(Os) # Starts the boot loader
+        print_log("Starting from bootloader")
 
-# In case the boot order fails, stop the program and write the following:
-else:
-    print_error("Invalid or not found boot order, STOPPING...")
+    elif (isLogin):
+        Login(Os) # Start the login
+        print_log("Starting from Login") # Not used
 
-    # Stop the program destroying the window
-    Os.destroy()
+    elif (isDesktop):
+        Desktop(Os) # Start the desktop
+        print_log("Starting from desktop")
+
+    elif (isBoot):
+        start_boot() # Start the general boot
+        print_log("Starting from normal boot")
+
+    # In case the boot order fails, stop the program and write the following:
+    else:
+        print_error("Invalid or not found boot order, STOPPING...")
+
+        # Stop the program destroying the window
+        Os.destroy()
+
+boot_check() # Execute the boot order
 
 Os.mainloop() # Tkinter main loop
 

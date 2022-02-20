@@ -1,51 +1,60 @@
 
 import datetime
+import os
 
+from System.Core.KeysSystem import rg_routines
 from System.Core.FileSystem import fs_routines
 from System.Core.TaskSystem import ts_routines
-from System.Utils.Utils import print_log
+from System.Utils.Utils import print_error, print_log
 
-Kernel_lvl = 6 # Main kernel variable
+Kernel_lvl = 8 # Main kernel variable
 
 # Each screen has an ID
-Is_FAIL = False         # 0
-Is_in_BIOS = False      # 1
-Is_in_INSTALLER = False # 2
-Is_in_Boot = False      # 3
-Is_in_Login = False     # 4
-Is_in_Desktop = False   # 5
-Is_Boot = False         # 6
+isBSOD = False        # Black screen of death 0
+isRSOD = False        # Red screen of death 1
+isGSOD = False        # Green screen of death 2
+
+isBIOS = False        # bios sceen 3
+isINSTALLER = False   # installer screen 4
+
+isBootloader = False  # Boot screen 5
+isLogin = False       # Login screen 6
+isDesktop = False     # Desktop screen 7
+isBoot = False        # Boot the system 8
+
+in_linux = False
+in_windows = False
 
 
 # Start the boot order
-if Kernel_lvl == 0:
-    Is_FAIL = True
+match Kernel_lvl:
+    case 0: isBSOD = True
+    case 1: isRSOD = True
+    case 2: isGSOD = True
+    case 3: isBIOS = True
+    case 4: isINSTALLER = True
+    case 5: isBootloader = True
+    case 6: isLogin = True
+    case 7: isDesktop = True
+    case 8: isBoot = True
+    case _:
+        print_error("Invalid Kernel_lvl value, must be 0-8, STOPPING...")
+        exit()
 
-elif Kernel_lvl == 1:
-    Is_in_BIOS = True
 
-elif Kernel_lvl == 2:
-    Is_in_INSTALLER = True
-
-elif Kernel_lvl == 3:
-    Is_in_Boot = True
-
-elif Kernel_lvl == 4:
-    Is_in_Login = True
-
-elif Kernel_lvl == 5:
-    Is_in_Desktop = True
-
-elif Kernel_lvl == 6:
-    Is_Boot = True
-
+def check_os():
+    # Check base system (is running on linux or windows)
+    pass
 
 # Routines, are the first tasks that are executed in the first seconds of system startup
+
 def routines():
 
-    print_log("")
-    print_log("---------- Starting system execution ----------")
-    print_log("Start date and time: " + str(datetime.datetime.now()))
+    print_log("----------- Starting system execution -----------")
+    print_log("Started log at: " + str(datetime.datetime.now()))
+
+    # Load the registry
+    rg_routines()
 
     # Load the process system
     ts_routines()
@@ -61,15 +70,15 @@ def delete_logs():
     from System.Utils.Utils import print_info
 
     # Get the relative path of the Logs folder
-    Logs_path = os.path.join(os.getcwd(), "Logs")
+    logs_path = os.path.join(os.getcwd(), "Logs")
 
     # Get the list of files inside the Logs folder
-    Logs_files = os.listdir(Logs_path)
+    logs_files = os.listdir(logs_path)
 
     # Print an information message
     print_info("Deleting files from the Logs folder")
 
     # Delete the files inside the Logs folder
-    for file in Logs_files:
-        os.remove(os.path.join(Logs_path, file))
-        print(os.path.join(Logs_path, file))
+    for file in logs_files:
+        os.remove(os.path.join(logs_path, file))
+        print(os.path.join(logs_path, file))

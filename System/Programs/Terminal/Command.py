@@ -658,18 +658,20 @@ def CMD(master, entry, output):
 
         from System.Core.FileSystem import Import_file, Save_FileSystem
 
+        # import_file(path, C:/System)
         command = command.replace("import_file(", "")
         command = command.replace(")", "")
         command = command.split(", ")
 
-        file_path = command[0]
-        to_folder_name = command[1]
+        path = command[0]
+        drive_name = command[1].split("/")[0]
+        folder_name = command[1].split("/")[1]
 
-        Import_file(file_path, to_folder_name)
+        Import_file(path, drive_name, folder_name)
         Save_FileSystem()
 
-        output.insert(INSERT, "File form path " + file_path + " imported to " + to_folder_name + "\n")
-        print_log("File form path " + file_path + " imported to " + to_folder_name)
+        output.insert(INSERT, "Archivo " + path + " importado a " + drive_name + "/" + folder_name + "\n")
+        print_log("Archivo " + path + " importado a " + drive_name + "/" + folder_name)
         output.see(END)
 
     if command.startswith("import_file("):
@@ -753,9 +755,8 @@ def CMD(master, entry, output):
         output.insert(INSERT, Get_Tree() + "\n")
 
         # imprime el numero de archivos en el directorio.
-        output.insert(INSERT, "[")
         output.insert(INSERT, Get_Files_Count() )
-        output.insert(INSERT, "]" + " archivos indexados, con un tamaño de ")
+        output.insert(INSERT, " archivos indexados, con un tamaño de ")
         output.insert(INSERT, Get_Fils_size() )
         output.insert(INSERT, " bytes." +  "\n\n")
 
@@ -787,6 +788,17 @@ def CMD(master, entry, output):
 
     if command.startswith("ps"):
         get_processes_command()
+
+    
+    def registry_tree_command():
+        from System.Core.KeysSystem import reg_tree
+
+        output.insert(INSERT, "Registry: " + "\n")
+        output.insert(INSERT, reg_tree() + "\n")
+        output.see(END)
+
+    if command.startswith("rtree"):
+        registry_tree_command()
 
 
 # -------------------------------------------------------------------------------------------------------------------------------------------------

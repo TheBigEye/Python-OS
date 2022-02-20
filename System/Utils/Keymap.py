@@ -1,5 +1,7 @@
 # List of all keys and buttons.
 
+# TODO: Add more keys.
+
 # Keyboard
 ENTER = "<Return>"
 ESC = "<Escape>"

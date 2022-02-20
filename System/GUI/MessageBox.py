@@ -1,7 +1,7 @@
 from tkinter import Button, Label
 from typing import Literal
 from System.GUI.Attributes.Draggable import make_draggable
-from System.Utils.Utils import get_asset
+from System.Utils.Utils import Asset
 
 __author__ = 'TheBigEye'
 __version__ = '1.1'
@@ -55,7 +55,7 @@ class MessageBox(Label):
 
 
             global Error_MessageBox_GUI_Image, Error_MessageBox
-            self.Error_MessageBox_GUI_Image = get_asset("Assets/GUI/Messagebox/Error_MessageBox.png")
+            self.Error_MessageBox_GUI_Image = Asset("Error_MessageBox.png")
 
             self.Error_MessageBox = Label(
                 self.master,
@@ -89,7 +89,7 @@ class MessageBox(Label):
             )
 
 
-            self.Error_logo_image = get_asset("Assets/GUI/Messagebox/Error.png")
+            self.Error_logo_image = Asset("Error.png")
 
             self.Error_logo = Label (
                 self.Error_MessageBox,
@@ -107,7 +107,7 @@ class MessageBox(Label):
                 self.Error_MessageBox.place_forget()
 
 
-            self.Error_OK_button_image = get_asset("Assets/GUI/Messagebox/OK_button.png")
+            self.Error_OK_button_image = Asset("OK_button.png")
 
             self.Error_OK_button = Button(
                 self.Error_MessageBox,
@@ -122,8 +122,8 @@ class MessageBox(Label):
             self.Error_OK_button.place(x=343, y=78)
 
 
-            self.Error_close_button_image = get_asset("Assets/GUI/Messagebox/Close_error_button.png")
-            self.Error_close_button_light_image = get_asset("Assets/GUI/Messagebox/Close_error_button_light.png")
+            self.Error_close_button_image = Asset("Close_error_button.png")
+            self.Error_close_button_light_image = Asset("Close_error_button_light.png")
 
             self.Error_close_button = Button(
                 self.Error_MessageBox,
@@ -162,7 +162,7 @@ class MessageBox(Label):
 
 
             global Info_MessageBox_GUI_Image, Info_MessageBox
-            self.Info_MessageBox_GUI_Image = get_asset("Assets/GUI/Messagebox/Info_MessageBox.png")
+            self.Info_MessageBox_GUI_Image = Asset("Info_MessageBox.png")
 
             self.Info_MessageBox = Label(
                 self.master,
@@ -197,7 +197,7 @@ class MessageBox(Label):
 
 
             global Info_Logo_Image, Info_Logo
-            self.Info_Logo_Image = get_asset("Assets/GUI/Messagebox/Info.png")
+            self.Info_Logo_Image = Asset("Info.png")
 
             self.Info_Logo = Label (
                 self.Info_MessageBox,
@@ -217,7 +217,7 @@ class MessageBox(Label):
 
 
             global Info_Ok_MessageBox_Image, Info_Ok_button
-            self.Info_Ok_MessageBox_Image = get_asset("Assets/GUI/Messagebox/OK_button.png")
+            self.Info_Ok_MessageBox_Image = Asset("OK_button.png")
 
             self.Info_Ok_button = Button(
                 self.Info_MessageBox,
@@ -232,8 +232,8 @@ class MessageBox(Label):
             self.Info_Ok_button.place(x=343, y=78)
 
 
-            self.Info_close_button_image = get_asset("Assets/GUI/Messagebox/Close_info_button.png")
-            self.Info_close_button_light_image = get_asset("Assets/GUI/Messagebox/Close_info_button_light.png")
+            self.Info_close_button_image = Asset("Close_info_button.png")
+            self.Info_close_button_light_image = Asset("Close_info_button_light.png")
 
             self.Info_close_button = Button(
                 self.Info_MessageBox,
@@ -275,7 +275,7 @@ class MessageBox(Label):
 
 
             global Warning_MessageBox_GUI_Image, Warning_MessageBox
-            self.Warning_MessageBox_GUI_Image = get_asset("Assets/GUI/Messagebox/Warning_MessageBox.png")
+            self.Warning_MessageBox_GUI_Image = Asset("Warning_MessageBox.png")
 
             self.Warning_MessageBox = Label(
                 self.master,
@@ -308,7 +308,7 @@ class MessageBox(Label):
 
 
             global Warning_Logo_Image, Warning_Logo
-            self.Warning_Logo_Image = get_asset("Assets/GUI/Messagebox/Warning.png")
+            self.Warning_Logo_Image = Asset("Warning.png")
 
             self.Warning_Logo = Label (
                 self.Warning_MessageBox,
@@ -328,7 +328,7 @@ class MessageBox(Label):
 
 
             global Warning_Ok_MessageBox_Image, Warning_Ok_button
-            self.Warning_Ok_MessageBox_Image = get_asset("Assets/GUI/Messagebox/OK_button.png")
+            self.Warning_Ok_MessageBox_Image = Asset("OK_button.png")
 
             self.Warning_Ok_button = Button(
                 self.Warning_MessageBox,
@@ -343,8 +343,8 @@ class MessageBox(Label):
             self.Warning_Ok_button.place(x=343, y=78)
 
 
-            self.Warning_close_button_image = get_asset("Assets/GUI/Messagebox/Close_warning_button.png")
-            self.Warning_close_button_light_image = get_asset("Assets/GUI/Messagebox/Close_warning_button_light.png")
+            self.Warning_close_button_image = Asset("Close_warning_button.png")
+            self.Warning_close_button_light_image = Asset("Close_warning_button_light.png")
 
             self.Warning_close_button= Button(
                 self.Warning_MessageBox,

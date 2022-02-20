@@ -1,7 +1,7 @@
 from tkinter import Label, Button, PhotoImage
 from System.GUI.Attributes.Draggable import make_draggable
-from System.Utils.Utils import get_asset
-from System.Utils.Vars import Assets_dir
+from System.Utils.Utils import Asset
+from System.Utils.Vars import Assets_directory
 
 __author__ = 'Nahuel senek'
 __version__ = '1.1'
@@ -40,20 +40,20 @@ def Display_FileManager(master, tab: str, draggable: bool = False):
     # Explorador de archivos ----------------------------------------------------------------------------------------------------------------
 
     # Botones
-    This_PC_button_image = get_asset("Assets/GUI/File manager/This_PC_unselected.png")
-    Desktop_button_image = get_asset("Assets/GUI/File manager/Desktop_unselected.png")
-    Documents_button_image = get_asset("Assets/GUI/File manager/Documents_unselected.png")
-    Downloads_button_image = get_asset("Assets/GUI/File manager/Downloads_unselected.png")
+    This_PC_button_image = Asset("This_PC_unselected.png")
+    Desktop_button_image = Asset("Desktop_unselected.png")
+    Documents_button_image = Asset("Documents_unselected.png")
+    Downloads_button_image = Asset("Downloads_unselected.png")
 
     # Componentes de la ventana
-    FileManager_GUI_Image = get_asset("Assets/GUI/File manager/FileManager.png") # FileManager image base
-    List_Pane_Image = get_asset("Assets/GUI/File manager/List_pane.png") # Files and folder list
-    List_Desktop_Image = get_asset("Assets/GUI/File manager/List_Desktop_pane.png") # Desktop files list
-    List_Documents_Image = get_asset("Assets/GUI/File manager/List_Documents_pane.png") # Documents file list
-    List_Downloads_Image = get_asset("Assets/GUI/File manager/List_Downloads_pane.png") # Downloads file list
-    Control_Pane_Image = get_asset("Assets/GUI/File manager/Control_pane.png") # Window control pane (- [] X)
-    Navigation_Pane_Image = get_asset("Assets/GUI/File manager/Navigation_pane.png") # Navigation pane
-    Close_FileManager_image = get_asset("Assets/Buttons/Close_white.png") # Window close button
+    FileManager_GUI_Image = Asset("FileManager.png") # FileManager image base
+    List_Pane_Image = Asset("List_pane.png") # Files and folder list
+    List_Desktop_Image = Asset("List_Desktop_pane.png") # Desktop files list
+    List_Documents_Image = Asset("List_Documents_pane.png") # Documents file list
+    List_Downloads_Image = Asset("List_Downloads_pane.png") # Downloads file list
+    Control_Pane_Image = Asset("Control_pane.png") # Window control pane (- [] X)
+    Navigation_Pane_Image = Asset("Navigation_pane.png") # Navigation pane
+    Close_FileManager_image = Asset("Close_white.png") # Window close button
 
 
     Window_bg = "#000000"
@@ -202,7 +202,7 @@ def Display_FileManager(master, tab: str, draggable: bool = False):
         command= Downloads_list
     )
 
-    This_PC_button.place(x= 3, y= 144)
+    This_PC_button.place(x= 3, y= 146)
     Desktop_button.place(x= 3, y= 168)
     Documents_button.place(x= 3, y= 192)
     Downloads_button.place(x= 3, y= 216)

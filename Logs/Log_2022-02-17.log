@@ -1,0 +1,10 @@
+
+2022-02-17 21:46:39.549755 | [LOG][routines][53] ----------- Starting system execution -----------
+2022-02-17 21:46:39.696750 | [LOG][routines][54] Started log at: 2022-02-17 21:46:39.551758
+2022-02-17 21:46:39.883756 | [INFO] Registry keys has finished loading
+2022-02-17 21:46:40.071754 | [INFO] Processes has finished loading
+2022-02-17 21:46:40.101755 | [INFO] File system has finished loading
+2022-02-17 21:46:40.157758 | [LOG][Boot_loader][12] Starting...
+2022-02-17 21:46:41.193933 | [LOG][boot_check][105] Starting from normal boot
+2022-02-17 21:46:51.234601 | [LOG][End_bootloader][52] Finishing...
+2022-02-17 21:46:53.219706 | [LOG][Desktop][32] Desktop loaded and running

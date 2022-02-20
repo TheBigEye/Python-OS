@@ -17,3 +17,5 @@ High_blue =    "#0000FF"
 Low_blue =     "#000080"
 Magenta =      "#FF00FF"
 Purple =       "#800080"
+
+# NOTE: I know this is somewhat useless assuming writing the hex value is more flexible in tkinter

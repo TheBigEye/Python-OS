@@ -1,10 +1,13 @@
 {
+    // This is better than using extensions, it doesn't affect performance
+
     // Colorized brackets.
     "editor.bracketPairColorization.enabled": true,
     "editor.guides.bracketPairs": true,
     "editor.guides.bracketPairsHorizontal": true,
     "editor.guides.highlightActiveBracketPair": true,
-    "editor.guides.highlightMatchingBracket": true,
+    "editor.guides.indentation": true,
+    "editor.guides.highlightActiveIndentation": true,
 
     // JSON with Comments
     "files.associations": {

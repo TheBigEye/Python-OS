@@ -1,0 +1,9 @@
+
+{
+    "Terminal_name": "Terminal",
+    "Terminal_description": "A terminal that can be used to run commands.",
+    "Terminal_welcome_message": "═════════════════════════ Welcome to the terminal ═════════════════════════\n\n>/ Type a command, or use help for get commands \n\n",
+
+    "Terminal_window_theme_path": "Assets/GUI/Terminal/Terminal.png"
+}
+

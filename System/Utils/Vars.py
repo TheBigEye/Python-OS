@@ -1,14 +1,14 @@
 import os
+# Important variables
 
-# Variables mportantes
+# Relative paths (used to be able to execute the program from anywhere)
+# WARNING: don't touch this unless you know what you're doing.
 
-# Rutas relativas (sirve para poder ejecutar el programa desde cualquier lugar)
+Assets_directory = os.path.join(os.getcwd(), "Assets")
+Assets_directory = Assets_directory.replace("\\", "/")
 
-Assets_dir = os.path.join(os.getcwd(), "Assets")
-Assets_dir = Assets_dir.replace("\\", "/")
+Disk_directory = os.path.join(os.getcwd(), "Disk")
+Disk_directory = Disk_directory.replace("\\", "/")
 
-Disk_dir = os.path.join(os.getcwd(), "Disk")
-Disk_dir = Disk_dir.replace("\\", "/")
-
-Logs_dir = os.path.join(os.getcwd(), "Logs")
-Logs_dir = Logs_dir.replace("\\", "/")
+Logs_directory = os.path.join(os.getcwd(), "Logs")
+Logs_directory = Logs_directory.replace("\\", "/")

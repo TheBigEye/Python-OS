@@ -1,6 +1,6 @@
 from tkinter import Entry, Label, Text
 from tkinter.constants import DISABLED, INSERT, NORMAL
-from System.Programs.Command import CMD
+from System.Programs.Terminal.Command import CMD
 from System.Utils.Colormap import Black
 
 __author__ = 'Nahuel senek'

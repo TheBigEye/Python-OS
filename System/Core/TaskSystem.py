@@ -22,7 +22,7 @@ def ts_routines():
     # se crea el proceso del sistema "System", los valores de CPU, RAM, Disk y Network son aleatorios
     add_task("System", random.randint(1, 50), random.randint(1, 50), random.randint(1, 50), random.randint(1, 50), "normal", "running")
 
-    print_info("Se termino de cargar los procesos")
+    print_info("Processes has finished loading")
 
 
 TaskSystem_directory = "Disk/TaskSystem.json"

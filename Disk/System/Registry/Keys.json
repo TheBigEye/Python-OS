@@ -1,0 +1,52 @@
+[
+    {
+        "ROOT_KEY": "System",
+        "ROOT_KEY_CONTENT": [
+            {
+                "SUB_KEY": "OS",
+                "SUB_KEY_CONTENT": [
+                    {
+                        "KEY": "Name",
+                        "VALUE": "Python OS"
+                    },
+                    {
+                        "KEY": "Version",
+                        "VALUE": "???"
+                    },
+                    {
+                        "KEY": "Architecture",
+                        "VALUE": "x64"
+                    },
+                    {
+                        "KEY": "Language",
+                        "VALUE": "English"
+                    },
+                    {
+                        "KEY": "Country",
+                        "VALUE": "Earth"
+                    },
+                    {
+                        "KEY": "Date",
+                        "VALUE": "17/02/2022"
+                    },
+                    {
+                        "KEY": "Time",
+                        "VALUE": "21:17:43"
+                    },
+                    {
+                        "KEY": "User",
+                        "VALUE": "User"
+                    },
+                    {
+                        "KEY": "Computer",
+                        "VALUE": "Computer"
+                    },
+                    {
+                        "KEY": "Domain",
+                        "VALUE": "Domain"
+                    }
+                ]
+            }
+        ]
+    }
+]

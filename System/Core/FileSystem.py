@@ -1,27 +1,29 @@
 import datetime
 import json
+import os
 import random
 import sys
+import time
 from os import urandom
 
 from System.Utils.Utils import print_info
 
-FileSystem = [] # Aqui se guarda y carga temporalmente el systema de archivos
+FileSystem = [] # Here the file system is temporarily saved and loaded
 
 
 def fs_routines():
 
-    # Carga el sistema de archivos desde el archivo .JSON
+    # Load the file system from the .JSON file
     Load_FileSystem()
 
-    # Verifica si existe la crpeta System en el sistema de archivos usando Exist_folder, si no es asi, la crea
+    # Check if the System folder exists in the file system using Exist_folder, if not, create it
     if Exist_folder("C:", "System") == False:
         Create_folder("C:", "System")
-        print_info("Se ha creado la carpeta System de nuevo debido a que no existia")
+        print_info("The System folder has been created again because it did not exist")
 
     # Se vuelve a cargar para estar seguros
     Load_FileSystem()
-    print_info("Se termino de cargar el sistema de archivos")
+    print_info("File system has finished loading")
 
 
 # Extensiones ----------------------------------------------------------------------------------------------------------------------------
@@ -31,7 +33,7 @@ Python_script_extension = "pys"
 
 # Sistema de archivos ---------------------------------------------------------------------------------------------------------------------
 
-FileSystem_directory = "Disk/FileSystem.json"
+FileSystem_directory = "Disk/System/Files.json"
 
 
 def save_file():
@@ -71,26 +73,25 @@ def Create_folder(Drive, FolderName):
     import time
     LastWriteTime = time.strftime("%m/%d/%Y     %H:%M")
 
+    New_folder = {
+        "FolderName": FolderName,
+        "LastWriteTime": LastWriteTime,
+        "FolderContent": [
+            {
+                # Crea un archivo index.pfs, servira para identificar un archivo de una carpeta
+                "FileName": "index",
+                "FileExtension": "pfs",
+                "FileLastWriteTime": LastWriteTime,
+                "FileContent": "---"
+            }
+        ]
+    }
 
     # Si la carpeta ya existe no se crea, en cambio si existe se crea
-    if Exist_folder(Drive, FolderName) == True:
-        return
-    else:
+    if Exist_folder(Drive, FolderName) == False:
         for drive in FileSystem:
             if drive["DriveName"] == Drive:
-                drive["DriveContent"].append({
-                    "FolderName": FolderName,
-                    "LastWriteTime": LastWriteTime,
-                    "FolderContent": [
-                        {
-                            # Crea un archivo index.pfs, servira para identificar un archivo de una carpeta
-                            "FileName": "Index",
-                            "FileExtension": Index_file_ext,
-                            "FileLastWriteTime": LastWriteTime,
-                            "FileContent": "---"
-                        }
-                    ],
-                })
+                drive["DriveContent"].append(New_folder)
 
     # Guarda la carpeta en el sistema de archivos en FileSystem
     save_folder()
@@ -342,7 +343,7 @@ def Open_folder(FolderName):
 
 # Guarda todos los cambios del sistema de archivos a FileSsystem.json usando la lista FileSystem[]
 def Save_FileSystem():
-    with open("Disk/FileSystem.json", "w") as file:
+    with open(FileSystem_directory, "w") as file:
         json.dump(FileSystem, file, sort_keys=False, indent=4)
 
 
@@ -352,7 +353,7 @@ def Load_FileSystem():
     # global para que pueda ser leido
     global FileSystem
 
-    with open("Disk/FileSystem.json", "r") as file:
+    with open(FileSystem_directory, "r") as file:
         FileSystem = json.load(file)
 
 
@@ -484,7 +485,7 @@ def Format_FileSystem():
 
 
 # Import_file, importa un archivo real y su contenido al sistema de archivos, ejemplo: import_file(C:/Users/User/Desktop/file.txt, "txt", "Main")
-def Import_file(FilePath, ToFolderName):
+def Import_file(FilePath, ToDrive, ToFolderName):
     global FileSystem
 
     # obtiene el nombre del archivo sin la extensión.
@@ -493,15 +494,27 @@ def Import_file(FilePath, ToFolderName):
     # obtiene la extension del archivo.
     FileExtension = FilePath.split("/")[-1].split(".")[1]
 
-    # obtiene el contenido del archivo.
+    # obtiene la fecha de creación del archivo.
+    FileLastWriteTime = time.strftime("%d/%m/%Y     %H:%M", time.localtime(os.path.getmtime(FilePath)))
+
+    # obtiene el contenido del archivo, ya sea texto o una imagen.
     with open(FilePath, "r") as file:
         FileContent = file.read()
 
-    # crea un nuevo archivo en el sistema de archivos, con el nombre, extension y contenido del archivo. importado
+    # crea un nuevo archivo en el sistema de archivos, con el nombre, extension y contenido del archivo importado
+    Imported_file = {
+        "FileName": FileName,
+        "FileExtension": FileExtension,
+        "FileLastWriteTime": FileLastWriteTime,
+        "FileContent": FileContent
+    }
+
+    # agrega el nuevo archivo al sistema de archivos.
     for drive in FileSystem:
-        for folder in drive["DriveContent"]:
-            if folder["FolderName"] == ToFolderName:
-                folder["FolderContent"].append({"FileName": FileName, "FileExtension": FileExtension, "FileContent": FileContent, "FileLastWriteTime": "Invalido"})
+        if drive["DriveName"] == ToDrive:
+            for folder in drive["DriveContent"]:
+                if folder["FolderName"] == ToFolderName:
+                    folder["FolderContent"].append(Imported_file)
 
     # guarda los cambios
     save_file()
@@ -530,7 +543,7 @@ def Execute_file(FolderName, FileName, FileExtension):
 
 
 
-# Export_file, export a file from the file system to a real file.
+# Export_file, export a file from the file system to a real file. TODO: less for statements.
 def Export_file(FolderName, FileName, FileExtension, ToPath):
     # get the file content.
     for drive in FileSystem:
