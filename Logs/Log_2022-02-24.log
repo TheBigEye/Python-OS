@@ -1,0 +1,10 @@
+2022-02-24 00:29:28.726511 | [LOG] [routines] [ln: 64] ----------- Starting system execution -----------
+2022-02-24 00:29:28.767644 | [LOG] [routines] [ln: 65] Started log at: 2022-02-24 00:29:28.742137
+2022-02-24 00:29:28.806131 | [LOG] [routines] [ln: 71] Running on Windows
+2022-02-24 00:29:28.870136 | [INFO] Processes has finished loading
+2022-02-24 00:29:28.875134 | [INFO] File system has finished loading
+2022-02-24 00:29:28.904136 | [LOG] [Boot_loader] [ln: 12] Starting...
+2022-02-24 00:29:29.289504 | [LOG] [boot_check] [ln: 107] Starting from normal boot
+2022-02-24 00:29:39.309060 | [LOG] [End_bootloader] [ln: 52] Finishing...
+2022-02-24 00:29:41.298992 | [LOG] [Desktop] [ln: 32] Desktop loaded and running
+2022-02-24 00:29:42.191110 | [WARNING] Asset not found: Taskbar_Icons.png

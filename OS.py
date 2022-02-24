@@ -7,31 +7,31 @@ from System.Core.Core import (
     isDesktop, isBoot, routines,
 )
 
-from System.GUI.Boot.BIOS import BIOS
-from System.GUI.Boot.Bootloader import Boot_loader
-from System.GUI.Boot.Desktop import Desktop
-from System.GUI.Boot.Installer import Os_Installer
-from System.GUI.Boot.Login import Login
-from System.GUI.Boot.RSOD import RSOD
-from System.GUI.Boot.BSOD import BSOD
+from System.UI.Boot.BIOS import BIOS
+from System.UI.Boot.Bootloader import Boot_loader
+from System.UI.Boot.Desktop import Desktop
+from System.UI.Boot.Installer import Os_Installer
+from System.UI.Boot.Login import Login
+from System.UI.Boot.RSOD import RSOD
+from System.UI.Boot.BSOD import BSOD
 
 from System.Utils.Colormap import Black
-from System.Utils.Utils import print_error, print_log, print_warning
+from System.Utils.Utils import print_error, print_info, print_log, print_warning
 from System.Utils.Vars import Assets_directory
 
 # -----------------------------------------------------------------[ Main ]----------------------------------------------------------------------- #
 
 
-Os = tk.Tk()  # Create the window that will be the base of the program
-Os.title("Python OS")  # Window title
+Os = tk.Tk()  # Create the window that will be the base of the program.
+Os.title("Python OS")  # Window title.
 
 # If are in linux use the default tkinter icon, if are in windows use a .ico icon (and MaacOS??)
 if (os.name == "nt"):
     Os.iconbitmap(Assets_directory + "/Icons/icon.ico")
 
-Os.geometry("1024x600")  # Window size
-Os.resizable(False, False)  # Window resizing
-Os.configure(background = Black)  # Black is the base color
+Os.geometry("1024x600")  # Window size.
+Os.resizable(False, False)  # Window resizing.
+Os.configure(background = Black)  # Black is the base color.
 
 
 # Warnings.
@@ -43,10 +43,12 @@ def warnings():
         print_warning("The resolution of the screen is less than that of the window.")
 
 
-warnings() # Show warnings before execution
 routines() # Execute system routines
+warnings() # Show warnings
+
 
 # -----------------------------------------------------------------[ Boot ]-------------------------------------------------------------------------- #
+
 
 # This part starts the important functions of the program
 def start_boot():
@@ -68,14 +70,14 @@ def boot_check():
 
     elif (isRSOD):
         RSOD(Os) # Red screen of death
-        print_error("The system has failed!!.")
+        print_warning("The system has failed!!.")
 
         # Stop the program after 8 seconds.
         Os.after(8000, Os.destroy)
 
     elif (isGSOD):
         BSOD(Os) # Green screen of death
-        print_error("The system has failed?.")
+        print_info("The system has failed?.")
 
         # Stop the program after 8 seconds.
         Os.after(8000, Os.destroy)
@@ -110,6 +112,7 @@ def boot_check():
 
         # Stop the program destroying the window
         Os.destroy()
+
 
 boot_check() # Execute the boot order
 

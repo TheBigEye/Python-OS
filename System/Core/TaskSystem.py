@@ -3,7 +3,6 @@ import random
 
 from System.Utils.Utils import print_error, print_info, print_warning
 
-
 # Sistema de tareas -----------------------------------------------------------------------------------------------------------------------
 
 TaskSystem = []

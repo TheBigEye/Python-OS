@@ -1,4 +1,3 @@
-import os
 import random
 import time
 from tkinter.constants import END, INSERT
@@ -44,25 +43,50 @@ def CMD(master, entry, output):
 
     # Comandos----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-    # print, imprime un mensaje (string) en la terminal, print("algo"), > algo
-    def print_command():
+    def print_command(command):
 
-        # si los argumentos de comando esta entre parentesis, entonces:
-        if "(" in command and ")" in command:
-            # si los argumentos estan entre comillas (Obligatorio para que se lea como un string), entonces:
-            if "\"" in command:
-                # Reemplaza el comando por comillas, estas se eliminan, y solo se imprime el string o mensaje declarado
-                output.insert(INSERT, eval(command.replace("print(", "").replace(")", "")) + "\n")
-            else:
-                # En caso de que no se halla declarado con comillas, aparece un error
-                output.insert(INSERT, "Error: se necesitan comillas." + "\n")
-        else:
-            # En caso de que el comando no tenga parentesis para declarar los argumentos, se mostrara un error
-            output.insert(INSERT, "Error: se necesitan parentesis" + "\n")
+        """
+        Summary:
+            This is used to print a message/string in the terminal.
 
-    # Si la terminal detecta el comando print, ejecuta el comando solicitado
-    if command.startswith("print("):
-        print_command()
+        Example:
+            print "Hello"
+
+        """
+
+        command = command.replace("print ", "")
+
+        # The string must be in quotes
+        text = command.split("\"")[1]
+
+        output.insert(INSERT, text + "\n")
+        output.see(END)
+
+    if command.startswith("print "):
+        print_command(command)
+
+
+    def echo_command(command):
+
+        """
+        Summary:
+            This is used to print a message/string in the terminal.
+
+        Example:
+            echo "Hello"
+
+        """
+
+        command = command.replace("echo ", "")
+
+        # The string must be in quotes
+        text = command.split("\"")[1]
+
+        output.insert(INSERT, text + "\n")
+        output.see(END)
+
+    if command.startswith("echo "):
+        echo_command(command)
 
 
 
@@ -353,34 +377,20 @@ def CMD(master, entry, output):
 
 # -------------------------------------------------------------------------------------------------------------------------------------------------
 
-
-    # cd command will change the current directory, like: cd(directory) , > , or cd.. to go back one directory.
-    def cd_command(command):
-        """Cd command"""
-
-        command = command.replace("cd(", "")
-        command = command.replace(")", "")
-
-        if command == "..":
-            os.chdir(os.path.dirname(os.getcwd()))
-        else:
-            os.chdir(command)
-
-        output.insert(INSERT, os.getcwd() + "\n")
-        output.see(END)
-
-    if command.startswith("cd("):
-        cd_command(command)
-
-
-    # mkfolder command will create a new folder, like: mkfolder(folder_name) , > .
     def mkfolder_command(command):
+
+        """
+            Summary:
+                Make a folder in the disk
+
+            Example:
+                mkfolder C:/folder_name
+
+        """
 
         from System.Core.FileSystem import Create_folder, Save_FileSystem
 
-        # example: mkfolder(drive_name/folder_name) -> delete_file(C:/System)
-        command = command.replace("mkfolder(", "")
-        command = command.replace(")", "")
+        command = command.replace("mkfolder ", "")
         command = command.split("/")
 
         drive_name = command[0]
@@ -388,20 +398,28 @@ def CMD(master, entry, output):
 
         Create_folder(drive_name, folder_name)
 
-        output.insert(INSERT, "Folder " + folder_name + " created in " + drive_name + "\n")
         print_log("Folder " + folder_name + " created in " + drive_name)
+        output.insert(INSERT, "Folder " + folder_name + " created in " + drive_name + "\n")
         output.see(END)
 
-    if command.startswith("mkfolder("):
+    if command.startswith("mkfolder "):
         mkfolder_command(command)
 
 
     def mkfile_command(command):
 
+        """
+            Summary:
+                Make a file in the disk
+
+            Example:
+                mkfile C:/folder_name/file_name.txt, "conttent :)" (the extension is important)
+
+        """
+
         from System.Core.FileSystem import Create_file
 
-        command = command.replace("mkfile(", "")
-        command = command.replace(")", "")
+        command = command.replace("mkfile ", "")
         command = command.split(", ")
 
         drive_name = command[0].split("/")[0]
@@ -415,11 +433,11 @@ def CMD(master, entry, output):
 
         Create_file(drive_name, folder_name, file_name, extension, content)
 
-        output.insert(INSERT, "Archivo " + file_name + "." + extension + " fue creado en " + drive_name + "/" + folder_name + "\n")
         print_log("Archivo " + file_name + "." + extension + " fue creado en " + drive_name + "/" + folder_name)
+        output.insert(INSERT, "Archivo " + file_name + "." + extension + " fue creado en " + drive_name + "/" + folder_name + "\n")
         output.see(END)
 
-    if command.startswith("mkfile("):
+    if command.startswith("mkfile "):
         mkfile_command(command)
 
 
@@ -552,8 +570,7 @@ def CMD(master, entry, output):
 
         from System.Core.FileSystem import Delete_folder
 
-        command = command.replace("delete_folder(", "")
-        command = command.replace(")", "")
+        command = command.replace("dfolder ", "")
         command = command.split("/")
 
         drive_name = command[0]
@@ -565,7 +582,7 @@ def CMD(master, entry, output):
         print_log("Carpeta " + folder_name + " borrada desde " + drive_name)
         output.see(END)
 
-    if command.startswith("delete_folder("):
+    if command.startswith("dfolder "):
         delete_folder_command(command)
 
 
@@ -575,8 +592,7 @@ def CMD(master, entry, output):
         from System.Core.FileSystem import Delete_file, Save_FileSystem
 
         # example: delete_file(drive_name/folder_name/filename.extension) -> delete_file(C:/System/test.pys)
-        command = command.replace("delete_file(", "")
-        command = command.replace(")", "")
+        command = command.replace("dfile ", "")
         command = command.split("/")
 
         drive_name = command[0]
@@ -597,10 +613,8 @@ def CMD(master, entry, output):
         Save_FileSystem()
         output.see(END)
 
-
-    if command.startswith("delete_file("):
+    if command.startswith("dfile "):
         delete_file_command(command)
-
 
 
     def rename_folder_command(command):
@@ -719,7 +733,7 @@ def CMD(master, entry, output):
         # insert the code result.
         print_log("Archivo " + file_name + "." + extension + " ejecutado")
         output.insert(INSERT, Execute_file(folder_name, file_name, extension))
-        output.insert(INSERT,  "\n")
+        output.insert(INSERT, "\n")
 
         output.see(END)
 
@@ -732,13 +746,8 @@ def CMD(master, entry, output):
 
         from System.Core.FileSystem import Get_Files_Count, Get_FileSystem
 
-        output.insert(INSERT, "Directorios: " + "\n")
+        output.insert(INSERT, "Directories: " + "\n")
         output.insert(INSERT, Get_FileSystem())
-        output.insert(INSERT,  "\n")
-
-        # print the number of files directory.
-        output.insert(INSERT, "Archivos: ")
-        output.insert(INSERT,  Get_Files_Count())
         output.insert(INSERT,  "\n\n")
 
         output.see(END)
@@ -749,14 +758,15 @@ def CMD(master, entry, output):
 
     # Tree imprime el contenido del directorio actual en forma de arbol, como: tree() , > tree.
     def tree_command():
-        from System.Core.FileSystem import (Get_Files_Count, Get_Fils_size, Get_Tree)
+        from System.Core.FileSystem import (Get_Files_Count, Get_Fils_size,
+                                            Get_Tree)
 
-        output.insert(INSERT, "Arbol de directorios: " + "\n")
+        output.insert(INSERT, "Directory tree: " + "\n")
         output.insert(INSERT, Get_Tree() + "\n")
 
         # imprime el numero de archivos en el directorio.
         output.insert(INSERT, Get_Files_Count() )
-        output.insert(INSERT, " archivos indexados, con un tamaño de ")
+        output.insert(INSERT, " indexed files, with a size of ")
         output.insert(INSERT, Get_Fils_size() )
         output.insert(INSERT, " bytes." +  "\n\n")
 
@@ -772,10 +782,10 @@ def CMD(master, entry, output):
 
         delete_logs()
 
-        output.insert(INSERT, "Logs eliminados" + "\n")
+        output.insert(INSERT, "Deleted logs" + "\n")
         output.see(END)
 
-    if command.startswith("delete_logs"):
+    if command.startswith("dlogs"):
         delete_logs_command()
 
 
@@ -789,16 +799,46 @@ def CMD(master, entry, output):
     if command.startswith("ps"):
         get_processes_command()
 
-    
+
     def registry_tree_command():
-        from System.Core.KeysSystem import reg_tree
+        from System.Core.KeysSystem import reg_tree_view
 
         output.insert(INSERT, "Registry: " + "\n")
-        output.insert(INSERT, reg_tree() + "\n")
+        output.insert(INSERT, reg_tree_view())
+        output.insert(INSERT, "\n")
         output.see(END)
 
-    if command.startswith("rtree"):
+    if command.startswith("reg"):
         registry_tree_command()
+
+
+    def foreground_command(command):
+
+        """
+        Changes the terminal foreground color
+
+        Command:
+            foreground "color"
+
+        Colors:
+            black (never), red, green, yellow, blue, magenta, cyan, white, etc.
+
+        """
+
+        from System.Programs.Terminal.Terminal import set_foreground
+
+        command = command.replace("foreground ", "")
+
+        # The color is beetween quotation marks
+        color = command.split("\"")[1]
+
+        set_foreground(color)
+
+        output.insert(INSERT, "Foreground changed to " + command + ", please restart to see the change", "\n\n")
+        output.see(END)
+
+    if command.startswith("foreground"):
+        foreground_command(command)
 
 
 # -------------------------------------------------------------------------------------------------------------------------------------------------
@@ -810,54 +850,41 @@ def CMD(master, entry, output):
         import platform
 
         output.insert(INSERT, "Info: ─────────────────────────────────────────────────────────────────────" + "\n")
-        output.insert(INSERT, "Sistema base: " + platform.system() + "\n")
-        output.insert(INSERT, "Release: " + platform.release() + "\n")
-        output.insert(INSERT, "Version: " + platform.version() + "\n")
-        output.insert(INSERT, "Maquina: " + platform.machine() + "\n")
-        output.insert(INSERT, "Procesador: " + platform.processor() + "\n")
+        output.insert(INSERT, "System:     " + platform.system() +    "\n")
+        output.insert(INSERT, "Release:    " + platform.release() +   "\n")
+        output.insert(INSERT, "Version:    " + platform.version() +   "\n")
+        output.insert(INSERT, "Machine:    " + platform.machine() +   "\n")
+        output.insert(INSERT, "Processor:  " + platform.processor() + "\n")
         output.insert(INSERT, "───────────────────────────────────────────────────────────────────────────" + "\n\n")
         output.see(END)
 
     if command.startswith("info"):
         info_command()
 
-    # help, va a imprimir la ayuda acerca de todos los comandos, como: help , >.
+
     def help_command():
         """Help command"""
 
-        output.insert(INSERT, "Ayuda: ────────────────────────────────────────────────────────────────────" + "\n")
-        output.insert(INSERT, "print() - imprime un string" + "\n")
-        output.insert(INSERT, "add() - suma numeros o une strings" + "\n")
-        output.insert(INSERT, "sub() - reta numeros" + "\n")
-        output.insert(INSERT, "mul() - multiplica numeros" + "\n")
-        output.insert(INSERT, "div() - divide numeros" + "\n")
-        output.insert(INSERT, "random(min_number, max_number) - genera un numero aleatorio" + "\n")
-        output.insert(INSERT, "\n")
-        output.insert(INSERT, "var(variable_name, value) - crea una variable" + "\n")
-        output.insert(INSERT, "print_value(variable_name) - imprime el valor de una variable" + "\n")
-        output.insert(INSERT, "clear_var(variable_name) - establece el valor de una variable a 0" + "\n")
-        output.insert(INSERT, "\n")
-        output.insert(INSERT, "repeat(command(args), number) - repite un comando o funcion un numero de veces" + "\n")
-        output.insert(INSERT, "\n")
-        output.insert(INSERT, "? | dir - imprime el directorio actual" + "\n")
-        output.insert(INSERT, "cd(directory) - cambia el directorio actual" + "\n")
-        output.insert(INSERT, "mkfolder(Drive/folder_name) - crea una nueva carpeta" + "\n")
-        output.insert(INSERT, "mkfile(Drive/folder_name/file_name.extension, content) - crea un nuevo archivo" + "\n")
-        output.insert(INSERT, "move_file(C:/folder_name/file_name.extension, to_folder) - mueve un archivo a otra carpeta" + "\n")
-        output.insert(INSERT, "Rename_file(folder_name, file_name, extension, new_name, new_extension) - renombra un archivo, ademas de su extension" + "\n")
-        output.insert(INSERT, "Import_file(file_path, folder_name) - importa un archivo real del sistema base hasta el sistema de archivos" + "\n")
-        output.insert(INSERT, "Execute_file(folder_name, file_name, extension) - ejecuta un archivo .pys (python script)" + "\n")
-        output.insert(INSERT, "delete_file(file_name, extension) - borra un archivo" + "\n")
-        output.insert(INSERT, "\n")
-        output.insert(INSERT, "time - imprime la hora actual" + "\n")
-        output.insert(INSERT, "tree - imprime un directorio de arbol de todos los archivos y carpetas" + "\n")
-        output.insert(INSERT, "help - imprime esta ayuda" + "\n")
-        output.insert(INSERT, "info - imprime la informacion basica del sistema" + "\n")
-        output.insert(INSERT, "clear | cls - limpia la pantalla de la terminal" + "\n")
-        output.insert(INSERT, "exit - ale de la terminal" + "\n")
-        output.insert(INSERT, "\n")
-        output.insert(INSERT, ">>> python_command - ejecuta funciones de python" + "\n")
-        output.insert(INSERT, "───────────────────────────────────────────────────────────────────────────" + "\n\n")
+        output.insert(INSERT, 'Help: ─────────────────────────────────────────────────────────────────────' + '\n')
+        output.insert(INSERT, 'print "text"             - print a string' +                                   '\n')
+        output.insert(INSERT, 'echo "text"              - print a string' +                                   '\n')
+        output.insert(INSERT, 'clear | cls              - clear the terminal' +                               '\n')
+        output.insert(INSERT,                                                                                 '\n')
+        output.insert(INSERT, 'dir | ?                  - show the file system directory' +                   '\n')
+        output.insert(INSERT, 'tree                     - show the file system directory as tree' +           '\n')
+        output.insert(INSERT,                                                                                 '\n')
+        output.insert(INSERT, 'mkfolder C:/folder_name                - create a folder in the file system' + '\n')
+        output.insert(INSERT, 'mkfile C:/.../file_name.ext, "content" - create a file in the file system' +   '\n')
+        output.insert(INSERT, 'dfolder C:/folder_name                 - delete a folder in the file system' + '\n')
+        output.insert(INSERT, 'dfile C:/folder/file_name.ext          - delete a file in the file system' +   '\n')
+        output.insert(INSERT,                                                                                 '\n')
+        output.insert(INSERT, 'dlogs                    - delete system logs' +                               '\n')
+        output.insert(INSERT, 'info                     - show the system info' +                             '\n')
+        output.insert(INSERT, 'ps                       - show all processes' +                               '\n')
+        output.insert(INSERT, 'reg                      - show the registry' +                                '\n')
+        output.insert(INSERT, 'foreground "color"       - change the terminal foreground color' +             '\n')
+        output.insert(INSERT, '>>> python code          - run a python interpreter where you can code' +      '\n')
+        output.insert(INSERT, '───────────────────────────────────────────────────────────────────────────' + '\n\n')
         output.see(END)
 
     if command.startswith("help"):

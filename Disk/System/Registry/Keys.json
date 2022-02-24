@@ -1,49 +1,74 @@
 [
     {
-        "ROOT_KEY": "System",
-        "ROOT_KEY_CONTENT": [
+        "root": "HKEY_CURRENT_USER",
+        "content": [
             {
-                "SUB_KEY": "OS",
-                "SUB_KEY_CONTENT": [
+                "category": "Software",
+                "keys": [
                     {
-                        "KEY": "Name",
-                        "VALUE": "Python OS"
+                        "name": "Terminal",
+                        "values": [
+                            {
+                                "key": "Foreground",
+                                "value": "white",
+                                "type": "str"
+                            },
+                            {
+                                "key": "Background",
+                                "value": "black",
+                                "type": "str"
+                            },
+                            {
+                                "key": "Cursor",
+                                "value": "white",
+                                "type": "str"
+                            }
+                        ]
                     },
                     {
-                        "KEY": "Version",
-                        "VALUE": "???"
-                    },
+                        "name": "Console",
+                        "values": [
+                            {
+                                "key": "Foreground",
+                                "value": "white",
+                                "type": "str"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "category": "System",
+                "keys": [
                     {
-                        "KEY": "Architecture",
-                        "VALUE": "x64"
-                    },
+                        "name": "Control Panel",
+                        "values": [
+                            {
+                                "key": "Desktop",
+                                "value": "black",
+                                "type": "str"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "root": "HKEY_LOCAL_MACHINE",
+        "content": [
+            {
+                "category": "Software",
+                "keys": [
                     {
-                        "KEY": "Language",
-                        "VALUE": "English"
-                    },
-                    {
-                        "KEY": "Country",
-                        "VALUE": "Earth"
-                    },
-                    {
-                        "KEY": "Date",
-                        "VALUE": "17/02/2022"
-                    },
-                    {
-                        "KEY": "Time",
-                        "VALUE": "21:17:43"
-                    },
-                    {
-                        "KEY": "User",
-                        "VALUE": "User"
-                    },
-                    {
-                        "KEY": "Computer",
-                        "VALUE": "Computer"
-                    },
-                    {
-                        "KEY": "Domain",
-                        "VALUE": "Domain"
+                        "name": "Microsoft",
+                        "values": [
+                            {
+                                "key": "Windows",
+                                "value": "10",
+                                "type": "str"
+                            }
+                        ]
                     }
                 ]
             }

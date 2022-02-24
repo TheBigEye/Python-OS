@@ -41,26 +41,31 @@ class CharColors:
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
 
+    GREEN_BLOCK = '\x1b[5;30;42m'
+    RED_BLOCK = '\x1b[5;30;41m'
+    YELLOW_BLOCK = '\x1b[5;30;43m'
+    BLUE_BLOCK = '\x1b[0;30;46m'
+
 
 def print_log(message):
 
     # example: [LOG][module_name][line_number] message.
-    print(f"{CharColors.LOG}[LOG] [{inspect.stack()[1][3]}] {CharColors.ENDC}[{inspect.stack()[1][2]}] " + message)
-    Logger("[LOG][{}][{}] {}".format(inspect.stack()[1][3], inspect.stack()[1][2], message))
+    print(f"{CharColors.GREEN_BLOCK}[LOG]{CharColors.ENDC} [{inspect.stack()[1][3]}] {CharColors.UNDERLINE}[ln: {inspect.stack()[1][2]}]{CharColors.ENDC} " + message)
+    Logger("[LOG] [{}] [ln: {}] {}".format(inspect.stack()[1][3], inspect.stack()[1][2], message))
 
 
 def print_error(message):
-    print(f"{CharColors.FAIL}[ERROR] {CharColors.ENDC}" + message)
+    print(f"{CharColors.RED_BLOCK}[ERROR]{CharColors.ENDC} " + message)
     Logger("[ERROR] " + message)
 
 
 def print_warning(message):
-    print(f"{CharColors.WARNING}[WARNING] {CharColors.ENDC}" + message)
+    print(f"{CharColors.YELLOW_BLOCK}[WARNING]{CharColors.ENDC} " + message)
     Logger("[WARNING] " + message)
 
 
 def print_info(message):
-    print(f"{CharColors.INFO}[INFO] {CharColors.ENDC}" + message)
+    print(f"{CharColors.BLUE_BLOCK}[INFO]{CharColors.ENDC} " + message)
     Logger("[INFO] " + message)
 
 
@@ -112,6 +117,7 @@ def Asset(file_name_and_extension):
             if file.endswith(file_name_and_extension):
                 return PhotoImage(file = os.path.join(root, file))
 
+    print_warning("Asset not found: " + file_name_and_extension)
     return None
 
 

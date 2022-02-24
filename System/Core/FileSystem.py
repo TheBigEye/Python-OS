@@ -1,10 +1,7 @@
-import datetime
 import json
 import os
 import random
-import sys
 import time
-from os import urandom
 
 from System.Utils.Utils import print_info
 
@@ -139,6 +136,9 @@ def Read_file(Drive, FolderName, FileName, FileExtension):
 
 def Delete_file(Drive, FolderName, FileName, FileExtension):
 
+    Load_FileSystem()
+
+    # delete file
     for drive in FileSystem:
         if drive["DriveName"] == Drive:
             for folder in drive["DriveContent"]:
@@ -153,6 +153,8 @@ def Delete_file(Drive, FolderName, FileName, FileExtension):
 
 def Delete_folder(Drive, FolderName):
 
+    Load_FileSystem()
+
     for drive in FileSystem:
         if drive["DriveName"] == Drive:
             for folder in drive["DriveContent"]:
@@ -160,7 +162,7 @@ def Delete_folder(Drive, FolderName):
                     drive["DriveContent"].remove(folder)
 
     # Guarda los cambios
-    save_file()
+    save_folder()
 
 
 def Rename_file(Drive, FolderName, FileName, FileExtension, NewFileName, NewFileExtension):

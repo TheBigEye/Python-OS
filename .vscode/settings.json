@@ -12,5 +12,10 @@
     // JSON with Comments
     "files.associations": {
         "*.json": "jsonc"
-    }
+    },
+
+    // Hide __pycache__ folders
+    "files.exclude": {
+        "**/__pycache__": true
+   }
 }

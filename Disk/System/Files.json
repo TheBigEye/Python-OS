@@ -24,9 +24,9 @@
                     },
                     {
                         "FileName": "lol",
-                        "FileLastWriteTime": "4/11/2020     10:31",
-                        "FileExtension": "pys",
-                        "FileContent": "def main():\n\tprint(\"hi, this is a executable file example\")\n\nmain()"
+                        "FileExtension": "txt",
+                        "FileLastWriteTime": "02/23/2022     02:23",
+                        "FileContent": "\"lol\""
                     }
                 ]
             }
