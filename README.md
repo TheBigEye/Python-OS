@@ -38,11 +38,15 @@
 
 ## Installation
 
-First of all, it is necessary to have Python 3.10 for the right functioning (although with previous versions it works fine)
+It is necessary to have Python 3.10 and have the following modules installed 
 
-Pillow and tkinterweb modules must be installed
+- ```Pillow```       Necessary so that the program can read the images and work.
+- ```Psutils```      Necessary for the neofetch command and some functions to work.
+- ```Tkinterweb```   Necessary for the browser to work.
 
-Download the code, unzip it and double click on OS.py file to run the project
+NOTE: If you're on a Linux distribution, you need a desktop or window manager for tkinter to work.
+
+Download the code, unzip it and double click on OS.py file to run the project or just in the command line you write ```python OS.py```
 
 
 
