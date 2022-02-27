@@ -1,10 +1,9 @@
-from tkinter import Button, Entry, Frame, Label, Text
+from tkinter import Button, Frame, Label
 from tkinter.constants import INSERT
 
-from System.Core.TaskSystem import add_task, stop_task, update_task
 from System.UI.Attributes.Draggable import drag_n_drop
 from System.Programs.Terminal.Command import CMD
-from System.Utils.Utils import Asset, json_get
+from System.Utils.Utils import Asset, Asset_colored, json_get
 
 __author__ = "TheBigEye"
 __version__ = "1.8"

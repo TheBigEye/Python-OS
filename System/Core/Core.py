@@ -14,7 +14,7 @@ isBSOD = False        # Black screen of death 0
 isRSOD = False        # Red screen of death 1
 isGSOD = False        # Green screen of death 2
 
-isBIOS = False        # bios sceen 3
+isBIOS = False        # bios screen 3
 isINSTALLER = False   # installer screen 4
 
 isBootloader = False  # Boot screen 5

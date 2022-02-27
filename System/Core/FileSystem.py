@@ -1,560 +1,250 @@
 import json
-import os
-import random
 import time
 
 from System.Utils.Utils import print_info
 
 FileSystem = [] # Here the file system is temporarily saved and loaded
 
-
 def fs_routines():
+    load_filesystem()
 
-    # Load the file system from the .JSON file
-    Load_FileSystem()
+    print_info("File System loaded")
 
-    # Check if the System folder exists in the file system using Exist_folder, if not, create it
-    if Exist_folder("C:", "System") == False:
-        Create_folder("C:", "System")
-        print_info("The System folder has been created again because it did not exist")
-
-    # Se vuelve a cargar para estar seguros
-    Load_FileSystem()
-    print_info("File system has finished loading")
-
-
-# Extensiones ----------------------------------------------------------------------------------------------------------------------------
+# Extensions ----------------------------------------------------------------------------------------------------------------------------
 
 Index_file_ext = "pfs"
 Python_script_extension = "pys"
 
-# Sistema de archivos ---------------------------------------------------------------------------------------------------------------------
+# File system functions ---------------------------------------------------------------------------------------------------------------------
 
 FileSystem_directory = "Disk/System/Files.json"
 
-
 def save_file():
-     with open(FileSystem_directory, "w") as file:
-        json.dump(FileSystem, file)
+
+    global FileSystem
+
+    with open(FileSystem_directory, "w") as file:
+        json.dump(FileSystem, file, indent=4)
 
 
 def save_folder():
+
+    global FileSystem
+
     with open(FileSystem_directory, "w") as folder:
-        json.dump(FileSystem, folder)
+        json.dump(FileSystem, folder, indent=4)
 
 
-def Exist_folder(Drive, FolderName):
+def save_filesystem():
+
+    global FileSystem
+
+    with open(FileSystem_directory, "w") as fs:
+        json.dump(FileSystem, fs, indent=4)
+
+def load_filesystem():
+
+    global FileSystem
+
+    with open(FileSystem_directory, "r") as fs:
+        FileSystem = json.load(fs)
+
+
+def create_drive(drive_letter):
+    drive = {
+        "drive": drive_letter + ":",
+        "content": []
+    }
+    FileSystem.append(drive)
+    save_filesystem()
+
+
+def delete_drive(drive_letter):
     for drive in FileSystem:
-        if drive["DriveName"] == Drive:
-            for folder in drive["DriveContent"]:
-                if folder["FolderName"] == FolderName:
-                    return True
-
-    return False
+        if drive["drive"] == drive_letter:
+            FileSystem.remove(drive)
+            save_filesystem()
 
 
-def Exist_file(Drive, FolderName, FileName, FileExtension):
+def create_folder(path):
+    load_filesystem()
+
+    drive_letter = path.split("/")[0]
+    folder_name = path.split("/")[1]
+
     for drive in FileSystem:
-        if drive["DriveName"] == Drive:
-            for folder in drive["DriveContent"]:
-                if folder["FolderName"] == FolderName:
-                    for file in folder["FolderContent"]:
-                        if file["FileName"] == FileName and file["FileExtension"] == FileExtension:
-                            return True
-    return False
+        if drive["drive"] == drive_letter:
+            for folder in drive["content"]:
+                if folder["name"] == folder_name:
+                    print("Folder already exists")
+                    return
 
-
-def Create_folder(Drive, FolderName):
-
-    # Obtiene la fecha de la ultima modificacion y la retorna como LastWriteTime
-    import time
-    LastWriteTime = time.strftime("%m/%d/%Y     %H:%M")
-
-    New_folder = {
-        "FolderName": FolderName,
-        "LastWriteTime": LastWriteTime,
-        "FolderContent": [
-            {
-                # Crea un archivo index.pfs, servira para identificar un archivo de una carpeta
-                "FileName": "index",
-                "FileExtension": "pfs",
-                "FileLastWriteTime": LastWriteTime,
-                "FileContent": "---"
+            folder = {
+                "type": "folder",
+                "name": folder_name,
+                "files": []
             }
-        ]
-    }
-
-    # Si la carpeta ya existe no se crea, en cambio si existe se crea
-    if Exist_folder(Drive, FolderName) == False:
-        for drive in FileSystem:
-            if drive["DriveName"] == Drive:
-                drive["DriveContent"].append(New_folder)
-
-    # Guarda la carpeta en el sistema de archivos en FileSystem
-    save_folder()
+            drive["content"].append(folder)
+            save_filesystem()
 
 
-def Create_file(Drive, FolderName, FileName, FileExtension, FileContent):
+def delete_folder(path):
+    load_filesystem()
 
-    # Obtiene la fecha y la hora de la ultima modificacion
-    import time
-
-    LastWriteTime = time.strftime("%m/%d/%Y     %H:%M")
+    drive_letter = path.split("/")[0]
+    folder_name = path.split("/")[1]
 
     for drive in FileSystem:
-        if drive["DriveName"] == Drive:
-            for folder in drive["DriveContent"]:
-                if folder["FolderName"] == FolderName:
-                    folder["FolderContent"].append({
-                        "FileName": FileName,
-                        "FileExtension": FileExtension,
-                        "FileLastWriteTime": LastWriteTime,
-                        "FileContent": FileContent
-                    })
-
-    # Guarda los cambios
-    save_file()
+        if drive["drive"] == drive_letter:
+            for folder in drive["content"]:
+                if folder["name"] == folder_name:
+                    drive["content"].remove(folder)
+                    save_filesystem()
 
 
-def Read_file(Drive, FolderName, FileName, FileExtension):
+def create_file(path):
+    load_filesystem()
 
-    # retorna el contenid odela rchivo como un string
+    drive_letter = path.split("/")[0]
+    folder_name = path.split("/")[1]
 
-    content = ""
+    file_name = path.split("/")[2].split(".")[0]
+    file_extension = path.split("/")[2].split(".")[1]
+
 
     for drive in FileSystem:
-        if drive["DriveName"] == Drive:
-            for folder in drive["DriveContent"]:
-                if folder["FolderName"] == FolderName:
-                    for file in folder["FolderContent"]:
-                        if file["FileName"] == FileName and file["FileExtension"] == FileExtension:
-                            content += str(file["FileContent"])
+        if drive["drive"] == drive_letter:
+            for folder in drive["content"]:
+                if folder["name"] == folder_name:
+                    for file in folder["files"]:
+                        if file["name"] == file_name:
+                            print("File already exists")
+                            return
 
-    return content
-
-
-
-def Delete_file(Drive, FolderName, FileName, FileExtension):
-
-    Load_FileSystem()
-
-    # delete file
-    for drive in FileSystem:
-        if drive["DriveName"] == Drive:
-            for folder in drive["DriveContent"]:
-                if folder["FolderName"] == FolderName:
-                    for file in folder["FolderContent"]:
-                        if file["FileName"] == FileName and file["FileExtension"] == FileExtension:
-                            folder["FolderContent"].remove(file)
-
-    # Guarda los cambios
-    save_file()
+                    file = {
+                        "type": "file",
+                        "name": file_name,
+                        "extension": file_extension,
+                        "metadata": {
+                            "size": "empty",
+                            "date": time.strftime("%d/%m/%y"),
+                            "time": time.strftime("%H:%M:%S")
+                        },
+                        "content": ""
+                    }
+                    folder["files"].append(file)
+                    save_filesystem()
 
 
-def Delete_folder(Drive, FolderName):
+def delete_file(path):
+    load_filesystem()
 
-    Load_FileSystem()
+    drive_letter = path.split("/")[0]
+    folder_name = path.split("/")[1]
 
-    for drive in FileSystem:
-        if drive["DriveName"] == Drive:
-            for folder in drive["DriveContent"]:
-                if folder["FolderName"] == FolderName:
-                    drive["DriveContent"].remove(folder)
-
-    # Guarda los cambios
-    save_folder()
-
-
-def Rename_file(Drive, FolderName, FileName, FileExtension, NewFileName, NewFileExtension):
-    for drive in FileSystem:
-        if drive["DriveName"] == Drive:
-            for folder in drive["DriveContent"]:
-                if folder["FolderName"] == FolderName:
-                    for file in folder["FolderContent"]:
-                        if file["FileName"] == FileName and file["FileExtension"] == FileExtension:
-                            file["FileName"] = NewFileName
-                            file["FileExtension"] = NewFileExtension
-
-    # Guarda los cambios
-    save_file()
-
-
-def Rename_folder(Drive, FolderName, NewFolderName):
-
-    # se verifica si no hay ninguna carpeta con el mismo nombre en el drive, en caso de que sea asi, se le agregara un numero aleatorio al final del nombre
-    if Exist_folder(Drive, NewFolderName) == True:
-        NewFolderName += str(random.randint(1, 255))
+    file_name = path.split("/")[2].split(".")[0]
+    file_extension = path.split("/")[2].split(".")[1]
 
     for drive in FileSystem:
-        if drive["DriveName"] == Drive:
-            for folder in drive["DriveContent"]:
-                if folder["FolderName"] == FolderName:
-                    folder["FolderName"] = NewFolderName
-
-    # Guarda los cambios
-    save_folder()
-
-
-def Clear_file(FolderName, FileName, FileExtension):
-    for drive in FileSystem:
-        for folder in drive["DriveContent"]:
-            if folder["FolderName"] == FolderName:
-                for file in folder["FolderContent"]:
-                    if file["FileName"] == FileName and file["FileExtension"] == FileExtension:
-                        file["FileContent"] = ""
-
-    # save the file in FileSystem
-    save_file()
+        if drive["drive"] == drive_letter:
+            for folder in drive["content"]:
+                if folder["name"] == folder_name:
+                    for file in folder["files"]:
+                        if file["name"] == file_name and file["extension"] == file_extension:
+                            folder["files"].remove(file)
+                            save_filesystem()
 
 
-def Move_file(Drive, FolderName, FileName, FileExtension, ToDrive, ToFolderName):
+def edit_file(path, content):
+    load_filesystem()
 
-    # obtiene los datos del archivo, nombre, extension, contenido, lastwritetime:
-    file_data = {}
-    for drive in FileSystem:
-        if drive["DriveName"] == Drive:
-            for folder in drive["DriveContent"]:
-                if folder["FolderName"] == FolderName:
-                    for file in folder["FolderContent"]:
-                        if file["FileName"] == FileName and file["FileExtension"] == FileExtension:
-                            file_data = file
+    drive_letter = path.split("/")[0]
+    folder_name = path.split("/")[1]
 
-    # se elimina el archivo de la carpeta actual
-    for drive in FileSystem:
-        if drive["DriveName"] == Drive:
-            for folder in drive["DriveContent"]:
-                if folder["FolderName"] == FolderName:
-                    for file in folder["FolderContent"]:
-                        if file["FileName"] == FileName and file["FileExtension"] == FileExtension:
-                            folder["FolderContent"].remove(file)
+    file_name = path.split("/")[2].split(".")[0]
+    file_extension = path.split("/")[2].split(".")[1]
 
-    # se agrega el archivo a la carpeta destino
-    for drive in FileSystem:
-        if drive["DriveName"] == ToDrive:
-            for folder in drive["DriveContent"]:
-                if folder["FolderName"] == ToFolderName:
-                    folder["FolderContent"].append(file_data)
-
-    # Guarda los cambios
-    save_file()
-
-
-def Move_folder(Drive, FolderName, ToDrive):
-
-    # Se obtiene los datos d ela carpeta, como su nombre y archivos
-    folder_data = {}
-    for drive in FileSystem:
-        if drive["DriveName"] == Drive:
-            for folder in drive["DriveContent"]:
-                if folder["FolderName"] == FolderName:
-                    folder_data = folder
-
-    # Se elimina la carpeta de la unidad actual
-    for drive in FileSystem:
-        if drive["DriveName"] == Drive:
-            for folder in drive["DriveContent"]:
-                if folder["FolderName"] == FolderName:
-                    drive["DriveContent"].remove(folder)
-
-    # Se agrega la carpeta a la unidad destino
-    for drive in FileSystem:
-        if drive["DriveName"] == ToDrive:
-            drive["DriveContent"].append(folder_data)
-
-    # Guarda los cambios
-    save_folder()
-
-
-
-def Copy_file(Drive, FolderName, FileName, FileExtension, ToDrive, ToFolder):
-
-    # Se obtiene los datos del archivo, nombre, extension, contenido, lastwritetime:
-    file_data = {}
-    for drive in FileSystem:
-        if drive["DriveName"] == Drive:
-            for folder in drive["DriveContent"]:
-                if folder["FolderName"] == FolderName:
-                    for file in folder["FolderContent"]:
-                        if file["FileName"] == FileName and file["FileExtension"] == FileExtension:
-                            file_data = file
-
-    # Se agrega el archivo a la carpeta destino, si en dicho destino hay un archivo igual con mismo nombre y extension, se renombra la copia del archivo agregndole un numero leatorio al final del nombre, por ejemplo file2.txt, mientras que el archivo original es file.txt, osea no se renombra
-    for drive in FileSystem:
-        if drive["DriveName"] == ToDrive:
-            for folder in drive["DriveContent"]:
-                if folder["FolderName"] == ToFolder:
-                    for file in folder["FolderContent"]:
-                        if file["FileName"] == FileName and file["FileExtension"] == FileExtension:
-                            file["FileName"] += str(random.randint(1, 255))
-
-    # Se agrega el archivo a la carpeta destino
-    for drive in FileSystem:
-        if drive["DriveName"] == ToDrive:
-            for folder in drive["DriveContent"]:
-                if folder["FolderName"] == ToFolder:
-                    folder["FolderContent"].append(file_data)
-
-
-    # Guarda los cambios
-    save_file()
-
-
-def Copy_folder(Drive, FolderName, ToDrive):
-
-    # Se obtiene los datos de la carpeta, como su nombre y archivos
-    folder_data = {}
-    for drive in FileSystem:
-        if drive["DriveName"] == Drive:
-            for folder in drive["DriveContent"]:
-                if folder["FolderName"] == FolderName:
-                    folder_data = folder
-
-    # si en el destino  hay una carpeta con el mismo nombre, se le agrega un numero aleatorio al final del nombre
-    for drive in FileSystem:
-        if drive["DriveName"] == ToDrive:
-            for folder in drive["DriveContent"]:
-                if folder["FolderName"] == FolderName:
-                    folder["FolderName"] += str(random.randint(1, 255))
-
-    # Se agrega la carpeta a la unidad destino
-    for drive in FileSystem:
-        if drive["DriveName"] == ToDrive:
-            drive["DriveContent"].append(folder_data)
-
-    # Guarda los cambios
-    save_folder()
-
-
-def Open_file( FileName, FileExtension):
-    # Obtiene el contenido del archivo
-    for drive in FileSystem:
-        for folder in drive["DriveContent"]:
-            if folder["FolderName"] == "System":
-                for file in folder["FolderContent"]:
-                    if file["FileName"] == FileName and file["FileExtension"] == FileExtension:
-                        return file["FileContent"]
-
-
-def Open_folder(FolderName):
-    # Obtiene el contenido de la carpeta
-    for drive in FileSystem:
-        for folder in drive["DriveContent"]:
-            if folder["FolderName"] == FolderName:
-                return folder["FolderContent"]
-
-
-# Guarda todos los cambios del sistema de archivos a FileSsystem.json usando la lista FileSystem[]
-def Save_FileSystem():
-    with open(FileSystem_directory, "w") as file:
-        json.dump(FileSystem, file, sort_keys=False, indent=4)
-
-
-# Carga el sistema de archivos desde FileSystem.json
-def Load_FileSystem():
-
-    # global para que pueda ser leido
-    global FileSystem
-
-    with open(FileSystem_directory, "r") as file:
-        FileSystem = json.load(file)
-
-
-def Get_FileSystem():
-
-    # Carga el sistema de archivos para no tener que reiniciar.
-    Load_FileSystem()
-
-    # Variable donde se almacena la informacion
-    FileSystem_string = ""
-
-    # Calcula el tamaño del archivo en bytes según el número de caracteres dentro del contenido del archivo.
-    def file_size(FileContent):
-        FileSize_string = str(len(FileContent)) + " bytes"
-        return FileSize_string
-
-    # Retorna el contenido del sistema de archivos dentro de un string por cada carpeta y archivo dentro.
-    for drive in FileSystem:
-        FileSystem_string += "" + drive["DriveName"] + "/" + "\n"
-        for folder in drive["DriveContent"]:
-            FileSystem_string += "    " + folder["FolderName"] + "/" + "\n"
-            for file in folder["FolderContent"]:
-                FileSystem_string += "        " + file["FileLastWriteTime"] + "     " + file_size(file["FileContent"]) + "    " + file["FileName"] + "." + file["FileExtension"] + "\n"
-
-    return FileSystem_string
-
-
-# Obtiene el recuento de archivos y carpetas.
-def Get_Files_Count():
-    Load_FileSystem()
-
-    Files_Count = 0
+    # calculate size of content in bytes
+    size = len(content)
 
     for drive in FileSystem:
-        for folder in drive["DriveContent"]:
-            for files in folder["FolderContent"]:
-                Files_Count += 1
+        if drive["drive"] == drive_letter:
+            for folder in drive["content"]:
+                if folder["name"] == folder_name:
+                    for file in folder["files"]:
+                        if file["name"] == file_name and file["extension"] == file_extension:
+                            file["content"] = content
+                            file["metadata"]["size"] = size
+                            file["metadata"]["date"] = time.strftime("%d/%m/%y")
+                            file["metadata"]["time"] = time.strftime("%H:%M:%S")
 
-                if Files_Count == -1:
-                    print(files)
-
-    return Files_Count
-
-
-# Calcula el tamaño total del archivo en bytes de todo el sistema de archivos en función del número de caracteres dentro del contenido del archivo.
-def Get_Fils_size():
-    Load_FileSystem()
-
-    FileSize = 0
-
-    for drive in FileSystem:
-        for folder in drive["DriveContent"]:
-            for file in folder["FolderContent"]:
-                FileSize += len(file["FileContent"])
-
-    return FileSize
+    save_filesystem()
 
 
-def Get_Tree():
+def dir():
+    load_filesystem()
 
-    Load_FileSystem()
+    dir_list = ""
 
-    Tree_string = ""
+    # dir scheme
+    # C:/
+    #       folder1/
+    #              file1.ext    20/10/2019  10:00:00
+    #              file2.ext    20/10/2019  10:00:00
+    #
+    #       folder2/
+    #              file3.ext    20/10/2019  10:00:00
 
     for drive in FileSystem:
-        Tree_string += drive["DriveName"] + "\n"
-        for folder in drive["DriveContent"]:
+        dir_list += drive["drive"] + "/" + "\n"
+        for folder in drive["content"]:
+            dir_list += "    " + folder["name"] + "/\n"
+            for file in folder["files"]:
+                dir_list += "        " + file["name"] + "." + file["extension"] + "    " + file["metadata"]["date"] + "  " + file["metadata"]["time"] + "\n"
 
-            # si es la última carpeta en la unidad, agrega un salto de línea.
-            if folder == drive["DriveContent"][-1]:
-                Tree_string += "└─── " + folder["FolderName"] + "\n"
+    return dir_list
 
-                for file in folder["FolderContent"]:
-                    # si es el último archivo de la carpeta, agrega un salto de línea.
-                    if file == folder["FolderContent"][-1]:
-                        Tree_string += "     └─── " + file["FileName"] + "." + file["FileExtension"] + "\n"
+
+def dir_tree():
+
+    load_filesystem()
+
+    tree_list = ""
+
+    # tree scheme
+    # C:
+    # ├─── folder1
+    # │    ├─── file1.ext
+    # │    └─── file2.ext
+    # |
+    # └─── folder2
+    #      └─── file3.ext
+
+    for drive in FileSystem:
+        tree_list += drive["drive"] + "\n"
+        for folder in drive["content"]:
+
+            if folder == drive["content"][-1]:
+                tree_list += "└─── " + folder["name"] + "\n"
+
+                for file in folder["files"]:
+
+                    if file == folder["files"][-1]:
+                        tree_list += "     └─── " + file["name"] + "." + file["extension"] + "\n"
+                        tree_list += "        \n" # next folder separation
                     else:
-                        Tree_string += "     ├─── " + file["FileName"] + "." + file["FileExtension"] + "\n"
+                        tree_list += "     ├─── " + file["name"] + "." + file["extension"] + "\n"
             else:
-                Tree_string += "├─── " + folder["FolderName"] + "\n"
+                tree_list += "├─── " + folder["name"] + "\n"
 
-                for file in folder["FolderContent"]:
-                    # si es el último archivo de la carpeta, agrega un salto de línea.
-                    if file == folder["FolderContent"][-1]:
-                        Tree_string += "│    └─── " + file["FileName"] + "." + file["FileExtension"] + "\n"
+                for file in folder["files"]:
+
+                    if file == folder["files"][-1]:
+                        tree_list += "│    └─── " + file["name"] + "." + file["extension"] + "\n"
+                        tree_list += "│       \n" # next folder separation
                     else:
-                        Tree_string += "│    ├─── " + file["FileName"] + "." + file["FileExtension"] + "\n"
+                        tree_list += "│    ├─── " + file["name"] + "." + file["extension"] + "\n"
 
-    return Tree_string
-
-
-def Tree_FileSystem_Advanced():
-
-    FileSystem_string = ""
-
-    for drive in FileSystem:
-        FileSystem_string += drive["DriveName"] + ">──┐" + "\n"
-
-        for folder in drive["DriveContent"]:
-
-            # si es la última carpeta del directorio, se pone un └─, si no un ├─
-            if folder == drive["DriveContent"][-1]:
-                FileSystem_string += " └─ " + folder["FolderName"] + "/" + "\n"
-            else:
-                FileSystem_string += " ├─ " + folder["FolderName"] + "/" + "\n"
-
-            for file in folder["FolderContent"]:
-                if file["FileName"] == "Index" and file["FileExtension"] == Index_file_ext:
-                    FileSystem_string += "    ├─ Index" + "." + Index_file_ext + "\n"
-                else:
-
-                    # si es el ultimo archivo de la carpeta, se pone un └─, si no un ├─
-                    if file == folder["FolderContent"][-1]:
-                        FileSystem_string += "    └─ " + file["FileName"] + "." + file["FileExtension"] + "\n"
-                    else:
-                        FileSystem_string += "    ├─ " + file["FileName"] + "." + file["FileExtension"] + "\n"
-
-    return FileSystem_string
+    return tree_list
 
 
-def Format_FileSystem():
-    global FileSystem
-
-    # Borra todo el contenido del sistema de archivos.
-    FileSystem = []
-
-    # save the file in FileSystem
-    save_file()
-
-
-# Import_file, importa un archivo real y su contenido al sistema de archivos, ejemplo: import_file(C:/Users/User/Desktop/file.txt, "txt", "Main")
-def Import_file(FilePath, ToDrive, ToFolderName):
-    global FileSystem
-
-    # obtiene el nombre del archivo sin la extensión.
-    FileName = FilePath.split("/")[-1].split(".")[0]
-
-    # obtiene la extension del archivo.
-    FileExtension = FilePath.split("/")[-1].split(".")[1]
-
-    # obtiene la fecha de creación del archivo.
-    FileLastWriteTime = time.strftime("%d/%m/%Y     %H:%M", time.localtime(os.path.getmtime(FilePath)))
-
-    # obtiene el contenido del archivo, ya sea texto o una imagen.
-    with open(FilePath, "r") as file:
-        FileContent = file.read()
-
-    # crea un nuevo archivo en el sistema de archivos, con el nombre, extension y contenido del archivo importado
-    Imported_file = {
-        "FileName": FileName,
-        "FileExtension": FileExtension,
-        "FileLastWriteTime": FileLastWriteTime,
-        "FileContent": FileContent
-    }
-
-    # agrega el nuevo archivo al sistema de archivos.
-    for drive in FileSystem:
-        if drive["DriveName"] == ToDrive:
-            for folder in drive["DriveContent"]:
-                if folder["FolderName"] == ToFolderName:
-                    folder["FolderContent"].append(Imported_file)
-
-    # guarda los cambios
-    save_file()
-
-
-# Execute_file, si el archivo tiene la extensión pys, ejecutará el código que tiene como contenido en python.
-def Execute_file(FolderName, FileName, FileExtension):
-
-    global Result
-    Result = ""
-
-    # obtiene el contenido, lo ejecuta y obtiene la salida
-    for drive in FileSystem:
-        for folder in drive["DriveContent"]:
-            if folder["FolderName"] == FolderName:
-                for file in folder["FolderContent"]:
-                    if file["FileName"] == FileName and file["FileExtension"] == FileExtension:
-                        try:
-                            code = compile(file["FileContent"], "<string>", "exec")
-                            exec(code, globals())
-                        except Exception as e:
-                            Result += e
-                            Result += "\n"
-
-    return Result
-
-
-
-# Export_file, export a file from the file system to a real file. TODO: less for statements.
-def Export_file(FolderName, FileName, FileExtension, ToPath):
-    # get the file content.
-    for drive in FileSystem:
-        for folder in drive["DriveContent"]:
-            if folder["FolderName"] == FolderName:
-                for file in folder["FolderContent"]:
-                    if file["FileName"] == FileName and file["FileExtension"] == FileExtension:
-                        with open(ToPath, "w") as file:
-                            file.write(file["FileContent"])
-
-    # save the file in FileSystem
-    save_file()

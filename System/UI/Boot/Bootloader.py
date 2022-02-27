@@ -1,7 +1,7 @@
 from tkinter import Label, PhotoImage
 
 from System.Utils.Colormap import Black
-from System.Utils.Utils import Asset, print_log
+from System.Utils.Utils import Asset, print_log, Asset_colored
 from System.Utils.Vars import Assets_directory
 
 __author__ = 'TheBigEye'
@@ -15,7 +15,7 @@ def Boot_loader(master):
 
     master.configure(background=Black)  # Establece el fondo a negro
 
-    Logon = Asset("logon.png")
+    Logon = Asset_colored("logon.png", 1)
     Boot_Logo = Label(master, image=Logon, borderwidth=0.1)
 
     Boot_Logo.place(x= 408, y= 160)

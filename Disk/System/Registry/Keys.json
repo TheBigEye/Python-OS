@@ -1,6 +1,6 @@
 [
     {
-        "root": "HKEY_CURRENT_USER",
+        "root": "PYTHON-OS",
         "content": [
             {
                 "category": "Software",
@@ -10,12 +10,12 @@
                         "values": [
                             {
                                 "key": "Foreground",
-                                "value": "white",
+                                "value": "#f0f0f0",
                                 "type": "str"
                             },
                             {
                                 "key": "Background",
-                                "value": "black",
+                                "value": "#000000",
                                 "type": "str"
                             },
                             {
@@ -30,7 +30,7 @@
                         "values": [
                             {
                                 "key": "Foreground",
-                                "value": "white",
+                                "value": "00c0ca",
                                 "type": "str"
                             }
                         ]
@@ -41,31 +41,21 @@
                 "category": "System",
                 "keys": [
                     {
-                        "name": "Control Panel",
+                        "name": "Desktop",
                         "values": [
                             {
-                                "key": "Desktop",
-                                "value": "black",
+                                "key": "Real-time-wallpaper",
+                                "value": "True",
                                 "type": "str"
-                            }
-                        ]
-                    }
-                ]
-            }
-        ]
-    },
-    {
-        "root": "HKEY_LOCAL_MACHINE",
-        "content": [
-            {
-                "category": "Software",
-                "keys": [
-                    {
-                        "name": "Microsoft",
-                        "values": [
+                            },
                             {
-                                "key": "Windows",
-                                "value": "10",
+                                "key": "Wallpaper",
+                                "value": "",
+                                "type": "str"
+                            },
+                            {
+                                "key": "Wallpaper-mode",
+                                "value": "2",
                                 "type": "str"
                             }
                         ]

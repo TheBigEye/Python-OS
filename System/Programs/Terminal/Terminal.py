@@ -4,7 +4,7 @@ from tkinter.constants import INSERT
 from System.Core.KeysSystem import add_key, get_value
 from System.Programs.Terminal.Command import CMD
 from System.UI.Attributes.Draggable import drag_n_drop
-from System.Utils.Utils import Asset
+from System.Utils.Utils import Asset, Asset_color
 
 __author__ = "TheBigEye"
 __version__ = "1.8"
@@ -16,28 +16,55 @@ def set_foreground(color):
     """Set the foreground color of the terminal"""
 
     # save the color in the registry
-    add_key("HKEY_CURRENT_USER", "Software", "Terminal", "Foreground", color, "str")
+    add_key("PYTHON-OS", "Software", "Terminal", "Foreground", color, "str")
+
+
+def get_foreground():
+
+    """Get the foreground color of the terminal"""
+
+    # get the color from the registry
+    return get_value("PYTHON-OS", "Software", "Terminal", "Foreground")
+
+
+def set_background(color):
+    
+    """Set the background color of the terminal"""
+    
+    # save the color in the registry
+    add_key("PYTHON-OS", "Software", "Terminal", "Background", color, "str")
+
+
+def get_background():
+    
+    """Get the background color of the terminal"""
+    
+    # get the color from the registry
+    return get_value("PYTHON-OS", "Software", "Terminal", "Background")
 
 
 class Terminal(Frame):
 
     """
-    Clase Terminal
+    Terminal
     """
 
     def __init__(self, master, draggable: bool):
         """
-        Constructor de la clase Terminal
+        Terminal constructor
         """
 
         Frame.__init__(self, master)
 
-        # Load the values from the registry
-        Foreground = get_value("HKEY_CURRENT_USER", "Software", "Terminal", "Foreground")
-
         self.master = master
         self.draggable = draggable
-        self.foreground = Foreground
+
+        # Load the values from the registry
+        Foreground_color = get_foreground()
+        Background_color = get_background()
+
+        self.foreground = Foreground_color
+        self.background = Background_color
 
         def Command_handler(event):
             """Execute the commands"""
@@ -46,8 +73,7 @@ class Terminal(Frame):
             CMD(self.Terminal, self.Terminal_entry, self.Terminal_screen)
             self.Terminal_screen.config(state="disabled")
 
-
-        self.Terminal_GUI_Image = Asset("Terminal.png")  # Terminal image base
+        self.Terminal_GUI_Image = Asset_color("Terminal.png", "#000000", self.background)  # Terminal image base
 
         self.Terminal = Label(
             self.master,
@@ -65,18 +91,19 @@ class Terminal(Frame):
             wrap="word"
         )
 
-        self.Terminal_screen.config(width=75, height=20, bg="#000000", fg=self.foreground, state="normal", insertbackground="#dfdfdf")
-        self.Terminal_screen.insert(INSERT, "═════════════════════════ Welcome to the terminal ═════════════════════════")
-        self.Terminal_screen.insert(INSERT, "\n\n")
-        self.Terminal_screen.insert(INSERT, ">/ Type a command, or use help for get commands")
-        self.Terminal_screen.insert(INSERT, "\n\n")
+        self.Terminal_screen.config(width=75, height=20, bg=self.background, fg=self.foreground, state="normal", insertbackground="#dfdfdf")
+        self.Terminal_screen.insert(INSERT, "═════════════════════════ Welcome to the terminal ═════════════════════════" + "\n")
+        self.Terminal_screen.insert(INSERT, "                                                                                \n")
+        self.Terminal_screen.insert(INSERT, ">/ Type a command, or use help for get commands"                             + "\n")
+        self.Terminal_screen.insert(INSERT, "                                                                                \n")
+
         self.Terminal_screen.config(state="disabled")
 
         self.Terminal.place(x=260, y=148)
         self.Terminal_screen.place(x=3.5, y=24)
 
 
-        # ----------------------------------------------------------------- [Boton de cerrar terminal] -------------------------------------------------------------------------
+        # ----------------------------------------------------------------- [Close terminal button] -------------------------------------------------------------------------
 
         self.Close_button_image = Asset("Close_button.png")  # Terminal close button
         self.Close_button_red_image = Asset("Close_button_red.png")  # Terminal close red button
@@ -84,7 +111,7 @@ class Terminal(Frame):
         def Close_Terminal():
             """Close the Terminal"""
 
-            self.Terminal.place_forget()
+            self.Terminal.destroy()
 
 
         self.Close_button = Button(
@@ -103,7 +130,7 @@ class Terminal(Frame):
         self.Close_button.place(x=520, y=4)
 
 
-        # ----------------------------------------------------------------- [Boton de maximizar terminal] ----------------------------------------------------------------------
+        # ----------------------------------------------------------------- [Maximize terminal button] ----------------------------------------------------------------------
 
         self.Maximize_button_image = Asset("Maximize_button.png")  # Terminal maximize button
         self.Maximize_button_light_image = Asset("Maximize_button_light.png")  # Terminal maximize button light
@@ -130,7 +157,7 @@ class Terminal(Frame):
         self.Maximize_button.place(x=502, y=4)
 
 
-        # ----------------------------------------------------------------- [Boton de minimizar terminal] ----------------------------------------------------------------------
+        # ----------------------------------------------------------------- [Minimize terminal button] ----------------------------------------------------------------------
 
         self.Minimize_button_image = Asset("Minimize_button.png")  # Terminal minimize button
         self.Minimize_button_light_image = Asset("Minimize_button_light.png")  # Terminal minimize button light
@@ -164,11 +191,11 @@ class Terminal(Frame):
             width=75,
             borderwidth="0",
             fg=self.foreground,
-            bg="#000000",
+            bg=self.background,
             font=("Consolas", 10)
         )
 
-        self.Terminal_entry.config(insertbackground="white")
+        self.Terminal_entry.config(insertbackground=self.foreground)
         self.Terminal_entry.bind("<Return>", Command_handler)
         self.Terminal_entry.focus()
 

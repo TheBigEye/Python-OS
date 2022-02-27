@@ -1,5 +1,7 @@
 import json
 
+from System.Utils.Utils import print_error, print_info, print_warning
+
 #from System.Utils.Utils import print_error, print_info
 
 # TODO: add commands to the terminal
@@ -11,7 +13,28 @@ def rg_routines():
     # load the registry keys
     load_registry_keys()
 
-    #print_info("Registry keys has finished loading")
+    # Checks if the registry is empty
+    if len(Keys) == 0:
+        print_error("A serious problem was found in the registry :(, let's rebuild it")
+        # Add the root key
+        add_key("PYTHON-OS", "", "", "", "", "")
+
+        # Add the category key
+        add_key("PYTHON-OS", "Software", "", "", "", "")
+        add_key("PYTHON-OS", "System", "", "", "", "")
+
+        # Add the keys:
+        # Terminal
+        add_key("PYTHON-OS", "Software", "Terminal", "Foreground", "white", "str")
+        add_key("PYTHON-OS", "Software", "Terminal", "Background", "black", "str")
+
+        # Desktop
+        add_key("PYTHON-OS", "System", "Desktop", "Real-time-wallpaper", "True", "str")
+        add_key("PYTHON-OS", "System", "Desktop", "Wallpaper", "", "str")
+        add_key("PYTHON-OS", "System", "Desktop", "Wallpaper-mode", "2", "str")
+
+    print_info("Registry keys loaded")
+
 
 
 # Load the registry keys
@@ -45,7 +68,7 @@ def add_key(root: str, category: str, name: str, key: str, value: str, type: str
     """
 
     # load the registry keys
-    ##load_registry_keys()
+    load_registry_keys()
 
     global Keys
 
@@ -61,8 +84,6 @@ def add_key(root: str, category: str, name: str, key: str, value: str, type: str
                                     value_key["type"] = type
                                     save_registry_keys()
                                     return True
-
-
 
     # save the registry keys
     save_registry_keys()
@@ -92,6 +113,10 @@ def get_value(root: str, category: str, name: str, key: str):
 
 # Tree view
 def reg_tree_view():
+
+    # load the registry keys
+    load_registry_keys()
+
     """
     Tree view
     """
@@ -103,10 +128,11 @@ def reg_tree_view():
     # This is a HELL, REALLY!!!
     for root_key in Keys:
         tree += root_key["root"] + "/" + "\n"
+
         for category_key in root_key["content"]:
 
             if category_key == Keys[-1]:
-                tree += "|   " + "\n"
+                tree += "│   " + "\n"
                 tree += "└───" + category_key["category"] + "\n"
                 for key_key in category_key["keys"]:
 
@@ -115,27 +141,28 @@ def reg_tree_view():
                         for value_key in key_key["values"]:
 
                             if value_key == key_key["values"][-1]:
-                                tree += "        └───" + value_key["key"] +  "\n"
-                                tree += "            ├──> " + value_key["value"] + "\n"
-                                tree += "            └──> " + value_key["type"] + "\n"
+                                tree += "          └────[" + value_key["key"] +  "]\n"
+                                tree += "               ├───= " + value_key["value"] + "\n"
+                                tree += "               └───$ " + value_key["type"] + "\n"
                             else:
-                                tree += "        ├───" + value_key["key"] + "\n"
-                                tree += "        │   ├──> " + value_key["value"] + "\n"
-                                tree += "        │   └──> " + value_key["type"] + "\n"
+                                tree += "          ├────[" + value_key["key"] + "]\n"
+                                tree += "          │    ├───= " + value_key["value"] + "\n"
+                                tree += "          │    └───$ " + value_key["type"] + "\n"
 
                     else:
                         tree += "    ├───" + key_key["name"] + "\n"
                         for value_key in key_key["values"]:
                             if value_key == key_key["values"][-1]:
-                                tree += "    │   └───" + value_key["key"] + "\n"
-                                tree += "    │       ├───> " + value_key["value"] + "\n"
-                                tree += "    │       └───> " + value_key["type"] + "\n"
+                                tree += "     │    └────[" + value_key["key"] + "]\n"
+                                tree += "     │         ├───= " + value_key["value"] + "\n"
+                                tree += "     │         └───$ " + value_key["type"] + "\n"
                             else:
-                                tree += "    │   ├───" + value_key["key"] + "\n"
-                                tree += "    │   │   ├───> " + value_key["value"] + "\n"
-                                tree += "    │   │   └───> " + value_key["type"] + "\n"
+                                tree += "     │    ├────[" + value_key["key"] + "]\n"
+                                tree += "     │    │    ├───= " + value_key["value"] + "\n"
+                                tree += "     │    │    └───$ " + value_key["type"] + "\n"
 
             else:
+                tree += "│   " + "\n"
                 tree += "├───" + category_key["category"] + "\n"
                 for key_key in category_key["keys"]:
 
@@ -143,29 +170,24 @@ def reg_tree_view():
                         tree += "│    └───" + key_key["name"] + "\n"
                         for value_key in key_key["values"]:
                             if value_key == key_key["values"][-1]:
-                                tree += "│        └───" + value_key["key"] + "\n"
-                                tree += "│            ├───> " + value_key["value"] + "\n"
-                                tree += "│            └───> " + value_key["type"] + "\n"
+                                tree += "│         └────[" + value_key["key"] + "]\n"
+                                tree += "│              ├───= " + value_key["value"] + "\n"
+                                tree += "│              └───$ " + value_key["type"] + "\n"
                             else:
-                                tree += "│        ├───" + value_key["key"] + "\n"
-                                tree += "│        │   ├───> " + value_key["value"] + "\n"
-                                tree += "│        |   └───> " + value_key["type"] + "\n"
+                                tree += "│         ├────[" + value_key["key"] + "]\n"
+                                tree += "│         │    ├───= " + value_key["value"] + "\n"
+                                tree += "│         │    └───$ " + value_key["type"] + "\n"
 
                     else:
                         tree += "│    ├───" + key_key["name"] + "\n"
                         for value_key in key_key["values"]:
                             if value_key == key_key["values"][-1]:
-                                tree += "│    │    └───" + value_key["key"] + "\n"
-                                tree += "│    │         ├───> " + value_key["value"] + "\n"
-                                tree += "│    │         └───> " + value_key["type"] + "\n"
+                                tree += "│    │    └────[" + value_key["key"] + "]\n"
+                                tree += "│    │         ├───= " + value_key["value"] + "\n"
+                                tree += "│    │         └───$ " + value_key["type"] + "\n"
                             else:
-                                tree += "│    │    ├───" + value_key["key"] + "\n"
-                                tree += "│    │    │    ├───> " + value_key["value"] + "\n"
-                                tree += "│    │    │    └───> " + value_key["type"] + "\n"
+                                tree += "│    │    ├────[" + value_key["key"] + "]\n"
+                                tree += "│    │    │    ├───= " + value_key["value"] + "\n"
+                                tree += "│    │    │    └───$ " + value_key["type"] + "\n"
+
     return tree
-
-
-
-
-
-

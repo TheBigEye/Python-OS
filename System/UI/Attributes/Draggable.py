@@ -1,5 +1,10 @@
-# Drag and drop function
+
+# Drag and drop functions
+
 def on_drag_start(event):
+
+    from System.Core.Core import in_windows
+    from System.Utils.Vars import Hand_2_wn
 
     global widget
 
@@ -8,7 +13,10 @@ def on_drag_start(event):
     widget._drag_start_x = event.x
     widget._drag_start_y = event.y
 
-    widget['cursor'] = "hand2"
+    if in_windows:
+        widget['cursor'] = "@" + Hand_2_wn
+    else:
+        widget['cursor'] = "hand2"
 
 
 def on_drag_finish(event):
@@ -45,7 +53,6 @@ def make_draggable(widget):
 def drag_n_drop(widget):
 
     # can drag an label with text and image without blinking bug
-    widget.config(cursor = "hand2")
     widget.bind("<ButtonPress-1>", lambda event: on_drag_start(event))
     widget.bind("<ButtonRelease-1>", lambda event: on_drag_finish(event))
     widget.bind("<B1-Motion>", lambda event: on_drag_motion(event))

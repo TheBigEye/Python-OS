@@ -1,50 +1,67 @@
 [
     {
-        "DriveName": "C:",
-        "DriveContent": [
+        "drive": "C:",
+        "content": [
             {
-                "FolderName": "System",
-                "FolderContent": [
+                "type": "folder",
+                "name": "System",
+                "files": [
                     {
-                        "FileName": "excecutable",
-                        "FileLastWriteTime": "11/18/2021     15:59",
-                        "FileExtension": "pys",
-                        "FileContent": "print(\"Hello\")"
+                        "type": "file",
+                        "name": "text",
+                        "extension": "txt",
+                        "metadata": {
+                            "size": "0",
+                            "date": "24/02/22",
+                            "time": "15:48:25"
+                        },
+                        "content": "This is a text file"
+                    },
+                    {
+                        "type": "file",
+                        "name": "image",
+                        "extension": "jpg",
+                        "metadata": {
+                            "size": "0",
+                            "date": "24/02/22",
+                            "time": "15:48:25"
+                        },
+                        "content": "This is an image file"
+                    },
+                    {
+                        "type": "file",
+                        "name": "f",
+                        "extension": "txt",
+                        "metadata": {
+                            "size": 8,
+                            "date": "27/02/22",
+                            "time": "10:30:02"
+                        },
+                        "content": "looooool"
                     }
                 ]
             },
             {
-                "FolderName": "Programs",
-                "FolderContent": [
+                "type": "folder",
+                "name": "Documents",
+                "files": [
                     {
-                        "FileName": "Index",
-                        "FileLastWriteTime": "4/11/2020     10:31",
-                        "FileExtension": "pfs",
-                        "FileContent": "---"
-                    },
-                    {
-                        "FileName": "lol",
-                        "FileExtension": "txt",
-                        "FileLastWriteTime": "02/23/2022     02:23",
-                        "FileContent": "\"lol\""
+                        "type": "file",
+                        "name": "text",
+                        "extension": "txt",
+                        "metadata": {
+                            "size": "0",
+                            "date": "24/02/22",
+                            "time": "15:48:25"
+                        },
+                        "content": "This is a text file"
                     }
                 ]
-            }
-        ]
-    },
-    {
-        "DriveName": "D:",
-        "DriveContent": [
+            },
             {
-                "FolderName": "Data",
-                "FolderContent": [
-                    {
-                        "FileName": "data",
-                        "FileExtension": "db",
-                        "FileLastWriteTime": "12/13/2021     22:09",
-                        "FileContent": "this is a data"
-                    }
-                ]
+                "type": "folder",
+                "name": "Tests",
+                "files": []
             }
         ]
     }

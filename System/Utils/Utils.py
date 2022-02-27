@@ -5,7 +5,9 @@ import os
 import urllib.request
 from tkinter import PhotoImage
 
-from System.Utils.Vars import Assets_directory
+from PIL import Image, ImageTk
+from System.Utils.Colormap import (color_hex_rgb, color_str_rgb)
+from System.Utils.Vars import Assets_directory, Loading_wn, XCursor_2_wn
 
 # Loggers ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -35,9 +37,9 @@ class CharColors:
     INFO = '\033[94m'
 
     HEADER = '\033[95m'
-    OKCYAN = '\033[96m'
+    CYAN = '\033[96m'
 
-    ENDC = '\033[0m'
+    WHITE = '\033[0m'
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
 
@@ -50,22 +52,22 @@ class CharColors:
 def print_log(message):
 
     # example: [LOG][module_name][line_number] message.
-    print(f"{CharColors.GREEN_BLOCK}[LOG]{CharColors.ENDC} [{inspect.stack()[1][3]}] {CharColors.UNDERLINE}[ln: {inspect.stack()[1][2]}]{CharColors.ENDC} " + message)
+    print(f"{CharColors.GREEN_BLOCK}[LOG]{CharColors.WHITE} [{inspect.stack()[1][3]}] {CharColors.UNDERLINE}[ln: {inspect.stack()[1][2]}]{CharColors.WHITE} " + message)
     Logger("[LOG] [{}] [ln: {}] {}".format(inspect.stack()[1][3], inspect.stack()[1][2], message))
 
 
 def print_error(message):
-    print(f"{CharColors.RED_BLOCK}[ERROR]{CharColors.ENDC} " + message)
+    print(f"{CharColors.RED_BLOCK}[ERROR]{CharColors.WHITE} " + message)
     Logger("[ERROR] " + message)
 
 
 def print_warning(message):
-    print(f"{CharColors.YELLOW_BLOCK}[WARNING]{CharColors.ENDC} " + message)
+    print(f"{CharColors.YELLOW_BLOCK}[WARNING]{CharColors.WHITE} " + message)
     Logger("[WARNING] " + message)
 
 
 def print_info(message):
-    print(f"{CharColors.BLUE_BLOCK}[INFO]{CharColors.ENDC} " + message)
+    print(f"{CharColors.BLUE_BLOCK}[INFO]{CharColors.WHITE} " + message)
     Logger("[INFO] " + message)
 
 
@@ -92,20 +94,31 @@ def Get_Current_Date_Time():
 
 # This function will execute a function with a loading time.
 def Execute(master, Loading_time: float, Function, *args):
+
+    from System.Core.Core import in_windows
+
     global Open, Loading_cursor, Normal_cursor
 
     def Open():
         Function(*args)
 
     def Loading_cursor():
+
+        if in_windows:
+            master.config(cursor="@" + Loading_wn)
+        else:
             master.config(cursor="wait")
 
     def Normal_cursor():
-            master.config(cursor = "")
+
+        if in_windows:
+            master.config(cursor="@" + XCursor_2_wn)
+        else:
+            master.config(cursor="")
 
     master.after(100, Loading_cursor)
     master.after(Loading_time, Open)
-    master.after(1512, Normal_cursor)
+    master.after(1000, Normal_cursor)
 
 
 # This function will return the image file from the file name inside Assets folder.
@@ -120,6 +133,60 @@ def Asset(file_name_and_extension):
     print_warning("Asset not found: " + file_name_and_extension)
     return None
 
+# my masterpiece!!
+def Asset_color(file_name_and_extension, from_color, to_color):
+
+    for root, dirs, files in os.walk(Assets_directory):
+        for file in files:
+
+            if file.endswith(file_name_and_extension):
+                img = Image.open(os.path.join(root, file))
+                img = img.convert("RGBA")
+                image_data = img.getdata()
+
+                # detect if from_color is in hex or string
+                if from_color[0] == "#":
+                    from_color = color_hex_rgb(from_color)
+                else:
+                    from_color = color_str_rgb(from_color)
+
+                # detect if to_color is in hex or string
+                if to_color[0] == "#":
+                    to_color = color_hex_rgb(to_color)
+                else:
+                    # convert string color rgb
+                    to_color = color_str_rgb(to_color)
+
+                # replace colors
+                newData = []
+                for item in image_data:
+                    if item[0] == from_color[0] and item[1] == from_color[1] and item[2] == from_color[2]:
+                        newData.append(to_color + (255,))
+                    else:
+                        newData.append(item)
+
+                img.putdata(newData)
+                return ImageTk.PhotoImage(img)
+
+
+def Asset_colored(file_name_and_extension, hue_value):
+
+    for root, dirs, files in os.walk(Assets_directory):
+        for file in files:
+
+            if file.endswith(file_name_and_extension):
+                img = Image.open(os.path.join(root, file))
+                img = img.convert("RGBA")
+                image_data = img.getdata()
+
+                # change image hue value
+                newData = []
+                for item in image_data:
+                    newData.append(tuple(int(item[i] * hue_value) for i in range(3)) + (255,))
+
+                img.putdata(newData)
+                return ImageTk.PhotoImage(img)
+
 
 # Check if the internet is on.
 def internet_on():
@@ -129,7 +196,6 @@ def internet_on():
             return True
     except:
         return False
-
 
 def json_get(json_file_path, key):
     # get the key value from the json file as UTF8

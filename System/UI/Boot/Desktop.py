@@ -1,13 +1,13 @@
 import time
 from tkinter import Button, Label
 
-from System.Programs.Registry.Registry import Registry
+from System.Core.KeysSystem import add_key, get_value
 from System.Programs.Terminal.Terminal import Terminal
 from System.Programs.Welcome.Welcome import Welcome_window
 from System.UI.Browser import Display_Browser
 from System.UI.FileManager import Display_FileManager
 from System.UI.MessageBox import MessageBox
-from System.Utils.Utils import Asset, Execute, internet_on, print_log
+from System.Utils.Utils import Asset, Asset_colored, Execute, internet_on, print_log
 
 __author__ = 'TheBigEye'
 __version__ = '2.0'
@@ -35,7 +35,16 @@ def Desktop(master):
 
     master.configure(background = "#000000")
 
-    Wallpaper = Asset("Day_dusk.png")
+    real_time_wallpaper = get_value("PYTHON-OS", "System", "Desktop", "Real-time-wallpaper")
+
+    if real_time_wallpaper == "True":
+        if time.localtime().tm_hour >= 18 or time.localtime().tm_hour < 6:
+            Wallpaper = Asset("Night_dusk.png")
+        else:
+            Wallpaper = Asset("Day_dusk.png")
+    else:
+        Wallpaper = Asset("BlissHill.png")
+
     Desktop_wallpaper = Label(master, image= Wallpaper, borderwidth=0)
     Desktop_wallpaper.place(x=0, y=0) # Posiciona el fondo de escritorio en el centro
 
@@ -84,13 +93,6 @@ def Desktop(master):
 
         Execute(master, 1000, Terminal, master, True)
 
-
-    def Registry_programm():
-        Close_start_menu()
-
-        Execute(master, 1000, Registry, master, True)
-
-
     # LLama al navegador
     def Browser():
         Close_start_menu()
@@ -106,7 +108,7 @@ def Desktop(master):
     # Barra de tareas
     Taskbar = Label(
         master,
-        width = 915,
+        width = 1024,
         height = 29,
         borderwidth = "0",
         image = Taskbar_UI_Image,
@@ -153,7 +155,7 @@ def Desktop(master):
 
     global Start_menu_button, Start_menu_active_button, Open_start_menu, Close_start_menu, Open_start_button, Close_start_button
     Start_menu_button = Asset("Start_Button.png")
-    Start_menu_active_button = Asset("Start_Button_active.png")
+    Start_menu_active_button = Asset_colored("Start_Button_active.png", 1)
 
     # Abre
     def Open_start_menu():
@@ -162,14 +164,14 @@ def Desktop(master):
         time.sleep(0.1)
 
         Open_start_button.place_forget()
-        Close_start_button.place(x=6, y=2)
+        Close_start_button.place(x=4, y=2)
 
     # Cierra
     def Close_start_menu():
         Start_menu.place_forget()
         time.sleep(0.1)
 
-        Open_start_button.place(x=6, y=2)
+        Open_start_button.place(x=4, y=2)
         Close_start_button.place_forget()
 
     # Los botones se van reemplazando uno al otro para usar diferentes funciones a la vez
@@ -183,7 +185,7 @@ def Desktop(master):
         command=Open_start_menu,
         image= Start_menu_button
     )
-    Open_start_button.place(x=6, y=2)
+    Open_start_button.place(x=4, y=2)
 
     Close_start_button = Button(
         Startbar,
@@ -209,7 +211,7 @@ def Desktop(master):
     # Icono de modulos
     global Modules_startbar_icon, Modules_startbar_active_icon, Modules_startbar_button
     Modules_startbar_icon = Asset("Modules_button.png")
-    Modules_startbar_active_icon = Asset("Modules_button_active.png")
+    Modules_startbar_active_icon = Asset_colored("Modules_button_active.png", 1)
 
     Modules_startbar_button = Button(
         Startbar,
@@ -218,10 +220,9 @@ def Desktop(master):
         borderwidth="0",
         relief="raised",
         bg = "#070E11",
-        image= Modules_startbar_icon,
-        command=Registry_programm
+        image= Modules_startbar_icon
     )
-    Modules_startbar_button.place(x=42, y=2)
+    Modules_startbar_button.place(x=35, y=2)
 
     Modules_startbar_button.bind("<Enter>", lambda event: Modules_startbar_button.config(image = Modules_startbar_active_icon))
     Modules_startbar_button.bind("<Leave>", lambda event: Modules_startbar_button.config(image = Modules_startbar_icon))
@@ -230,7 +231,7 @@ def Desktop(master):
     # icono de busqueda
     global Search_startbar_icon, Search_startbar_active_icon, Search_startbar_button
     Search_startbar_icon = Asset("Search_button.png")
-    Search_startbar_active_icon = Asset("Search_button_active.png")
+    Search_startbar_active_icon = Asset_colored("Search_button_active.png", 1)
 
     Search_startbar_button = Button(
         Startbar,
@@ -242,7 +243,7 @@ def Desktop(master):
         image= Search_startbar_icon,
         command=Terminal_programm
     )
-    Search_startbar_button.place(x=76, y=2)
+    Search_startbar_button.place(x=66, y=2)
 
     Search_startbar_button.bind("<Enter>", lambda event: Search_startbar_button.config(image = Search_startbar_active_icon))
     Search_startbar_button.bind("<Leave>", lambda event: Search_startbar_button.config(image = Search_startbar_icon))

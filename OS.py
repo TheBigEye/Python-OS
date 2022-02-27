@@ -17,7 +17,7 @@ from System.UI.Boot.BSOD import BSOD
 
 from System.Utils.Colormap import Black
 from System.Utils.Utils import print_error, print_info, print_log, print_warning
-from System.Utils.Vars import Assets_directory
+from System.Utils.Vars import Assets_directory, XCursor_2_wn
 
 # -----------------------------------------------------------------[ Main ]----------------------------------------------------------------------- #
 
@@ -25,27 +25,27 @@ from System.Utils.Vars import Assets_directory
 Os = tk.Tk()  # Create the window that will be the base of the program.
 Os.title("Python OS")  # Window title.
 
-# If are in linux use the default tkinter icon, if are in windows use a .ico icon (and MaacOS??)
-if (os.name == "nt"):
-    Os.iconbitmap(Assets_directory + "/Icons/icon.ico")
-
 Os.geometry("1024x600")  # Window size.
 Os.resizable(False, False)  # Window resizing.
-Os.configure(background = Black)  # Black is the base color.
+
+if (os.name == "nt"): # Windows
+
+    Os.iconbitmap(Assets_directory + "/Icons/icon.ico")
+    Os.configure(background = Black, cursor="@" + XCursor_2_wn)
+
+else:
+    Os.configure(background = Black)  # Black is the base color.
 
 
 # Warnings.
 def warnings():
 
-    # In case the screen resolution is lower than expected in the window, a warning will be displayed
-    if ((Os.winfo_screenwidth() < 1024) and (Os.winfo_screenheight() < 600)):
-
-        print_warning("The resolution of the screen is less than that of the window.")
-
+    # In case the device screen resolution is lower than expected in the window, a warning will be displayed
+    if (Os.winfo_screenwidth() < 1024 or Os.winfo_screenheight() < 600):
+        print_warning("The screen resolution is lower than expected, the program may not work properly.")
 
 routines() # Execute system routines
 warnings() # Show warnings
-
 
 # -----------------------------------------------------------------[ Boot ]-------------------------------------------------------------------------- #
 
