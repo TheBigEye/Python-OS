@@ -393,8 +393,10 @@ def CMD(master, entry, output):
 
         output.see(END)
 
-    if command.startswith("?") or command.startswith("dir"):
-        master.after(900, dir_command())
+    # if start with dir or DIR lower or upper
+    if command.startswith("dir") or command.startswith("DIR") or command.startswith("ls") or command.startswith("?"):
+        dir_command()
+
 
 
     def tree_command():
@@ -559,7 +561,7 @@ def CMD(master, entry, output):
         output.insert(INSERT, 'echo "text"              - print a string' +                                   '\n')
         output.insert(INSERT, 'clear | cls              - clear the terminal' +                               '\n')
         output.insert(INSERT,                                                                                 '\n')
-        output.insert(INSERT, 'dir | ?                  - show the file system directory' +                   '\n')
+        output.insert(INSERT, 'dir | ? | ls             - show the file system directory' +                   '\n')
         output.insert(INSERT, 'tree                     - show the file system directory as tree' +           '\n')
         output.insert(INSERT,                                                                                 '\n')
         output.insert(INSERT, 'mkfolder C:/folder_name           - create a folder in the file system' +      '\n')

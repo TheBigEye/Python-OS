@@ -17,7 +17,7 @@ from System.UI.Boot.BSOD import BSOD
 
 from System.Utils.Colormap import Black
 from System.Utils.Utils import print_error, print_info, print_log, print_warning
-from System.Utils.Vars import Assets_directory, XCursor_2_wn
+from System.Utils.Vars import Assets_directory, XCursor_2
 
 # -----------------------------------------------------------------[ Main ]----------------------------------------------------------------------- #
 
@@ -31,11 +31,8 @@ Os.resizable(False, False)  # Window resizing.
 if (os.name == "nt"): # Windows
 
     Os.iconbitmap(Assets_directory + "/Icons/icon.ico")
-    Os.configure(background = Black, cursor="@" + XCursor_2_wn)
 
-else:
-    Os.configure(background = Black)  # Black is the base color.
-
+Os.configure(background = Black, cursor = XCursor_2)
 
 # Warnings.
 def warnings():

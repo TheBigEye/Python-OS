@@ -3,8 +3,7 @@
 
 def on_drag_start(event):
 
-    from System.Core.Core import in_windows
-    from System.Utils.Vars import Hand_2_wn
+    from System.Utils.Vars import Hand_2
 
     global widget
 
@@ -13,10 +12,8 @@ def on_drag_start(event):
     widget._drag_start_x = event.x
     widget._drag_start_y = event.y
 
-    if in_windows:
-        widget['cursor'] = "@" + Hand_2_wn
-    else:
-        widget['cursor'] = "hand2"
+
+    widget['cursor'] = Hand_2
 
 
 def on_drag_finish(event):

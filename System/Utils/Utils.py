@@ -7,7 +7,7 @@ from tkinter import PhotoImage
 
 from PIL import Image, ImageTk
 from System.Utils.Colormap import (color_hex_rgb, color_str_rgb)
-from System.Utils.Vars import Assets_directory, Loading_wn, XCursor_2_wn
+from System.Utils.Vars import Assets_directory, Loading, XCursor_2
 
 # Loggers ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -105,14 +105,14 @@ def Execute(master, Loading_time: float, Function, *args):
     def Loading_cursor():
 
         if in_windows:
-            master.config(cursor="@" + Loading_wn)
+            master.config(cursor=Loading)
         else:
             master.config(cursor="wait")
 
     def Normal_cursor():
 
         if in_windows:
-            master.config(cursor="@" + XCursor_2_wn)
+            master.config(cursor=XCursor_2)
         else:
             master.config(cursor="")
 
