@@ -29,7 +29,7 @@
 - Terminal mode.
 - File system.
 
-## Some current ideas...
+### Some current ideas...
 - Antivirus (fake)
 - Control panel
 - Draggable desktop icons
@@ -47,7 +47,3 @@ It is necessary to have Python 3.10 and have the following modules installed
 NOTE: If you're on a Linux distribution, you need a desktop or window manager for tkinter to work.
 
 Download the code, unzip it and double click on OS.py file to run the project or just in the command line you write ```python OS.py```
-
-
-
-    
