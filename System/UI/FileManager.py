@@ -1,6 +1,5 @@
 from tkinter import Button, Label
 
-from System.UI.Attributes.Draggable import make_draggable
 from System.Utils.Utils import Asset
 
 __author__ = 'TheBigEye'
@@ -37,15 +36,15 @@ def Display_FileManager(master, tab: str, draggable: bool = False):
     global This_PC_button_image, Desktop_button_image, Documents_button_image, Downloads_button_image
     global This_PC_button, Desktop_button, Documents_button, Downloads_button
 
-    # Explorador de archivos ----------------------------------------------------------------------------------------------------------------
+    # File explorer ----------------------------------------------------------------------------------------------------------------
 
-    # Botones
+    # Buttons
     This_PC_button_image = Asset("This_PC_unselected.png")
     Desktop_button_image = Asset("Desktop_unselected.png")
     Documents_button_image = Asset("Documents_unselected.png")
     Downloads_button_image = Asset("Downloads_unselected.png")
 
-    # Componentes de la ventana
+    # Window components
     FileManager_GUI_Image = Asset("FileManager.png") # FileManager image base
     List_Pane_Image = Asset("List_pane.png") # Files and folder list
     List_Desktop_Image = Asset("List_Desktop_pane.png") # Desktop files list
@@ -73,7 +72,7 @@ def Display_FileManager(master, tab: str, draggable: bool = False):
 
     if (draggable == True):
 
-        make_draggable(FileManager)
+        pass
 
     Control_pane = Label(
         FileManager,

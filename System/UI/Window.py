@@ -1,122 +1,85 @@
 
-class content(Label):
-    """
-    Clase Content
-    """
+from tkinter import Button, Frame, Label, Tk
 
-    def __init__(self, master, text, width, height, x, y):
-        """
-        Constructor de la clase Content
-        """
-
-        Label.__init__(self, master)
-        self.master = master
-        self.text = text
-        self.width = width
-        self.height = height
-        self.x = x
-        self.y = y
-
-        self.config(
-            text=self.text,
-            width=self.width,
-            height=self.height,
-            bg="#CCCCfC",
-            fg="#000000",   
-            font=("Consolas", 10),
-            borderwidth="0",
-            relief="flat",
-        )
-
-        self.place(x=self.x, y=self.y)
-
-
-
-    
-    
 
 class Window(Frame):
-    # args: master, title, width, height, x, y, content
-    #  the content of the window is a widget (can be a frame, a label, a button, etc), always is centered in the window
-    # the windows is  a frame, so you can add widgets to it
-    # the content arg is a widget or class, so you can add widgets to it
-    def __init__(self, master, title, width, height, x, y, content):
+    def __init__(self, master, width, height, x, y, title, color, widgets, bgcolor):
         Frame.__init__(self, master)
         self.master = master
-        self.title = title
-        self.width = width
-        self.height = height
+        self.w = width
+        self.h = height
         self.x = x
         self.y = y
-        self.content = content
+        self.title = title
+        self.color = color
+        self.widgets = widgets
+        self.bgcolor = bgcolor
 
-        # Window base
-        self.Window_base = Frame(   
-            self.master,
-            bg="#CCCCCC",
-            borderwidth="0",
-            width=self.width,   
-            height=self.height,
+        # make the window base
+        # window structure
+        # --------------------------------------------------
+        # | title                                        x | <------ title bar and close button
+        # |------------------------------------------------|
+        # |                                                | <------- window frame
+        # |                                                |
+        # |                                                |
+        # |                                                |
+        # |                                                |
+        # |                    widgets                     |
+        # |                                                |
+        # |                                                |
+        # |                                                |
+        # |                                                |
+        # |                                                |
+        # |                                                |
+        # --------------------------------------------------
 
-        )
-
-        self.Window_base.place(x=self.x, y=self.y)
-
-        # Window title bar
-        self.Window_title_bar = Frame(
-            self.Window_base,
-            bg="#CFAFCF",
-            borderwidth="0",
-            width=self.width,
-            height=20,
-        )
-
-        self.Window_title_bar.place(x=0, y=0)
+        # make the window base frame
+        window_base = Frame(self.master, width=self.w, height=self.h, bg=self.bgcolor)
+        window_base.place(x=self.x, y=self.y)
 
 
-        # Window title
-        self.Window_title = Label(
-            self.Window_title_bar,
-            text=self.title,
-            bg="#CFAFCF",
-            fg="#000000",
-            font=("Consolas", 12),
-            borderwidth="0",
-        ) 
+        # make the title bar
+        title_bar = Frame(window_base, width=self.w, height=28, bg=self.color)
+        title_bar.place(x=0, y=0)
 
-        self.Window_title.place(x=5, y=0)
+        global close_window
+        def close_window():
+            window_base.destroy()
 
-        # Window close button
-        self.Window_close_button = Button(
-            self.Window_title_bar,
-            bg="#FF0F0F",
-            fg="#000000",
-            font=("Consolas", 12),
-            borderwidth="0",
-            text="X"
-        )
+        # make the close button
+        close_button = Button(title_bar, text="X", command=close_window, bg=self.color, fg="white")
+        close_button.place(x=self.w-30, y=0)
 
-        self.Window_close_button.place(x=self.width-20, y=0)
+        # make the window frame
+        window_frame = Frame(window_base, width=self.w, height=self.h-30, bg=self.bgcolor)
+        window_frame.place(x=0, y=30)
 
-        # Window content, load the class or widget
-        self.Window_content = content(
-            self.Window_base,
-            "lol",
-            30,
-            30,
-            10,
-            10
-        )
+        # put the widgets inside the window frame
+        for widget in self.widgets:
+            widget.master = window_frame
+            widget.place(x=self.x + 2, y=self.y + 24)
+            widget.lift()
 
+       # drag n drop
+        def drag_n_drop(event):
+            master.after(1, lambda: window_base.place(x=event.x_root-x, y=event.y_root-y))
+            for widget in self.widgets:
+                widget.place(x=event.x_root-x + 2, y=event.y_root-y + 24)
+                widget.lift()
+
+        window_frame.bind("<B1-Motion>", drag_n_drop)
 
 # test
 if __name__ == "__main__":
     root = Tk()
-    Window(root, "Window", 300, 300, 100, 100, content)
+    root.configure(background="black")
+
+    # widgets
+    label = Label(text="Hello World!")
+
+    label2 = Label(text="Hello World2324!")
+
+
+    window = Window(root, width=512, height=400, x=100, y=100, title="test", color="red", widgets=[label, label2], bgcolor="white")
     root.mainloop()
-
-
-
-
-
-

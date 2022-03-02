@@ -1,4 +1,3 @@
-
 import datetime
 import platform
 
@@ -48,12 +47,9 @@ def check_os():
 
     global in_linux, in_windows, in_mac
 
-    if platform.system() == "Linux":
-        in_linux = True
-    elif platform.system() == "Windows":
-        in_windows = True
-    elif platform.system() == "Darwin":
-        in_mac = True
+    if platform.system() == "Linux": in_linux = True
+    elif platform.system() == "Windows": in_windows = True
+    elif platform.system() == "Darwin": in_mac = True
 
 
 # Routines, are the first tasks that are executed in the first seconds of system startup
@@ -65,14 +61,10 @@ def routines():
     print_log("Started log at: " + str(datetime.datetime.now()))
 
     # In what os is running the system?
-    if in_linux:
-        print_log("Running on Linux")
-    elif in_windows:
-        print_log("Running on Windows")
-    elif in_mac:
-        print_log("Running on Mac")
-    else:
-        print_warning("Unknown OS, starting anyway...")
+    if in_linux: print_log("Running on Linux")
+    elif in_windows: print_log("Running on Windows")
+    elif in_mac: print_log("Running on Mac")
+    else: print_warning("Unknown OS, starting anyway...")
 
     # Load the registry.
     rg_routines()

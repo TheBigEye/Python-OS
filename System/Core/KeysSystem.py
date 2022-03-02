@@ -111,6 +111,29 @@ def get_value(root: str, category: str, name: str, key: str):
                                     return value_key["value"]
 
 
+def exists_key(root: str, category: str, name: str, key: str):
+    """
+    Check if a key exists
+    """
+
+    # load the registry keys
+    load_registry_keys()
+
+    global Keys
+
+    for root_key in Keys:
+        if root_key["root"] == root:
+            for category_key in root_key["content"]:
+                if category_key["category"] == category:
+                    for key_key in category_key["keys"]:
+                        if key_key["name"] == name:
+                            for value_key in key_key["values"]:
+                                if value_key["key"] == key:
+                                    return True
+
+    return False
+
+
 # Tree view
 def reg_tree_view():
 

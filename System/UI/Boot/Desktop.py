@@ -46,7 +46,7 @@ def Desktop(master):
         Wallpaper = Asset("BlissHill.png")
 
     Desktop_wallpaper = Label(master, image= Wallpaper, borderwidth=0)
-    Desktop_wallpaper.place(x=0, y=0) # Posiciona el fondo de escritorio en el centro
+    Desktop_wallpaper.place(x=0, y=0) # set the position of the wallpaper to the center of the screen
 
 
  # ---------------------------------------------------------------[Welcome window]------------------------------------------------------------------
@@ -54,7 +54,7 @@ def Desktop(master):
     Welcome_window(master, draggable=False)
 
 
- # -------------------------------------------------------------[ Tipos de errores ]----------------------------------------------------------------
+ # -------------------------------------------------------------[ Errors types ]----------------------------------------------------------------
 
     global Settings_error, Print_error, This_PC_error, FileManager_error
 
@@ -386,15 +386,14 @@ def Desktop(master):
     Battery_status_icon.place(x=24, y=-6)
 
 
-    # Icono del estado del internet
+    # Internet status icon
     global Internet_icon, Internet_status_icon
 
-    # Comprueba si hay conexion a internet
     if internet_on() == True:
-        # Estado conectado
+        # Connected
         Internet_icon = Asset("Internet_Connected.png")
     else:
-        # Estado desconectado
+        # Disconnected
         Internet_icon = Asset("Internet_Warning.png")
 
     Internet_status_icon = Button(
@@ -410,7 +409,7 @@ def Desktop(master):
     Internet_status_icon.place(x=48, y=-6)
 
 
-    # Icono de volumen del sonido
+    # Sound volume icon
     global Volume_icon, Volume_status_icon
     Volume_icon = Asset("Volume.png")
 
@@ -427,9 +426,8 @@ def Desktop(master):
     Volume_status_icon.place(x=72, y=-6)
 
 
- # ----------------------------------------------------------------- [ Iconos del menu de inicio ] --------------------------------------------------
+ # ----------------------------------------------------------------- [ Start menu icons ] --------------------------------------------------
 
-    # Icono de configuracion del menu de inicio
     #global Settings_Start_icon, Settings_Start_icon_2
     #Settings_Start_icon = Asset("Assets/Images/Settings_Icon.png")
     #Settings_Start_icon_2 = Asset("Assets/Images/Settings_Icon_2.png")

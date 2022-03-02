@@ -34,7 +34,7 @@ def on_drag_motion(event):
     widget = event.widget
     x = widget.winfo_x() - widget._drag_start_x + event.x
     y = widget.winfo_y() - widget._drag_start_y + event.y
-    widget.place(x = x, y = y)
+    widget.master.after(1, lambda: widget.place(x = x, y = y))
 
 
 def make_draggable(widget):

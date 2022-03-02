@@ -1,7 +1,7 @@
 from tkinter import Button, Label
 from typing import Literal
 
-from System.UI.Attributes.Draggable import make_draggable
+from System.UI.Attributes.Draggable import drag_n_drop
 from System.Utils.Utils import Asset
 
 __author__ = 'TheBigEye'
@@ -11,7 +11,7 @@ Font = "Segou UI"
 
 class MessageBox(Label):
     """
-    Clase MessageBox
+    Class MessageBox
     """
 
     def __init__(self, master, type: Literal['Error', 'Info', 'Warning'], title: str, message: str, draggable: bool = True):
@@ -144,7 +144,7 @@ class MessageBox(Label):
 
             if (self.draggable == True):
 
-                make_draggable(self.Error_MessageBox)
+                drag_n_drop(self.Error_MessageBox)
 
             self.Error_title_label.place(x= 11, y= 1)
             self.Error_message_label.place(x= 20, y= 32)
@@ -255,7 +255,7 @@ class MessageBox(Label):
 
             if (self.draggable == True):
 
-                make_draggable(self.Info_MessageBox)
+                drag_n_drop(self.Info_MessageBox)
 
 
             self.Info_Title_label.place(x= 11, y= 1)
@@ -365,7 +365,7 @@ class MessageBox(Label):
 
             if (draggable == True):
 
-                make_draggable(self.Warning_MessageBox)
+                drag_n_drop(self.Warning_MessageBox)
 
             self.Warning_Title_label.place(x= 11, y= 1)
             self.Warning_Message_label.place(x= 20, y= 32)

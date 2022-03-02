@@ -30,7 +30,7 @@ def Logger(Log_Message):
 
 # Print ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-class CharColors:
+class Style:
     FAIL = '\033[91m'
     LOG = '\033[92m'
     WARNING = '\033[93m'
@@ -52,22 +52,22 @@ class CharColors:
 def print_log(message):
 
     # example: [LOG][module_name][line_number] message.
-    print(f"{CharColors.GREEN_BLOCK}[LOG]{CharColors.WHITE} [{inspect.stack()[1][3]}] {CharColors.UNDERLINE}[ln: {inspect.stack()[1][2]}]{CharColors.WHITE} " + message)
+    print(f"{Style.GREEN_BLOCK}[LOG]{Style.WHITE} [{inspect.stack()[1][3]}] {Style.UNDERLINE}[ln: {inspect.stack()[1][2]}]{Style.WHITE} " + message)
     Logger("[LOG] [{}] [ln: {}] {}".format(inspect.stack()[1][3], inspect.stack()[1][2], message))
 
 
 def print_error(message):
-    print(f"{CharColors.RED_BLOCK}[ERROR]{CharColors.WHITE} " + message)
+    print(f"{Style.RED_BLOCK}[ERROR]{Style.WHITE} " + message)
     Logger("[ERROR] " + message)
 
 
 def print_warning(message):
-    print(f"{CharColors.YELLOW_BLOCK}[WARNING]{CharColors.WHITE} " + message)
+    print(f"{Style.YELLOW_BLOCK}[WARNING]{Style.WHITE} " + message)
     Logger("[WARNING] " + message)
 
 
 def print_info(message):
-    print(f"{CharColors.BLUE_BLOCK}[INFO]{CharColors.WHITE} " + message)
+    print(f"{Style.BLUE_BLOCK}[INFO]{Style.WHITE} " + message)
     Logger("[INFO] " + message)
 
 

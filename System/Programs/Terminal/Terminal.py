@@ -1,15 +1,14 @@
 from tkinter import Button, Entry, Frame, Label, Text
 from tkinter.constants import INSERT
 
-from System.Core.KeysSystem import add_key, get_value
+from System.Core.KeysSystem import add_key, get_value, exists_key
 from System.Programs.Terminal.Command import CMD
 from System.UI.Attributes.Draggable import drag_n_drop
-from System.Utils.Utils import Asset, Asset_color
+from System.Utils.Utils import Asset, Asset_color, print_warning
 
 __author__ = "TheBigEye"
 __version__ = "1.8"
 
-buttons_size = (13, 13)
 
 def set_foreground(color):
 
@@ -23,24 +22,35 @@ def get_foreground():
 
     """Get the foreground color of the terminal"""
 
-    # get the color from the registry
-    return get_value("PYTHON-OS", "Software", "Terminal", "Foreground")
+    if exists_key("PYTHON-OS", "Software", "Terminal", "Foreground"):
+
+        # get the color from the registry
+        return get_value("PYTHON-OS", "Software", "Terminal", "Foreground")
+
+    else:
+        # set the default color
+        return "white"
 
 
 def set_background(color):
-    
+
     """Set the background color of the terminal"""
-    
+
     # save the color in the registry
     add_key("PYTHON-OS", "Software", "Terminal", "Background", color, "str")
 
 
 def get_background():
-    
+
     """Get the background color of the terminal"""
-    
-    # get the color from the registry
-    return get_value("PYTHON-OS", "Software", "Terminal", "Background")
+    if exists_key("PYTHON-OS", "Software", "Terminal", "Background"):
+
+        # get the color from the registry
+        return get_value("PYTHON-OS", "Software", "Terminal", "Background")
+
+    else:
+        # set the default color
+        return "black"
 
 
 class Terminal(Frame):
@@ -116,8 +126,8 @@ class Terminal(Frame):
 
         self.Close_button = Button(
             self.Terminal,
-            width=buttons_size[0],
-            height=buttons_size[1],
+            width=13,
+            height=13,
             bg="#2E2E2E",
             image=self.Close_button_image,
             borderwidth=0,
@@ -143,8 +153,8 @@ class Terminal(Frame):
 
         self.Maximize_button = Button(
             self.Terminal,
-            width=buttons_size[0],
-            height=buttons_size[1],
+            width=13,
+            height=13,
             bg="#2E2E2E",
             image=self.Maximize_button_image,
             borderwidth=0,
@@ -170,8 +180,8 @@ class Terminal(Frame):
 
         self.Minimize_button = Button(
             self.Terminal,
-            width=buttons_size[0],
-            height=buttons_size[1],
+            width=13,
+            height=13,
             bg="#2E2E2E",
             image=self.Minimize_button_image,
             borderwidth="0",
@@ -201,6 +211,7 @@ class Terminal(Frame):
 
         self.Terminal_entry.place(x=5.5, y=330)
 
+        #self.master.after(1000, self.Terminal.update_idletasks())
 
         # --------------------------------------------------------------------------- [Final] ----------------------------------------------------------------------------------
 
@@ -208,3 +219,4 @@ class Terminal(Frame):
         if (draggable):
 
             drag_n_drop(self.Terminal)
+

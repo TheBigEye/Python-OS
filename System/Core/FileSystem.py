@@ -1,250 +1,194 @@
-import json
-import time
+import random
+import shelve
+from System.Core.KeysSystem import add_key, get_value
 
-from System.Utils.Utils import print_info
+from System.Utils.Utils import print_error, print_info, print_warning
 
-FileSystem = [] # Here the file system is temporarily saved and loaded
+fs = shelve.open('Disk/FS/Filesystem', writeback=True)
+current_dir = []
 
 def fs_routines():
-    load_filesystem()
+
+    # Check the registry if the filesystem is installed
+    if get_value("PYTHON-OS", "System", "FS", "Created") == "False":
+        install(fs)
+        add_key("PYTHON-OS", "System", "FS", "Created", "True", "str")
+        print_info("File system mounted")
 
     print_info("File System loaded")
 
-# Extensions ----------------------------------------------------------------------------------------------------------------------------
 
-Index_file_ext = "pfs"
-Python_script_extension = "pys"
+def install(fs):
+    # create root and others
+    username = "User"
 
-# File system functions ---------------------------------------------------------------------------------------------------------------------
-
-FileSystem_directory = "Disk/System/Files.json"
-
-def save_file():
-
-    global FileSystem
-
-    with open(FileSystem_directory, "w") as file:
-        json.dump(FileSystem, file, indent=4)
-
-
-def save_folder():
-
-    global FileSystem
-
-    with open(FileSystem_directory, "w") as folder:
-        json.dump(FileSystem, folder, indent=4)
-
-
-def save_filesystem():
-
-    global FileSystem
-
-    with open(FileSystem_directory, "w") as fs:
-        json.dump(FileSystem, fs, indent=4)
-
-def load_filesystem():
-
-    global FileSystem
-
-    with open(FileSystem_directory, "r") as fs:
-        FileSystem = json.load(fs)
-
-
-def create_drive(drive_letter):
-    drive = {
-        "drive": drive_letter + ":",
-        "content": []
+    fs[""] = {
+        "Data": {},
+        "System": {},
+        "Users": {
+            username: {}
+        }
     }
-    FileSystem.append(drive)
-    save_filesystem()
+
+def current_dictionary():
+    """Return a dictionary representing the files in the current directory"""
+    d = fs[""]
+    for key in current_dir:
+        d = d[key]
+    return d
+
+def ls():
+    list_dir = ""
+
+    list_dir += "Contents of directory " + str("/" + "/".join(current_dir) ) + '/:' + "\n"
+
+    for i in current_dictionary():
+        list_dir += "   " + i + '\n'
+
+    return list_dir
+
+def cd(directory):
+
+    if directory == "..":
+        if len(current_dir) > 0:
+            current_dir.pop()
+
+    else:
+        # check if the directory exists
+        if directory not in current_dictionary():
+            print_error("Directory " + directory + " does not exist")
+            return
+
+        else:
+            current_dir.append(directory)
+
+    print_info("Current directory: " + str("/" + "/".join(current_dir) ) )
+
+def mkdir(name):
+
+    global fs
+
+    # Check if the directory already exists in the current directory
+    if name in current_dictionary():
+        print_error("Directory " + name +" already exists in " + str("/" + "/".join(current_dir) ) )
+        return
+
+    print_info("Creating directory: " + name)
+    # create an empty directory there and sync back to shelve dictionary!
+    d = current_dictionary()[name] = {}
+    fs.sync()
+
+def mkfile(argument):
+    global fs
+
+    # Get the name and extension
+    name = argument.split(".")[0]
+    extension = argument.split(".")[1]
+
+    name_and_extension = name + "." + extension
+
+    # Check if the file already exists in the current directory
+    if name_and_extension in current_dictionary():
+        print_warning("File " + name + "." + extension + " already exists, overwriting")
+
+        # add a random number to the name
+        name = name + "-" + str(random.randint(0, 512) + random.randint(0, 512)) # imposible to have a file with the same name :)
+        name_and_extension = name + "." + extension
+
+        # create the file
+        directory = current_dictionary()
+        directory[name_and_extension] = ""
+        return
+
+    print_info("Created file " + name_and_extension + " in " + str("/" + "/".join(current_dir) ) )
+    d = current_dictionary()
+    d[name_and_extension] = ""
+    fs.sync()
 
 
-def delete_drive(drive_letter):
-    for drive in FileSystem:
-        if drive["drive"] == drive_letter:
-            FileSystem.remove(drive)
-            save_filesystem()
+def edit_file(name_and_extension, content):
+    global fs
+
+    # Check if the file exists
+    if name_and_extension not in current_dictionary():
+        print_error("File " + name_and_extension + " does not exist")
+        return
+
+    print_info("Editing file " + name_and_extension)
+    d = current_dictionary()
+    d[name_and_extension] = content
+    fs.sync()
 
 
-def create_folder(path):
-    load_filesystem()
+def get_file_content(name_and_extension):
+    global fs
 
-    drive_letter = path.split("/")[0]
-    folder_name = path.split("/")[1]
+    # Check if the file exists
+    if name_and_extension not in current_dictionary():
+        print_error("File " + name_and_extension + " does not exist")
+        return
 
-    for drive in FileSystem:
-        if drive["drive"] == drive_letter:
-            for folder in drive["content"]:
-                if folder["name"] == folder_name:
-                    print("Folder already exists")
-                    return
-
-            folder = {
-                "type": "folder",
-                "name": folder_name,
-                "files": []
-            }
-            drive["content"].append(folder)
-            save_filesystem()
+    print_info("Getting content of file " + name_and_extension)
+    d = current_dictionary()
+    return d[name_and_extension]
 
 
-def delete_folder(path):
-    load_filesystem()
+def rmdir(name):
+    global fs
 
-    drive_letter = path.split("/")[0]
-    folder_name = path.split("/")[1]
+    # Check if the directory exists
+    if name not in current_dictionary():
+        print_error("Directory " + name + " does not exist")
+        return
 
-    for drive in FileSystem:
-        if drive["drive"] == drive_letter:
-            for folder in drive["content"]:
-                if folder["name"] == folder_name:
-                    drive["content"].remove(folder)
-                    save_filesystem()
-
-
-def create_file(path):
-    load_filesystem()
-
-    drive_letter = path.split("/")[0]
-    folder_name = path.split("/")[1]
-
-    file_name = path.split("/")[2].split(".")[0]
-    file_extension = path.split("/")[2].split(".")[1]
+    print_info("Deleting directory " + name)
+    d = current_dictionary()
+    del d[name]
+    fs.sync()
 
 
-    for drive in FileSystem:
-        if drive["drive"] == drive_letter:
-            for folder in drive["content"]:
-                if folder["name"] == folder_name:
-                    for file in folder["files"]:
-                        if file["name"] == file_name:
-                            print("File already exists")
-                            return
+def rmfile(name_and_extension):
+    global fs
 
-                    file = {
-                        "type": "file",
-                        "name": file_name,
-                        "extension": file_extension,
-                        "metadata": {
-                            "size": "empty",
-                            "date": time.strftime("%d/%m/%y"),
-                            "time": time.strftime("%H:%M:%S")
-                        },
-                        "content": ""
-                    }
-                    folder["files"].append(file)
-                    save_filesystem()
+    # Check if the file exists
+    if name_and_extension not in current_dictionary():
+        print_error("File " + name_and_extension + " does not exist")
+        return
+
+    print_info("Deleting file " + name_and_extension)
+    d = current_dictionary()
+    del d[name_and_extension]
+    fs.sync()
 
 
-def delete_file(path):
-    load_filesystem()
+def tree(*args):
+    global fs
 
-    drive_letter = path.split("/")[0]
-    folder_name = path.split("/")[1]
+    tree = ""
 
-    file_name = path.split("/")[2].split(".")[0]
-    file_extension = path.split("/")[2].split(".")[1]
+    # if no argument is given, print the whole tree
+    if args[0] == "$null":
 
-    for drive in FileSystem:
-        if drive["drive"] == drive_letter:
-            for folder in drive["content"]:
-                if folder["name"] == folder_name:
-                    for file in folder["files"]:
-                        if file["name"] == file_name and file["extension"] == file_extension:
-                            folder["files"].remove(file)
-                            save_filesystem()
+        directory = current_dictionary()
+        tree += "Contents of directory " + str("/" + "/".join(current_dir) ) + '/:' + "\n"
+
+    elif args[0] in current_dictionary():
+
+        directory = current_dictionary()[args[0]]
+        tree += "Contents of directory " + str("/" + "/".join(current_dir) ) + '/' + args[0] + '/:' + "\n"
 
 
-def edit_file(path, content):
-    load_filesystem()
+    for i in directory:
+        tree += "|--" + i + '\n'
 
-    drive_letter = path.split("/")[0]
-    folder_name = path.split("/")[1]
+        for j in directory[i]:
+            tree += "|   |--" + j + '\n'
 
-    file_name = path.split("/")[2].split(".")[0]
-    file_extension = path.split("/")[2].split(".")[1]
+            for k in directory[i][j]:
+                tree += "|   |   |--" + k + '\n'
 
-    # calculate size of content in bytes
-    size = len(content)
+                for l in directory[i][j][k]:
+                    tree += "|   |   |   |--" + l + "..." + '\n'
 
-    for drive in FileSystem:
-        if drive["drive"] == drive_letter:
-            for folder in drive["content"]:
-                if folder["name"] == folder_name:
-                    for file in folder["files"]:
-                        if file["name"] == file_name and file["extension"] == file_extension:
-                            file["content"] = content
-                            file["metadata"]["size"] = size
-                            file["metadata"]["date"] = time.strftime("%d/%m/%y")
-                            file["metadata"]["time"] = time.strftime("%H:%M:%S")
-
-    save_filesystem()
-
-
-def dir():
-    load_filesystem()
-
-    dir_list = ""
-
-    # dir scheme
-    # C:/
-    #       folder1/
-    #              file1.ext    20/10/2019  10:00:00
-    #              file2.ext    20/10/2019  10:00:00
-    #
-    #       folder2/
-    #              file3.ext    20/10/2019  10:00:00
-
-    for drive in FileSystem:
-        dir_list += drive["drive"] + "/" + "\n"
-        for folder in drive["content"]:
-            dir_list += "    " + folder["name"] + "/\n"
-            for file in folder["files"]:
-                dir_list += "        " + file["name"] + "." + file["extension"] + "    " + file["metadata"]["date"] + "  " + file["metadata"]["time"] + "\n"
-
-    return dir_list
-
-
-def dir_tree():
-
-    load_filesystem()
-
-    tree_list = ""
-
-    # tree scheme
-    # C:
-    # ├─── folder1
-    # │    ├─── file1.ext
-    # │    └─── file2.ext
-    # |
-    # └─── folder2
-    #      └─── file3.ext
-
-    for drive in FileSystem:
-        tree_list += drive["drive"] + "\n"
-        for folder in drive["content"]:
-
-            if folder == drive["content"][-1]:
-                tree_list += "└─── " + folder["name"] + "\n"
-
-                for file in folder["files"]:
-
-                    if file == folder["files"][-1]:
-                        tree_list += "     └─── " + file["name"] + "." + file["extension"] + "\n"
-                        tree_list += "        \n" # next folder separation
-                    else:
-                        tree_list += "     ├─── " + file["name"] + "." + file["extension"] + "\n"
-            else:
-                tree_list += "├─── " + folder["name"] + "\n"
-
-                for file in folder["files"]:
-
-                    if file == folder["files"][-1]:
-                        tree_list += "│    └─── " + file["name"] + "." + file["extension"] + "\n"
-                        tree_list += "│       \n" # next folder separation
-                    else:
-                        tree_list += "│    ├─── " + file["name"] + "." + file["extension"] + "\n"
-
-    return tree_list
-
+    return tree
 

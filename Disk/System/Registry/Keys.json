@@ -10,7 +10,7 @@
                         "values": [
                             {
                                 "key": "Foreground",
-                                "value": "#f0f0f0",
+                                "value": "#ffffff",
                                 "type": "str"
                             },
                             {
@@ -56,6 +56,16 @@
                             {
                                 "key": "Wallpaper-mode",
                                 "value": "2",
+                                "type": "str"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "FS",
+                        "values": [
+                            {
+                                "key": "Created",
+                                "value": "True",
                                 "type": "str"
                             }
                         ]

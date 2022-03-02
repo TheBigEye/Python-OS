@@ -1,13 +1,12 @@
 from tkinter import Label
 import tkinterweb
-from System.UI.Attributes.Draggable import make_draggable
 from System.Utils.Utils import Asset
 from System.Utils.Vars import Assets_directory
 
 __author__ = 'TheBigEye'
 __version__ = '1.1'
 
-# TODO: remove and replace it with a more efficient fucntion.
+# TODO: remove and replace it with a more efficient function.
 
 
 def Display_Browser(master, draggable: bool = False):
@@ -28,7 +27,7 @@ def Display_Browser(master, draggable: bool = False):
     None
     """
 
-# Navegaador ---------------------------------------------------------------------------------------------------------------
+# Browser ---------------------------------------------------------------------------------------------------------------
 
     global Browser, Browser_GUI_Image
     Browser_GUI_Image = Asset("Browser.png")
@@ -44,7 +43,7 @@ def Display_Browser(master, draggable: bool = False):
 
     if (draggable == True):
 
-        make_draggable(Browser)
+        pass
 
     Browser_frame = Label(
         Browser,

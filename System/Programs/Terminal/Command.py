@@ -262,6 +262,24 @@ def CMD(master, entry, output):
 
 # -------------------------------------------------------------------------------------------------------------------------------------------------
 
+    def cd_command(command):
+        """Cd command"""
+
+        from System.Core.FileSystem import cd
+
+        command = command.replace("cd ", "")
+
+
+
+        cd(command)
+
+        print(command)
+        output.insert(INSERT, "Changed directory to " + command + "\n")
+        output.see(END)
+
+    if command.startswith("cd "):
+        cd_command(command)
+
     def mkfolder_command(command):
 
         """
@@ -269,147 +287,129 @@ def CMD(master, entry, output):
                 Make a folder in the disk
 
             Example:
-                mkfolder C:/folder_name
+                mkfolder folder_name
 
         """
 
-        from System.Core.FileSystem import create_folder
+        from System.Core.FileSystem import mkdir
 
         command = command.replace("mkfolder ", "")
 
-        drive_name = command.split("/")[0]
-        folder_name = command.split("/")[1]
+        mkdir(command)
 
-        create_folder(command)
-
-        output.insert(INSERT, "Folder " + folder_name + " created in " + drive_name + "\n")
+        output.insert(INSERT, "Folder " + command + " created " + "\n")
         output.see(END)
 
     if command.startswith("mkfolder "):
         mkfolder_command(command)
 
 
+    def dfolder_command(command):
+
+        """
+            Summary:
+                Delete a folder in the disk
+
+            Example:
+                dfolder folder_name
+
+        """
+
+        from System.Core.FileSystem import rmdir
+
+        command = command.replace("dfolder ", "")
+
+        rmdir(command)
+
+        output.insert(INSERT, "Folder " + command + " deleted " + "\n")
+        output.see(END)
+
+    if command.startswith("dfolder "):
+        dfolder_command(command)
+
+
     def mkfile_command(command):
 
         """
             Summary:
-                Make a file in the disk
+                Make a folder in the disk
 
             Example:
-                mkfile C:/folder_name/file_name.txt, "conttent :)" (the extension is important)
+                mkfolder folder_name
 
         """
 
-        from System.Core.FileSystem import create_file
+        from System.Core.FileSystem import mkfile
 
         command = command.replace("mkfile ", "")
 
-        drive_name = command.split("/")[0]
-        folder_name = command.split("/")[1]
-        file_name = command.split("/")[2].split(".")[0]
-        extension = command.split("/")[2].split(".")[1]
+        mkfile(command)
 
-        create_file(command)
-
-        print_log("File " + file_name + "." + extension + " created in " + drive_name + "/" + folder_name)
-        output.insert(INSERT, "File " + file_name + "." + extension + " created in " + drive_name + "/" + folder_name + "\n")
+        output.insert(INSERT, "File " + command + " created " + "\n")
         output.see(END)
 
     if command.startswith("mkfile "):
         mkfile_command(command)
 
-    def delete_folder_command(command):
 
-        from System.Core.FileSystem import delete_folder
+    def dfile_command(command):
 
-        command = command.replace("dfolder ", "")
+        """
+            Summary:
+                Delete a file in the disk
 
-        drive_name = command.split("/")[0]
-        folder_name = command.split("/")[1]
+            Example:
+                dfolder file_name
 
-        delete_folder(command)
+        """
 
-        output.insert(INSERT, "Folder " + folder_name + " deleted from " + drive_name + "\n")
-        print_log("Folder " + folder_name + " deleted from " + drive_name)
-        output.see(END)
-
-    if command.startswith("dfolder "):
-        delete_folder_command(command)
-
-
-    # delete_file command will delete a file, like: delete_file(file_name, extension) , > .
-    def delete_file_command(command):
-
-        from System.Core.FileSystem import delete_file
+        from System.Core.FileSystem import rmfile
 
         command = command.replace("dfile ", "")
 
-        drive_name = command.split("/")[0]
-        folder_name = command.split("/")[1]
-        file_name = command.split("/")[2].split(".")[0]
-        extension = command.split("/")[2].split(".")[1]
+        rmfile(command)
 
-        delete_file(command)
-
-        output.insert(INSERT, "File " + file_name + "." + extension + " deleted from " + drive_name + "/" + folder_name + "\n")
-        print_log("File " + file_name + "." + extension + " deleted from " + drive_name + "/" + folder_name)
+        output.insert(INSERT, "File " + command + " deleted " + "\n")
         output.see(END)
 
     if command.startswith("dfile "):
-        delete_file_command(command)
+        dfile_command(command)
 
 
     def edit_file_command(command):
 
-        from System.Core.FileSystem import edit_file
+        from System.Core.FileSystem import edit_file, get_file_content
 
         command = command.replace("efile ", "")
 
-        path = command.split(" ")[0]
+        name = command.split(" ")[0]
         content = command.split(" ")[1]
         content = content.replace("\"", "")
 
-        edit_file(path, content)
+        edit_file(name, content)
 
-        output.insert(INSERT, "File " + path + " edited\n")
-        print_log("File " + path + " edited")
+        output.insert(INSERT, "File " + name + " edited\n")
+        output.insert(INSERT, "Content: " + get_file_content(name) + "\n")
+        print_log("File " + name + " edited")
         output.see(END)
 
     if command.startswith("efile "):
         edit_file_command(command)
 
 
-
-
-
     # dir command will print the directory of the current file (using the filesystem in core.py), like: dir() , > dir.
     def dir_command():
 
-        from System.Core.FileSystem import dir
+        from System.Core.FileSystem import ls
 
-        output.insert(INSERT, "Directories: " + "\n")
-        output.insert(INSERT, dir())
-        output.insert(INSERT,  "\n\n")
+        output.insert(INSERT, ls())
+        output.insert(INSERT,  "\n")
 
         output.see(END)
 
     # if start with dir or DIR lower or upper
     if command.startswith("dir") or command.startswith("DIR") or command.startswith("ls") or command.startswith("?"):
         dir_command()
-
-
-
-    def tree_command():
-        from System.Core.FileSystem import dir_tree
-
-        output.insert(INSERT, "Directory tree: " + "\n")
-        output.insert(INSERT, dir_tree() + "\n")
-        output.insert(INSERT, "\n")
-
-        output.see(END)
-
-    if command.startswith("tree"):
-        master.after(800, tree_command())
 
 
     # delete_logs
@@ -446,6 +446,28 @@ def CMD(master, entry, output):
     if command.startswith("reg"):
         master.after(1000, registry_tree_command())
 
+
+    def tree_command(command):
+        from System.Core.FileSystem import tree
+
+        if command.startswith("tree "): # Specific directory, tree <directory>
+            command = command.replace("tree ", "")
+
+            output.insert(INSERT, tree(command))
+            output.insert(INSERT, "\n")
+            output.see(END)
+
+        elif command.startswith("tree"): # Current directory, tree
+            command = command.replace("tree", "")
+
+            command = "$null"
+
+            output.insert(INSERT, tree(command))
+            output.insert(INSERT, "\n")
+            output.see(END)
+
+    if command.startswith("tr"):
+        master.after(1000, tree_command(command))
 
     def foreground_command(command):
 
@@ -507,7 +529,8 @@ def CMD(master, entry, output):
 
     def neofetch_command():
 
-        from System.Programs.Terminal.Terminal import get_background, get_foreground
+        from System.Programs.Terminal.Terminal import (get_background,
+                                                       get_foreground)
 
         neo = ""
 
@@ -564,11 +587,11 @@ def CMD(master, entry, output):
         output.insert(INSERT, 'dir | ? | ls             - show the file system directory' +                   '\n')
         output.insert(INSERT, 'tree                     - show the file system directory as tree' +           '\n')
         output.insert(INSERT,                                                                                 '\n')
-        output.insert(INSERT, 'mkfolder C:/folder_name           - create a folder in the file system' +      '\n')
-        output.insert(INSERT, 'mkfile C:/.../file_name.ext       - create a file in the file system' +        '\n')
-        output.insert(INSERT, 'dfolder C:/folder_name            - delete a folder in the file system' +      '\n')
-        output.insert(INSERT, 'dfile C:/folder/file_name.ext     - delete a file in the file system' +        '\n')
-        output.insert(INSERT, 'efile C:/.../file_name.ext "content"    - edit a file in the file system' +    '\n')
+        output.insert(INSERT, 'mkfolder folder_name             - create a folder in the file system' +       '\n')
+        output.insert(INSERT, 'mkfile file_name.ext             - create a file in the file system' +         '\n')
+        output.insert(INSERT, 'dfolder folder_name              - delete a folder in the file system' +       '\n')
+        output.insert(INSERT, 'dfile file_name.ext              - delete a file in the file system' +         '\n')
+        output.insert(INSERT, 'efile file_name.ext "content"    - edit a file in the file system' +           '\n')
         output.insert(INSERT,                                                                                 '\n')
         output.insert(INSERT, 'dlogs                    - delete system logs' +                               '\n')
         output.insert(INSERT, 'info                     - show the system info' +                             '\n')

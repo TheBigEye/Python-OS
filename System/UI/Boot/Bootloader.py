@@ -13,7 +13,7 @@ def Boot_loader(master):
 
     global Logon
 
-    master.configure(background=Black)  # Establece el fondo a negro
+    master.configure(background=Black)  # Set the background color to black.
 
     Logon = Asset_colored("logon.png", 1)
     Boot_Logo = Label(master, image=Logon, borderwidth=0.1)
@@ -21,15 +21,15 @@ def Boot_loader(master):
     Boot_Logo.place(x= 408, y= 160)
 
     # Animation...
-    frames_count = 60 # Frames por segundo #27
+    frames_count = 60 # Frames per second
 
-    # Crea una lista de cada frame del gif
+    # Make a list of frames
     frames = [
         PhotoImage(file= Assets_directory + "/GUI/Bootloader/Loading.gif", format="gif -index %i" % (i))
         for i in range(frames_count)
     ]
 
-    # Muestra y va cambiando (Actualizando) el frame
+    # Show and update the frames
     def update(ind):
 
         frame = frames[ind]

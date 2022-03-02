@@ -22,6 +22,7 @@ from System.Utils.Vars import Assets_directory, XCursor_2
 # -----------------------------------------------------------------[ Main ]----------------------------------------------------------------------- #
 
 
+
 Os = tk.Tk()  # Create the window that will be the base of the program.
 Os.title("Python OS")  # Window title.
 
