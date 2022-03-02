@@ -1,0 +1,3 @@
+psutils
+tkinterweb
+pillow
