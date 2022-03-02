@@ -10,12 +10,12 @@
                         "values": [
                             {
                                 "key": "Foreground",
-                                "value": "#ffffff",
+                                "value": "#F4FAEC",
                                 "type": "str"
                             },
                             {
                                 "key": "Background",
-                                "value": "#000000",
+                                "value": "#000E14",
                                 "type": "str"
                             },
                             {

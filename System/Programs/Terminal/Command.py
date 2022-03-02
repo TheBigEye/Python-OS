@@ -269,12 +269,11 @@ def CMD(master, entry, output):
 
         command = command.replace("cd ", "")
 
-
-
         cd(command)
 
         print(command)
-        output.insert(INSERT, "Changed directory to " + command + "\n")
+        #output.insert(INSERT, "Changed directory to " + command + "\n")
+        output.insert(INSERT, "\n")
         output.see(END)
 
     if command.startswith("cd "):
@@ -369,7 +368,7 @@ def CMD(master, entry, output):
 
         rmfile(command)
 
-        output.insert(INSERT, "File " + command + " deleted " + "\n")
+        output.insert(INSERT, "File " + command + " deleted " + "\n\n")
         output.see(END)
 
     if command.startswith("dfile "):
@@ -382,19 +381,34 @@ def CMD(master, entry, output):
 
         command = command.replace("efile ", "")
 
-        name = command.split(" ")[0]
-        content = command.split(" ")[1]
-        content = content.replace("\"", "")
+        #efile file_name "content"
+        command = command.split(" \"")
+        file_name = command[0]
+        file_content = command[1]
 
-        edit_file(name, content)
+        edit_file(file_name, "\"" + file_content)
 
-        output.insert(INSERT, "File " + name + " edited\n")
-        output.insert(INSERT, "Content: " + get_file_content(name) + "\n")
-        print_log("File " + name + " edited")
+        output.insert(INSERT, "File " + file_name + " edited " + "\n\n")
         output.see(END)
 
     if command.startswith("efile "):
         edit_file_command(command)
+
+    
+    def metafile_command(command):
+
+        from System.Core.FileSystem import get_file_content, get_file_metadata
+
+        command = command.replace("metafile ", "")
+
+        name = command
+
+        output.insert(INSERT, get_file_metadata(name) + "\n")
+        output.insert(INSERT, "Content: " + get_file_content(name) + "\n")
+        output.see(END)
+
+    if command.startswith("metafile "):
+        metafile_command(command)
 
 
     # dir command will print the directory of the current file (using the filesystem in core.py), like: dir() , > dir.
@@ -587,11 +601,12 @@ def CMD(master, entry, output):
         output.insert(INSERT, 'dir | ? | ls             - show the file system directory' +                   '\n')
         output.insert(INSERT, 'tree                     - show the file system directory as tree' +           '\n')
         output.insert(INSERT,                                                                                 '\n')
-        output.insert(INSERT, 'mkfolder folder_name             - create a folder in the file system' +       '\n')
-        output.insert(INSERT, 'mkfile file_name.ext             - create a file in the file system' +         '\n')
-        output.insert(INSERT, 'dfolder folder_name              - delete a folder in the file system' +       '\n')
-        output.insert(INSERT, 'dfile file_name.ext              - delete a file in the file system' +         '\n')
-        output.insert(INSERT, 'efile file_name.ext "content"    - edit a file in the file system' +           '\n')
+        output.insert(INSERT, 'mkfolder folder_name           - create a folder in the file system' +         '\n')
+        output.insert(INSERT, 'mkfile file_name.ext           - create a file in the file system' +           '\n')
+        output.insert(INSERT, 'dfolder folder_name            - delete a folder in the file system' +         '\n')
+        output.insert(INSERT, 'dfile file_name.ext            - delete a file in the file system' +           '\n')
+        output.insert(INSERT, 'efile file_name.ext "content"  - edit a file in the file system' +             '\n')
+        output.insert(INSERT, 'metafile file_name.ext         - show the metadata, like content or date' +    '\n')
         output.insert(INSERT,                                                                                 '\n')
         output.insert(INSERT, 'dlogs                    - delete system logs' +                               '\n')
         output.insert(INSERT, 'info                     - show the system info' +                             '\n')

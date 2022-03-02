@@ -336,7 +336,7 @@ def Desktop(master):
         height=28,
         borderwidth="0",
         relief="raised",
-        bg="#070E11",
+        bg="#001023",
         image = Clockbar_taskbar_icons
     )
     Clockbar_icons.place(x=755, y=1)
@@ -348,7 +348,7 @@ def Desktop(master):
 
     def clock():
         global Time
-        Time = time.strftime("%H:%M")
+        Time = time.strftime("%I:%M %p")
         Clock.config(text=Time)
         Clock.after(200, clock)
 
@@ -358,8 +358,8 @@ def Desktop(master):
         width = 8,
         height = 2,
         borderwidth = "0",
-        background = "#070E11",
-        foreground = "white",
+        background = "#001023",
+        foreground = "#86A4AE",
         relief = "raised",
         font=("Segoe UI Semibold", 9),
         text = "",
@@ -379,11 +379,11 @@ def Desktop(master):
         height=40,
         borderwidth="0",
         relief="flat",
-        bg="#070E11",
+        bg="#001023",
         image=Battery_taskbar_icon,
         command = Settings_error
     )
-    Battery_status_icon.place(x=24, y=-6)
+    Battery_status_icon.place(x=16, y=-6)
 
 
     # Internet status icon
@@ -406,7 +406,7 @@ def Desktop(master):
         image=Internet_icon,
         command = Print_error
     )
-    Internet_status_icon.place(x=48, y=-6)
+    Internet_status_icon.place(x=38, y=-6)
 
 
     # Sound volume icon
@@ -423,7 +423,7 @@ def Desktop(master):
         image=Volume_icon,
         command = This_PC_error
     )
-    Volume_status_icon.place(x=72, y=-6)
+    Volume_status_icon.place(x=60, y=-6)
 
 
  # ----------------------------------------------------------------- [ Start menu icons ] --------------------------------------------------

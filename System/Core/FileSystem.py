@@ -1,3 +1,4 @@
+import datetime
 import random
 import shelve
 from System.Core.KeysSystem import add_key, get_value
@@ -22,11 +23,25 @@ def install(fs):
     # create root and others
     username = "User"
 
+    # default filesystem
     fs[""] = {
-        "Data": {},
-        "System": {},
-        "Users": {
-            username: {}
+        "bin": {},
+        "etc": {},
+        "home": {
+            username: {
+                "Desktop": {},
+                "Documents": {},
+                "Music": {}
+            }
+        },
+        "opt": {},
+        "tmp": {},
+        "usr": {
+            "bin": {},
+            "lib": {}
+        },
+        "var": {
+            "log": {}
         }
     }
 
@@ -108,7 +123,13 @@ def mkfile(argument):
 
     print_info("Created file " + name_and_extension + " in " + str("/" + "/".join(current_dir) ) )
     d = current_dictionary()
-    d[name_and_extension] = ""
+    d[name_and_extension] = {
+            "Metadata": {
+                "Created": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                "Modified": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            },
+            "Data": ""
+        }
     fs.sync()
 
 
@@ -122,7 +143,14 @@ def edit_file(name_and_extension, content):
 
     print_info("Editing file " + name_and_extension)
     d = current_dictionary()
-    d[name_and_extension] = content
+    d[name_and_extension] = {
+            "Metadata": {
+                "Created": d[name_and_extension]["Metadata"]["Created"],
+                "Modified": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            },
+            "Data": content
+        }
+
     fs.sync()
 
 
@@ -136,7 +164,25 @@ def get_file_content(name_and_extension):
 
     print_info("Getting content of file " + name_and_extension)
     d = current_dictionary()
-    return d[name_and_extension]
+    return d[name_and_extension]["Data"]
+
+
+def get_file_metadata(name_and_extension):
+    global fs
+
+    meta = ""
+
+    # Check if the file exists
+    if name_and_extension not in current_dictionary():
+        print_error("File " + name_and_extension + " does not exist")
+        return
+
+    print_info("Getting metadata of file " + name_and_extension)
+    d = current_dictionary()
+    meta += "File: " + name_and_extension + "\n"
+    meta += "Created: " + d[name_and_extension]["Metadata"]["Created"] + "\n"
+    meta += "Modified: " + d[name_and_extension]["Metadata"]["Modified"] + "\n"
+    return meta
 
 
 def rmdir(name):
@@ -183,18 +229,24 @@ def tree(*args):
         directory = current_dictionary()[args[0]]
         tree += "Contents of directory " + str("/" + "/".join(current_dir) ) + '/' + args[0] + '/:' + "\n"
 
+    for deep_1 in directory:
+        if "." in deep_1:
+            continue
+        tree += "|----" + deep_1 + '\n'
 
-    for i in directory:
-        tree += "|--" + i + '\n'
+        for deep_2 in directory[deep_1]:
+            if "." in deep_2:
+                continue
+            tree += "|    |----" + deep_2 + '\n'
 
-        for j in directory[i]:
-            tree += "|   |--" + j + '\n'
+            for deep_3 in directory[deep_1][deep_2]:
+                if "." in deep_3:
+                    continue
+                tree += "|    |    |----" + deep_3 + '\n'
 
-            for k in directory[i][j]:
-                tree += "|   |   |--" + k + '\n'
-
-                for l in directory[i][j][k]:
-                    tree += "|   |   |   |--" + l + "..." + '\n'
+                for deep_4 in directory[deep_1][deep_2][deep_3]:
+                    if "." in deep_4:
+                        continue
+                    tree += "|    |    |    |----" + deep_4 + "... etc" + '\n'
 
     return tree
-
