@@ -49,20 +49,26 @@ def ls():
 
 def cd(directory):
 
+    # if the directory contains a dot and extension like .txt, cannot cd into it
+    if "." in directory:
+        if directory.split(".")[1] != "":
+            print_warning("Cannot cd into file")
+            return
+
+    global current_dir
+
+    # if the directory is .., go to the parent directory
     if directory == "..":
         if len(current_dir) > 0:
             current_dir.pop()
+        return
 
-    else:
-        # check if the directory exists
-        if directory not in current_dictionary():
-            print_error("Directory " + directory + " does not exist")
-            return
+    # if the directory is a subdirectory, go to the subdirectory
+    if directory in current_dictionary():
+        current_dir.append(directory)
+        return
 
-        else:
-            current_dir.append(directory)
-
-    print_info("Current directory: " + str("/" + "/".join(current_dir) ) )
+    print_error("Directory " + directory + " does not exist")
 
 def mkdir(name):
 
