@@ -1,7 +1,7 @@
 # Python OS
 
 <p>
-  <img align="right" src="https://user-images.githubusercontent.com/63316583/156764802-7e1ffb65-f482-45ef-9c05-f82d9c4b4e23.svg" alt="TheBigEye" />
+  <img align="right" src="https://user-images.githubusercontent.com/63316583/156767604-3dae9cb2-a1af-4c2e-86fd-a003445cba60.svg" alt="TheBigEye" />
 </p>
 
 <!-- <img src="https://user-images.githubusercontent.com/63316583/156764802-7e1ffb65-f482-45ef-9c05-f82d9c4b4e23.svg" width="512" height="360"> UNUSED but usefuul -->
