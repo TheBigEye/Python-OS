@@ -31,7 +31,7 @@ Os.resizable(False, False)  # Window resizing.
 
 if (os.name == "nt"): # Windows
 
-    Os.iconbitmap(Assets_directory + "/Icons/icon.ico")
+    Os.iconbitmap(f'{Assets_directory}/Icons/icon.ico')
 
 Os.configure(background = Black, cursor = XCursor_2)
 

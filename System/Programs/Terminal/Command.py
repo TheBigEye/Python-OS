@@ -101,7 +101,7 @@ def CMD(master, entry, output):
         var_name = command[0]
         var_value = command[1]
         globals()[var_name] = var_value
-        output.insert(INSERT, var_name + " = " + var_value + "\n")
+        output.insert(INSERT, f'{var_name} = {var_value}' + "\n")
         output.see(END)
 
     if command.startswith("var("):
@@ -128,7 +128,7 @@ def CMD(master, entry, output):
         command = command.replace("clear_var(", "")
         command = command.replace(")", "")
         globals()[command] = ""
-        output.insert(INSERT, command + " = " + "\n")
+        output.insert(INSERT, f'{command} = ' + "\n")
         output.see(END)
 
     if command.startswith("clear_var("):
@@ -143,10 +143,10 @@ def CMD(master, entry, output):
         command = command.replace(")", "")
         if eval(command):
             output.insert(INSERT, "True" + "\n")
-            output.see(END)
         else:
             output.insert(INSERT, "False" + "\n")
-            output.see(END)
+
+        output.see(END)
 
     if command.startswith("if("):
         if_command(command)
@@ -174,7 +174,7 @@ def CMD(master, entry, output):
         command = command.split(",")
         repeat_command = command[0]
         repeat_number = command[1]
-        for i in range(int(repeat_number)):
+        for _ in range(int(repeat_number)):
             output.insert(INSERT, repeat_command + "\n")
             output.see(END)
 
@@ -189,7 +189,7 @@ def CMD(master, entry, output):
         command = command.replace("delay(", "")
         command = command.replace(")", "")
         time.sleep(int(command))
-        output.insert(INSERT, "Delay " + command + " seconds" + "\n")
+        output.insert(INSERT, f"Delay {command} seconds" + "\n")
         output.see(END)
 
     if command.startswith("delay("):
@@ -245,7 +245,7 @@ def CMD(master, entry, output):
 
             # if command is not empty, will print the command in Terminal_screen and execute it.
         else:
-            output.insert(INSERT, ">>> " + command + "\n")
+            output.insert(INSERT, f">>> {command}" + "\n")
             output.see(END)
 
             try:
@@ -336,7 +336,7 @@ def CMD(master, entry, output):
 
         mkfile(command)
 
-        output.insert(INSERT, "File " + command + " created " + "\n")
+        output.insert(INSERT, f"File {command} created " + "\n")
         output.see(END)
 
     if command.startswith("mkfile "):
@@ -360,7 +360,7 @@ def CMD(master, entry, output):
 
         rmfile(command)
 
-        output.insert(INSERT, "File " + command + " deleted " + "\n\n")
+        output.insert(INSERT, f"File {command} deleted " + "\n\n")
         output.see(END)
 
     if command.startswith("dfile "):
@@ -394,7 +394,7 @@ def CMD(master, entry, output):
         name = command
 
         output.insert(INSERT, get_file_metadata(name) + "\n")
-        output.insert(INSERT, "Content: " + get_file_content(name) + "\n")
+        output.insert(INSERT, f"Content: {get_file_content(name)}" + "\n")
         output.see(END)
 
     if command.startswith("metafile "):
@@ -482,7 +482,13 @@ def CMD(master, entry, output):
 
         set_foreground(color)
 
-        output.insert(INSERT, "Foreground changed to " + command + ", please restart to see the change", "\n\n")
+        output.insert(
+            INSERT,
+            f"Foreground changed to {command}"
+            + ", please restart to see the change",
+            "\n\n",
+        )
+
         output.see(END)
 
     if command.startswith("foreground"):
@@ -511,7 +517,13 @@ def CMD(master, entry, output):
 
         set_background(color)
 
-        output.insert(INSERT, "Background changed to " + command + ", please restart to see the change", "\n\n")
+        output.insert(
+            INSERT,
+            f"Background changed to {command}"
+            + ", please restart to see the change",
+            "\n\n",
+        )
+
         output.see(END)
 
     if command.startswith("background"):
@@ -526,17 +538,17 @@ def CMD(master, entry, output):
 
         neo += os.getlogin() + "\n"
         neo += "--------\n"
-        neo += "OS: " + platform.system() + " " + platform.release() + "\n"
-        neo += "Kernel: " + platform.version() + "\n"
-        neo += "Uptime: " + str(psutil.boot_time() - psutil.boot_time()) + "\n"
+        neo += f"OS: {platform.system()} {platform.release()}" + "\n"
+        neo += f"Kernel: {platform.version()}" + "\n"
+        neo += f"Uptime: {str(psutil.boot_time() - psutil.boot_time())}" + "\n"
         neo += "Shell: " + "Py-OS" + "\n"
         neo += "Terminal: " + "Iris CLI" + "\n"
-        neo += "CPU: " + str(psutil.cpu_percent()) + "%\n"
-        neo += "Memory: " + str(psutil.virtual_memory().percent) + "%\n\n"
+        neo += f"CPU: {str(psutil.cpu_percent())}" + "%\n"
+        neo += f"Memory: {str(psutil.virtual_memory().percent)}" + "%\n\n"
 
         neo += "--------\n"
-        neo += "Foreground: " + get_foreground() + "\n"
-        neo += "Background: " + get_background() + "\n"
+        neo += f"Foreground: {get_foreground()}" + "\n"
+        neo += f"Background: {get_background()}" + "\n"
 
         output.insert(INSERT, neo + "\n")
         output.see(END)
@@ -554,11 +566,11 @@ def CMD(master, entry, output):
         import platform
 
         output.insert(INSERT, "Info: ─────────────────────────────────────────────────────────────────────" + "\n")
-        output.insert(INSERT, "System:     " + platform.system() +    "\n")
-        output.insert(INSERT, "Release:    " + platform.release() +   "\n")
-        output.insert(INSERT, "Version:    " + platform.version() +   "\n")
-        output.insert(INSERT, "Machine:    " + platform.machine() +   "\n")
-        output.insert(INSERT, "Processor:  " + platform.processor() + "\n")
+        output.insert(INSERT, f"System:     {platform.system()}" + "\n")
+        output.insert(INSERT, f"Release:    {platform.release()}" + "\n")
+        output.insert(INSERT, f"Version:    {platform.version()}" + "\n")
+        output.insert(INSERT, f"Machine:    {platform.machine()}" + "\n")
+        output.insert(INSERT, f"Processor:  {platform.processor()}" + "\n")
         output.insert(INSERT, "───────────────────────────────────────────────────────────────────────────" + "\n\n")
         output.see(END)
 

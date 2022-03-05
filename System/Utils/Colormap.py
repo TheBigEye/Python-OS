@@ -37,7 +37,7 @@ def color_str_rgb(string):
     elif string == "blue": return (0, 0, 255)
     elif string == "yellow": return (255, 255, 0)
     elif string == "cyan": return (0, 255, 255)
-    elif string == "magenta" or string == "fuchsia": return (255, 0, 255)
+    elif string in ["magenta", "fuchsia"]: return (255, 0, 255)
     elif string == "grey": return (128, 128, 128)
     elif string == "darkgrey": return (64, 64, 64)
     elif string == "lightgrey": return (192, 192, 192)
@@ -51,11 +51,10 @@ def color_str_rgb(string):
     elif string == "lightyellow": return (255, 255, 128)
     elif string == "darkcyan": return (0, 128, 128)
     elif string == "lightcyan": return (128, 255, 255)
-    elif string == "darkmagenta" or string == "darkfuchsia": return (128, 0, 128)
-    elif string == "lightmagenta" or string == "lightfuchsia": return (255, 128, 255)
-
+    elif string in ["darkmagenta", "darkfuchsia"]: return (128, 0, 128)
+    elif string in ["lightmagenta", "lightfuchsia"]: return (255, 128, 255)
     else:
-        print_error(string + " color not found")
+        print_error(f'{string} color not found')
         return (0, 0, 0)
 
 
@@ -72,7 +71,7 @@ def color_hex_rgb(hex):
         hex = tuple(int(hex[i:i+2], 16) for i in (0, 2 ,4))
         return hex
     else:
-        print_error(hex + " hex color not found")
+        print_error(f'{hex} hex color not found')
         return (0, 0, 0)
 
 
@@ -85,9 +84,8 @@ def color_rgb_hex(rgb):
 
     if type(rgb) == tuple:
         return "#" + "".join(["%02x" % i for i in rgb])
-    else:
-        print_error(rgb + " rgb color not found")
-        return "#000000"
+    print_error(f'{rgb} rgb color not found')
+    return "#000000"
 
 
 def color_rgb_hsv(rgb):
@@ -119,10 +117,9 @@ def color_rgb_hsv(rgb):
 
         value = max_value
 
-        hsv = (hue, saturation, value)
-        return hsv
+        return hue, saturation, value
     else:
-        print_error(rgb + " rgb color not found")
+        print_error(f'{rgb} rgb color not found')
         return (0, 0, 0)
 
 
@@ -159,5 +156,5 @@ def color_hsv_rgb(hsv):
 
         return rgb
     else:
-        print_error(hsv + " hsv color not found")
+        print_error(f'{hsv} hsv color not found')
         return (0, 0, 0)

@@ -6,7 +6,6 @@ __version__ = '1.2'
 # TODO Add encoders (in addition to decoders) and make Base64.py independent of the Python module
 
 def read_32_sl(File, line):
-
 # Documentation ---------------------------------------------------------------------------------------------------------------
 
     """
@@ -24,18 +23,11 @@ def read_32_sl(File, line):
 
     """
 
-# Decode Base32 ---------------------------------------------------------------------------------------------------------------
-
-    File_get_data = open(File, "r")
-    File_read_data = File_get_data.readlines()[line]
-    File_bytes = File_read_data.encode("ascii")
-    Data_bytes = base64.b32decode(File_bytes)
-    Data = Data_bytes.decode("ascii")
-
-    # close for open
-    File_get_data.close()
-
-
+    with open(File, "r") as File_get_data:
+        File_read_data = File_get_data.readlines()[line]
+        File_bytes = File_read_data.encode("ascii")
+        Data_bytes = base64.b32decode(File_bytes)
+        Data = Data_bytes.decode("ascii")
 
     print(File)
     print(Data)
@@ -43,7 +35,6 @@ def read_32_sl(File, line):
 
 
 def read_64_sl(File, line):
-
 # Documentation ---------------------------------------------------------------------------------------------------------------
 
     """
@@ -61,16 +52,11 @@ def read_64_sl(File, line):
 
     """
 
-# Decode Base64 ---------------------------------------------------------------------------------------------------------------
-
-    File_get_data = open(File, "r")
-    File_read_data = File_get_data.readlines()[line]
-    File_bytes = File_read_data.encode("ascii")
-    Data_bytes = base64.b64decode(File_bytes)
-    Data = Data_bytes.decode("ascii")
-
-    # close for open
-    File_get_data.close()
+    with open(File, "r") as File_get_data:
+        File_read_data = File_get_data.readlines()[line]
+        File_bytes = File_read_data.encode("ascii")
+        Data_bytes = base64.b64decode(File_bytes)
+        Data = Data_bytes.decode("ascii")
 
     print(File)
     print(Data)

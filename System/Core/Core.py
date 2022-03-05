@@ -57,7 +57,7 @@ def routines():
     check_os()
 
     print_log("----------- Starting system execution -----------")
-    print_log("Started log at: " + str(datetime.datetime.now()))
+    print_log(f"Started log at: {str(datetime.datetime.now())}")
 
     # In what os is running the system?
     if in_linux: print_log("Running on Linux")

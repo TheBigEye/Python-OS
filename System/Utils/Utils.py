@@ -24,8 +24,8 @@ def Logger(Log_Message):
     current_time = str(datetime.datetime.now())
 
     # Open the file and write the message.
-    with open("Logs/Log_" + current_date + ".log", "a") as Log_File:
-        Log_File.write(current_time + " | " + Log_Message + "\n")
+    with open(f"Logs/Log_{current_date}.log", "a") as Log_File:
+        Log_File.write(f'{current_time} | {Log_Message}' + "\n")
 
 
 # Print ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -57,37 +57,34 @@ def print_log(message):
 
 
 def print_error(message):
-    print(f"{Style.RED_BLOCK}[ERROR]{Style.WHITE} " + message)
-    Logger("[ERROR] " + message)
+    print(f"{Style.RED_BLOCK}[ERROR]{Style.WHITE} {message}")
+    Logger(f"[ERROR] {message}")
 
 
 def print_warning(message):
-    print(f"{Style.YELLOW_BLOCK}[WARNING]{Style.WHITE} " + message)
-    Logger("[WARNING] " + message)
+    print(f"{Style.YELLOW_BLOCK}[WARNING]{Style.WHITE} {message}")
+    Logger(f"[WARNING] {message}")
 
 
 def print_info(message):
-    print(f"{Style.BLUE_BLOCK}[INFO]{Style.WHITE} " + message)
-    Logger("[INFO] " + message)
+    print(f"{Style.BLUE_BLOCK}[INFO]{Style.WHITE} {message}")
+    Logger(f"[INFO] {message}")
 
 
 # Time --------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 # This function returns the time as a String.
 def Get_Current_Time():
-    current_time = str(datetime.datetime.now())
-    return current_time
+    return str(datetime.datetime.now())
 
 # This function returns the date in a string.
 def Get_Current_Date():
-    current_date = str(datetime.date.today())
-    return current_date
+    return str(datetime.date.today())
 
 
 # This function returns the time and date in a string.
 def Get_Current_Date_Time():
-    current_date_time = str(datetime.datetime.now())
-    return current_date_time
+    return str(datetime.datetime.now())
 
 
 # Misc --------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -130,7 +127,7 @@ def Asset(file_name_and_extension):
             if file.endswith(file_name_and_extension):
                 return PhotoImage(file = os.path.join(root, file))
 
-    print_warning("Asset not found: " + file_name_and_extension)
+    print_warning(f"Asset not found: {file_name_and_extension}")
     return None
 
 # my masterpiece!!
@@ -180,9 +177,10 @@ def Asset_colored(file_name_and_extension, hue_value):
                 image_data = img.getdata()
 
                 # change image hue value
-                newData = []
-                for item in image_data:
-                    newData.append(tuple(int(item[i] * hue_value) for i in range(3)) + (255,))
+                newData = [
+                    tuple(int(item[i] * hue_value) for i in range(3)) + (255,)
+                    for item in image_data
+                ]
 
                 img.putdata(newData)
                 return ImageTk.PhotoImage(img)
