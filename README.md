@@ -44,7 +44,7 @@ Python OS is an operating system simulator written in Python, with a graphical i
 It is necessary to have Python 3.10 and have the following modules installed 
 
 - ```Pillow```       Necessary so that the program can read the images and work.
-- ```Psutils```      Necessary for the neofetch command and some functions to work.
+- ```Psutil```      Necessary for the neofetch command and some functions to work.
 - ```Tkinterweb```   Necessary for the browser to work.
 
 NOTE: If you're on a Linux distribution, you need a desktop or window manager for tkinter to work.
