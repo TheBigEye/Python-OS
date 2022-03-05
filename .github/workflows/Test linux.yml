@@ -28,9 +28,9 @@ jobs:
     - name: install modules
       run: python -m pip install wheel pillow tkinterweb psutil
       
-    - run: sudo apt-get update && sudo apt-get install -y xorg-dev mesa-utils xvfb libgl1 freeglut3-dev libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev libxext-dev dbus-x11
-    - run: DISPLAY=localhost:0.0 xvfb-run --auto-servernum
+    - name: install xorg
+      run: sudo apt-get update && sudo apt-get install -y xorg-dev mesa-utils xvfb libgl1 freeglut3-dev libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev libxext-dev dbus-x11
       
-    - name: execute and get logs
-      run: python OS.py
+    - name: run Python OS
+      run: xvfb-run --auto-servernum --server-num=1 python OS.py
 
