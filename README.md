@@ -41,15 +41,22 @@ Python OS is an operating system simulator written in Python, with a graphical i
 
 ## Installation
 
-It is necessary to have Python 3.10 and have the following modules installed 
+Download the code and unzip it, it is necessary to have Python 3.10 and have the following modules installed 
 
 - ```Pillow```       Necessary so that the program can read the images and work.
 - ```Psutil```      Necessary for the neofetch command and some functions to work.
 - ```Tkinterweb```   Necessary for the browser to work.
 
-NOTE: If you're on a Linux distribution, you need a desktop or window manager for tkinter to work.
+For a quick installation use the following command inside the project folder:
 
-Download the code, unzip it and double click on OS.py file to run the project or just in the command line you write 
+```sh
+pip install -r requirements.txt
+```
+
+And double click on OS.py file to run the project or just in the command line you write 
 ```sh
 python OS.py
 ```
+**NOTE**: If you're on a on a minimal Linux installation, you need a desktop or window manager for tkinter to work, like xorg, xfce, etc.
+
+
