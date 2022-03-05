@@ -32,8 +32,9 @@ Os.resizable(False, False)  # Window resizing.
 if (os.name == "nt"): # Windows
 
     Os.iconbitmap(Assets_directory + "/Icons/icon.ico")
+    Os.configure(cursor = XCursor_2)
 
-Os.configure(background = Black, cursor = XCursor_2)
+Os.configure(background = Black)
 
 # Warnings.
 def warnings():
