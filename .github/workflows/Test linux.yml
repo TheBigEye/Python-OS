@@ -26,12 +26,15 @@ jobs:
         cache: pip
         
     - name: install modules
-      run: python -m pip install wheel pillow tkinterweb psutil
+      run: python -m pip install wheel pillow tkinterweb psutil python3-tk tk-dev
       
     - name: install xorg
       run: sudo apt-get update && sudo apt-get install -y xorg-dev mesa-utils xvfb libgl1 freeglut3-dev libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev libxext-dev dbus-x11
       
-    - run: Xvfb :99 -screen 0 640x480x24 2>/tmp/Xvfb.log &
+    - run: disp=:99
+    - run: screen=0
+    - run: geom=640x480x24
+    - run: exec Xvfb $disp -screen $screen $geom 2>/tmp/Xvfb.log &
     - run: export DISPLAY=:99
     - run: python OS.py
 
