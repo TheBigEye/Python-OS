@@ -2,9 +2,8 @@ import datetime
 import platform
 
 from System.Core.FileSystem import fs_routines
-from System.Core.KeysSystem import rg_routines
 from System.Core.TaskSystem import ts_routines
-from System.Utils.Utils import print_error, print_log, print_warning
+from System.Utils.Utils import print_error, print_info, print_log, print_warning
 
 Kernel_lvl = 8 # Main kernel variable, 8 by default
 
@@ -65,9 +64,6 @@ def routines():
     elif in_windows: print_log("Running on Windows")
     elif in_mac: print_log("Running on Mac")
     else: print_warning("Unknown OS, starting anyway...")
-
-    # Load the registry.
-    rg_routines()
 
     # Load the process system
     ts_routines()

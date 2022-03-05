@@ -1,7 +1,6 @@
 import time
 from tkinter import Button, Label
 
-from System.Core.KeysSystem import add_key, get_value
 from System.Programs.Terminal.Terminal import Terminal
 from System.Programs.Welcome.Welcome import Welcome_window
 from System.UI.Browser import Display_Browser
@@ -35,15 +34,7 @@ def Desktop(master):
 
     master.configure(background = "#000000")
 
-    real_time_wallpaper = get_value("PYTHON-OS", "System", "Desktop", "Real-time-wallpaper")
-
-    if real_time_wallpaper == "True":
-        if time.localtime().tm_hour >= 18 or time.localtime().tm_hour < 6:
-            Wallpaper = Asset("Night_dusk.png")
-        else:
-            Wallpaper = Asset("Day_dusk.png")
-    else:
-        Wallpaper = Asset("BlissHill.png")
+    Wallpaper = Asset("Night_dusk.png")
 
     Desktop_wallpaper = Label(master, image= Wallpaper, borderwidth=0)
     Desktop_wallpaper.place(x=0, y=0) # set the position of the wallpaper to the center of the screen
@@ -349,19 +340,26 @@ def Desktop(master):
     def clock():
         global Time
         Time = time.strftime("%I:%M %p")
-        Clock.config(text=Time)
+        Date = time.strftime("%d/%m/%Y")
+
+        ClockStr = ""
+        ClockStr += Time
+        ClockStr += "\n"
+        ClockStr += Date
+
+        Clock.config(text=ClockStr)
         Clock.after(200, clock)
 
 
     Clock = Label(
         Clockbar_icons,
-        width = 8,
+        width = 12,
         height = 2,
         borderwidth = "0",
         background = "#001023",
-        foreground = "#86A4AE",
+        foreground = "#F3F3F3",
         relief = "raised",
-        font=("Segoe UI Semibold", 9),
+        font=("Segoe UI Semibold", 7),
         text = "",
     )
 

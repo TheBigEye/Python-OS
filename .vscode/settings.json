@@ -17,5 +17,5 @@
     // Hide __pycache__ folders
     "files.exclude": {
         "**/__pycache__": true
-   }
+    }
 }

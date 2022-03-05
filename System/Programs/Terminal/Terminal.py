@@ -1,10 +1,9 @@
 from tkinter import Button, Entry, Frame, Label, Text
 from tkinter.constants import INSERT
 
-from System.Core.KeysSystem import add_key, get_value, exists_key
 from System.Programs.Terminal.Command import CMD
 from System.UI.Attributes.Draggable import drag_n_drop
-from System.Utils.Utils import Asset, Asset_color, print_warning
+from System.Utils.Utils import Asset, Asset_color, json_get, json_set, print_warning
 
 __author__ = "TheBigEye"
 __version__ = "1.8"
@@ -14,43 +13,28 @@ def set_foreground(color):
 
     """Set the foreground color of the terminal"""
 
-    # save the color in the registry
-    add_key("PYTHON-OS", "Software", "Terminal", "Foreground", color, "str")
+    # Save the json in Assets/GUI/Desktop/Terminal/Data/Terminal.json
+    json_set("Terminal.json", "Foreground", color)
 
 
 def get_foreground():
 
     """Get the foreground color of the terminal"""
 
-    if exists_key("PYTHON-OS", "Software", "Terminal", "Foreground"):
-
-        # get the color from the registry
-        return get_value("PYTHON-OS", "Software", "Terminal", "Foreground")
-
-    else:
-        # set the default color
-        return "white"
+    return json_get("Terminal.json", "Foreground")
 
 
 def set_background(color):
 
     """Set the background color of the terminal"""
 
-    # save the color in the registry
-    add_key("PYTHON-OS", "Software", "Terminal", "Background", color, "str")
+    # Save the json in Assets/GUI/Desktop/Terminal/Data/Terminal.json
+    json_set("Terminal.json", "Background", color)
 
 
 def get_background():
 
-    """Get the background color of the terminal"""
-    if exists_key("PYTHON-OS", "Software", "Terminal", "Background"):
-
-        # get the color from the registry
-        return get_value("PYTHON-OS", "Software", "Terminal", "Background")
-
-    else:
-        # set the default color
-        return "black"
+    return json_get("Terminal.json", "Background")
 
 
 class Terminal(Frame):

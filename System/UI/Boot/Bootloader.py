@@ -21,11 +21,11 @@ def Boot_loader(master):
     Boot_Logo.place(x= 408, y= 160)
 
     # Animation...
-    frames_count = 60 # Frames per second
+    frames_count = 95 # Frames per second
 
     # Make a list of frames
     frames = [
-        PhotoImage(file= Assets_directory + "/GUI/Bootloader/Loading.gif", format="gif -index %i" % (i))
+        PhotoImage(file= Assets_directory + "/GUI/Bootloader/Loading 3.gif", format="gif -index %i" % (i))
         for i in range(frames_count)
     ]
 
@@ -39,7 +39,7 @@ def Boot_loader(master):
             ind = 0
 
         loading.configure(image=frame)
-        master.after(50, update, ind)
+        master.after(8, update, ind)
 
     loading = Label(master, borderwidth=0.1)
     loading.place(x= 480, y= 400)

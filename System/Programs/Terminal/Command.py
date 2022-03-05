@@ -269,11 +269,7 @@ def CMD(master, entry, output):
 
         command = command.replace("cd ", "")
 
-        cd(command)
-
-        print(command)
-        #output.insert(INSERT, "Changed directory to " + command + "\n")
-        output.insert(INSERT, "\n")
+        output.insert(INSERT, cd(command) + "\n")
         output.see(END)
 
     if command.startswith("cd "):
@@ -294,9 +290,7 @@ def CMD(master, entry, output):
 
         command = command.replace("mkfolder ", "")
 
-        mkdir(command)
-
-        output.insert(INSERT, "Folder " + command + " created " + "\n")
+        output.insert(INSERT, mkdir(command) + "\n")
         output.see(END)
 
     if command.startswith("mkfolder "):
@@ -318,9 +312,7 @@ def CMD(master, entry, output):
 
         command = command.replace("dfolder ", "")
 
-        rmdir(command)
-
-        output.insert(INSERT, "Folder " + command + " deleted " + "\n")
+        output.insert(INSERT, rmdir(command) + "\n")
         output.see(END)
 
     if command.startswith("dfolder "):
@@ -386,9 +378,7 @@ def CMD(master, entry, output):
         file_name = command[0]
         file_content = command[1]
 
-        edit_file(file_name, "\"" + file_content)
-
-        output.insert(INSERT, "File " + file_name + " edited " + "\n\n")
+        output.insert(INSERT, edit_file(file_name, "\"" + file_content) + "\n")
         output.see(END)
 
     if command.startswith("efile "):
@@ -447,19 +437,6 @@ def CMD(master, entry, output):
 
     if command.startswith("ps"):
         master.after(512, get_processes_command())
-
-
-    def registry_tree_command():
-        from System.Core.KeysSystem import reg_tree_view
-
-        output.insert(INSERT, "\n")
-        output.insert(INSERT, reg_tree_view())
-        output.insert(INSERT, "\n")
-        output.see(END)
-
-    if command.startswith("reg"):
-        master.after(1000, registry_tree_command())
-
 
     def tree_command(command):
         from System.Core.FileSystem import tree
@@ -543,8 +520,7 @@ def CMD(master, entry, output):
 
     def neofetch_command():
 
-        from System.Programs.Terminal.Terminal import (get_background,
-                                                       get_foreground)
+        from System.Programs.Terminal.Terminal import (get_background, get_foreground)
 
         neo = ""
 

@@ -197,25 +197,24 @@ def internet_on():
     except:
         return False
 
-def json_get(json_file_path, key):
-    # get the key value from the json file as UTF8
-    with open(json_file_path, encoding="utf8") as json_file:
-        data = json.load(json_file)
-        return data[key]
+def json_get(json_file, key):
+    for root, dirs, files in os.walk(Assets_directory):
+        for file in files:
+
+            if file.endswith(json_file):
+                with open(os.path.join(root, file), 'r') as f:
+                    data = json.load(f)
+                    return data[key]
+
+def json_set(json_file, key, value):
+    for root, dirs, files in os.walk(Assets_directory):
+        for file in files:
+
+            if file.endswith(json_file):
+                with open(os.path.join(root, file), 'r') as f:
+                    data = json.load(f)
+                    data[key] = value
+                    with open(os.path.join(root, file), 'w') as f:
+                        json.dump(data, f, indent=4)
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

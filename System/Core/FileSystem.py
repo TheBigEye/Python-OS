@@ -1,7 +1,8 @@
 import datetime
+import json
+import os
 import random
 import shelve
-from System.Core.KeysSystem import add_key, get_value
 
 from System.Utils.Utils import print_error, print_info, print_warning
 
@@ -10,14 +11,31 @@ current_dir = []
 
 def fs_routines():
 
-    # Check the registry if the filesystem is installed
-    if get_value("PYTHON-OS", "System", "FS", "Created") == "False":
-        install(fs)
-        add_key("PYTHON-OS", "System", "FS", "Created", "True", "str")
-        print_info("File system mounted")
+    # laod boot data
+    with open('Disk/Boot.json', 'r') as f:
+        boot_data = json.load(f)
 
-    print_info("File System loaded")
+    def check_boot():
+        if boot_data["FS_mounted"] == "False":
+            print_error("File system is not mounted")
 
+            # delete the .dat, bak and dir files in  Disk/FS/
+            if os.path.exists("Disk/FS/Filesystem.dat"): os.remove("Disk/FS/Filesystem.dat")
+            if os.path.exists("Disk/FS/Filesystem.bak"): os.remove("Disk/FS/Filesystem.bak")
+            if os.path.exists("Disk/FS/Filesystem.dir"): os.remove("Disk/FS/Filesystem.dir")
+
+            fs = shelve.open('Disk/FS/Filesystem', writeback=True)
+            install(fs)
+
+            boot_data["FS_mounted"] = "True"
+
+            with open("Disk/Boot.json", "w") as f:
+                json.dump(boot_data, f, indent=4)
+
+            print_info("File system installed")
+
+    check_boot()
+    print_info("File system ready!")
 
 def install(fs):
     # create root and others
@@ -25,25 +43,25 @@ def install(fs):
 
     # default filesystem
     fs[""] = {
-        "bin": {},
-        "etc": {},
-        "home": {
+        "Home": {
+            "Programs": {},
             username: {
                 "Desktop": {},
                 "Documents": {},
                 "Music": {}
             }
         },
-        "opt": {},
-        "tmp": {},
-        "usr": {
-            "bin": {},
-            "lib": {}
-        },
-        "var": {
-            "log": {}
+        "System": {
+            "Core": {
+                "Temp": {},
+            },
+            "Boot": {},
+            "Lib": {}
         }
     }
+
+    # sync the filesystem
+    fs.sync()
 
 def current_dictionary():
     """Return a dictionary representing the files in the current directory"""
@@ -57,8 +75,9 @@ def ls():
 
     list_dir += "Contents of directory " + str("/" + "/".join(current_dir) ) + '/:' + "\n"
 
-    for i in current_dictionary():
-        list_dir += "   " + i + '\n'
+    # show orderly alphabetically
+    for key in sorted(current_dictionary()):
+        list_dir += "   " + key + "\n"
 
     return list_dir
 
@@ -67,8 +86,7 @@ def cd(directory):
     # if the directory contains a dot and extension like .txt, cannot cd into it
     if "." in directory:
         if directory.split(".")[1] != "":
-            print_warning("Cannot cd into file")
-            return
+            return str("Cannot cd into file")
 
     global current_dir
 
@@ -76,14 +94,14 @@ def cd(directory):
     if directory == "..":
         if len(current_dir) > 0:
             current_dir.pop()
-        return
+        return str("Directory changed to " + str("/" + "/".join(current_dir) ) )
 
     # if the directory is a subdirectory, go to the subdirectory
     if directory in current_dictionary():
         current_dir.append(directory)
-        return
+        return str("Directory changed to " + str("/" + "/".join(current_dir)))
 
-    print_error("Directory " + directory + " does not exist")
+    return str("Directory " + directory + " does not exist")
 
 def mkdir(name):
 
@@ -91,13 +109,13 @@ def mkdir(name):
 
     # Check if the directory already exists in the current directory
     if name in current_dictionary():
-        print_error("Directory " + name +" already exists in " + str("/" + "/".join(current_dir) ) )
-        return
+        return str("Directory " + name +" already exists in " + str("/" + "/".join(current_dir) ) )
 
-    print_info("Creating directory: " + name)
     # create an empty directory there and sync back to shelve dictionary!
     d = current_dictionary()[name] = {}
     fs.sync()
+
+    return str("Directory " + name + " created in " + str("/" + "/".join(current_dir) ) )
 
 def mkfile(argument):
     global fs
@@ -125,6 +143,7 @@ def mkfile(argument):
     d = current_dictionary()
     d[name_and_extension] = {
             "Metadata": {
+                "Extension": extension,
                 "Created": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
                 "Modified": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             },
@@ -138,13 +157,12 @@ def edit_file(name_and_extension, content):
 
     # Check if the file exists
     if name_and_extension not in current_dictionary():
-        print_error("File " + name_and_extension + " does not exist")
-        return
+        return str("File " + name_and_extension + " does not exist")
 
-    print_info("Editing file " + name_and_extension)
     d = current_dictionary()
     d[name_and_extension] = {
             "Metadata": {
+                "Extension": d[name_and_extension]["Metadata"]["Extension"],
                 "Created": d[name_and_extension]["Metadata"]["Created"],
                 "Modified": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             },
@@ -152,6 +170,8 @@ def edit_file(name_and_extension, content):
         }
 
     fs.sync()
+
+    return str("File " + name_and_extension + " edited")
 
 
 def get_file_content(name_and_extension):
@@ -190,13 +210,13 @@ def rmdir(name):
 
     # Check if the directory exists
     if name not in current_dictionary():
-        print_error("Directory " + name + " does not exist")
-        return
+        return str("Directory " + name + " does not exist")
 
-    print_info("Deleting directory " + name)
     d = current_dictionary()
     del d[name]
     fs.sync()
+
+    return str("Directory " + name + " deleted")
 
 
 def rmfile(name_and_extension):
@@ -229,22 +249,22 @@ def tree(*args):
         directory = current_dictionary()[args[0]]
         tree += "Contents of directory " + str("/" + "/".join(current_dir) ) + '/' + args[0] + '/:' + "\n"
 
-    for deep_1 in directory:
+    for deep_1 in sorted(directory):
         if "." in deep_1:
             continue
         tree += "|----" + deep_1 + '\n'
 
-        for deep_2 in directory[deep_1]:
+        for deep_2 in sorted(directory[deep_1]):
             if "." in deep_2:
                 continue
             tree += "|    |----" + deep_2 + '\n'
 
-            for deep_3 in directory[deep_1][deep_2]:
+            for deep_3 in sorted(directory[deep_1][deep_2]):
                 if "." in deep_3:
                     continue
                 tree += "|    |    |----" + deep_3 + '\n'
 
-                for deep_4 in directory[deep_1][deep_2][deep_3]:
+                for deep_4 in sorted(directory[deep_1][deep_2][deep_3]):
                     if "." in deep_4:
                         continue
                     tree += "|    |    |    |----" + deep_4 + "... etc" + '\n'
