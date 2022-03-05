@@ -9,9 +9,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        language: [ 'python' ]
+        language: ['python']
         python-version: ["3.10"]
-        architecture: ["x86", "x64"]
+        architecture: ["x64"]
 
     steps:
     - name: Checkout repository
@@ -27,6 +27,9 @@ jobs:
         
     - name: install modules
       run: python -m pip install wheel pillow tkinterweb psutil
+      
+    - name: display
+      run: export DISPLAY=:0.0
       
     - name: execute and get logs
       run: python OS.py
