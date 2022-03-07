@@ -1,7 +1,11 @@
 
 # Drag and drop functions
 
-def on_drag_start(event):
+def drag_start(event):
+
+    """
+    This function is invoked when the user presses the left mouse button.
+    """
 
     from System.Utils.Vars import Hand_2
 
@@ -16,7 +20,11 @@ def on_drag_start(event):
     widget['cursor'] = Hand_2
 
 
-def on_drag_finish(event):
+def drag_finish(event):
+
+    """
+    This function is invoked when the user releases the left mouse button.
+    """
 
     global widget
     widget.lift()
@@ -27,7 +35,11 @@ def on_drag_finish(event):
     widget['cursor'] = ""
 
 
-def on_drag_motion(event):
+def drag_motion(event):
+
+    """
+    This function is invoked when the user moves the mouse.
+    """
 
     global widget, x, y
     widget.lift()
@@ -39,22 +51,34 @@ def on_drag_motion(event):
 
 def make_draggable(widget):
 
-    global on_drag_start, on_drag_motion, on_drag_finish
+    """
+    This function is used to make a widget draggable.
+    """
 
-    widget.bind("<Button-1>", on_drag_start)
-    widget.bind("<ButtonRelease-1>", on_drag_finish)
-    widget.bind("<B1-Motion>", on_drag_motion)
+    global drag_start, drag_motion, drag_finish
+
+    widget.bind("<Button-1>", drag_start)
+    widget.bind("<ButtonRelease-1>", drag_finish)
+    widget.bind("<B1-Motion>", drag_motion)
 
 
 # Drag n drop function
 def drag_n_drop(widget):
 
+    """
+    This function is used to make a widget draggable.
+    """
+
     # can drag an label with text and image without blinking bug
-    widget.bind("<ButtonPress-1>", lambda event: on_drag_start(event))
-    widget.bind("<ButtonRelease-1>", lambda event: on_drag_finish(event))
-    widget.bind("<B1-Motion>", lambda event: on_drag_motion(event))
+    widget.bind("<ButtonPress-1>", lambda event: drag_start(event))
+    widget.bind("<ButtonRelease-1>", lambda event: drag_finish(event))
+    widget.bind("<B1-Motion>", lambda event: drag_motion(event))
 
 def make_draggable_button(Button):
+
+    """
+    This function is used to make a button draggable.
+    """
 
     def on_drag_start(event):
 

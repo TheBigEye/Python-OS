@@ -1,9 +1,10 @@
 import datetime
 import platform
+import sys
 
 from System.Core.FileSystem import fs_routines
 from System.Core.TaskSystem import ts_routines
-from System.Utils.Utils import print_error, print_info, print_log, print_warning
+from System.Utils.Utils import print_error, print_log, print_warning
 
 Kernel_lvl = 8 # Main kernel variable, 8 by default
 
@@ -38,11 +39,15 @@ match Kernel_lvl:
     case 8: isBoot = True
     case _:
         print_error("Invalid Kernel_lvl value, must be 0-8, STOPPING...")
-        exit()
+        sys.exit()
 
 
 # Check base system (is running on linux, windows or mac)
 def check_os():
+
+    """
+    This function is used to check if the system is running on Linux, Windows or Mac.
+    """
 
     global in_linux, in_windows, in_mac
 
@@ -53,6 +58,10 @@ def check_os():
 
 # Routines, are the first tasks that are executed in the first seconds of system startup
 def routines():
+
+    """
+    This function is used to execute the first tasks that are executed in the first seconds of system startup.
+    """
 
     check_os()
 
@@ -73,6 +82,11 @@ def routines():
 
 
 def delete_logs():
+
+    """
+    This function is used to delete the logs.
+    """
+
     # Delete the files inside the Logs folder using the os module
     import os
 

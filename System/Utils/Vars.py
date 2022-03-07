@@ -48,14 +48,3 @@ elif platform.system() == "Linux":
         Hand= ""
         Hand_2 = ""
         Loading= ""
-
-
-
-
-
-
-
-
-
-
-

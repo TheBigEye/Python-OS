@@ -6,15 +6,14 @@ import urllib.request
 from tkinter import PhotoImage
 
 from PIL import Image, ImageTk
-from System.Utils.Colormap import (color_hex_rgb, color_str_rgb)
+from System.Utils.Colormap import color_hex_rgb, color_str_rgb
 from System.Utils.Vars import Assets_directory, Loading, XCursor_2
 
-# Loggers ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# -------------------------------------------[ Logger ]------------------------------------------- #
 
-# A Logger, this will be used to log all the errors and information in a file in the Logs folder.
 def Logger(Log_Message):
 
-    # If the file does not exist, it creates it in the path where this project is, inside the Logs folder.
+    # Make the logs folder.
     if not os.path.exists("Logs"):
         os.makedirs("Logs")
 
@@ -27,8 +26,6 @@ def Logger(Log_Message):
     with open("Logs/Log_" + current_date + ".log", "a") as Log_File:
         Log_File.write(current_time + " | " + Log_Message + "\n")
 
-
-# Print ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 class Style:
     FAIL = '\033[91m'
@@ -51,49 +48,79 @@ class Style:
 
 def print_log(message):
 
-    # example: [LOG][module_name][line_number] message.
+    """
+    This function will print a log message in the console.
+    """
+
     print(f"{Style.GREEN_BLOCK}[LOG]{Style.WHITE} [{inspect.stack()[1][3]}] {Style.UNDERLINE}[ln: {inspect.stack()[1][2]}]{Style.WHITE} " + message)
     Logger("[LOG] [{}] [ln: {}] {}".format(inspect.stack()[1][3], inspect.stack()[1][2], message))
 
 
 def print_error(message):
+
+    """
+    This function will print an error message in the console.
+    """
+
     print(f"{Style.RED_BLOCK}[ERROR]{Style.WHITE} " + message)
     Logger("[ERROR] " + message)
 
 
 def print_warning(message):
+
+    """
+    This function will print a warning message in the console.
+    """
+
     print(f"{Style.YELLOW_BLOCK}[WARNING]{Style.WHITE} " + message)
     Logger("[WARNING] " + message)
 
 
 def print_info(message):
+
+    """
+    This function will print an info message in the console.
+    """
+
     print(f"{Style.BLUE_BLOCK}[INFO]{Style.WHITE} " + message)
     Logger("[INFO] " + message)
 
 
-# Time --------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# -------------------------------------------[ Time ]------------------------------------------- #
 
-# This function returns the time as a String.
+
 def Get_Current_Time():
-    current_time = str(datetime.datetime.now())
-    return current_time
 
-# This function returns the date in a string.
+    """
+    Return the current time in a string.
+    """
+
+    return str(datetime.datetime.now())
+
 def Get_Current_Date():
-    current_date = str(datetime.date.today())
-    return current_date
 
+    """
+    Return the current date in a string.
+    """
 
-# This function returns the time and date in a string.
+    return str(datetime.date.today())
+
 def Get_Current_Date_Time():
-    current_date_time = str(datetime.datetime.now())
-    return current_date_time
+
+    """
+    Return the current date and time in a string.
+    """
+
+    return str(datetime.datetime.now())
 
 
-# Misc --------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# -------------------------------------------[ Misc ]------------------------------------------- #
 
-# This function will execute a function with a loading time.
 def Execute(master, Loading_time: float, Function, *args):
+
+    """
+    This function will execute a function with a loading time.
+    """
 
     from System.Core.Core import in_windows
 
@@ -121,8 +148,11 @@ def Execute(master, Loading_time: float, Function, *args):
     master.after(1000, Normal_cursor)
 
 
-# This function will return the image file from the file name inside Assets folder.
 def Asset(file_name_and_extension):
+
+    """
+    This function will return the image file from the file name inside Assets folder
+    """
 
     for root, dirs, files in os.walk(Assets_directory):
         for file in files:
@@ -217,4 +247,4 @@ def json_set(json_file, key, value):
                     with open(os.path.join(root, file), 'w') as f:
                         json.dump(data, f, indent=4)
 
-# --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# -------------------------------------------[ End ]------------------------------------------- #

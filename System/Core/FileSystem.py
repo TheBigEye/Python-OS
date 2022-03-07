@@ -71,6 +71,11 @@ def current_dictionary():
     return d
 
 def ls():
+
+    """
+    List the files in the current directory
+    """
+
     list_dir = ""
 
     list_dir += "Contents of directory " + str("/" + "/".join(current_dir) ) + '/:' + "\n"
@@ -83,10 +88,13 @@ def ls():
 
 def cd(directory):
 
+    """
+    Change the current directory
+    """
+
     # if the directory contains a dot and extension like .txt, cannot cd into it
-    if "." in directory:
-        if directory.split(".")[1] != "":
-            return str("Cannot cd into file")
+    if "." in directory and directory.split(".")[1] != "":
+        return str("Cannot cd into file")
 
     global current_dir
 
@@ -105,6 +113,10 @@ def cd(directory):
 
 def mkdir(name):
 
+    """
+    Create a directory
+    """
+
     global fs
 
     # Check if the directory already exists in the current directory
@@ -118,6 +130,11 @@ def mkdir(name):
     return str("Directory " + name + " created in " + str("/" + "/".join(current_dir) ) )
 
 def mkfile(argument):
+
+    """
+    Create a file in the current directory
+    """
+
     global fs
 
     # Get the name and extension
@@ -130,8 +147,8 @@ def mkfile(argument):
     if name_and_extension in current_dictionary():
         print_warning("File " + name + "." + extension + " already exists, overwriting")
 
-        # add a random number to the name
-        name = name + "-" + str(random.randint(0, 512) + random.randint(0, 512)) # imposible to have a file with the same name :)
+        # add a random number to the name, imposible to have a file with the same name :)
+        name = name + "-" + str(random.randint(0, 512) + random.randint(0, 512))
         name_and_extension = name + "." + extension
 
         # create the file
@@ -139,7 +156,7 @@ def mkfile(argument):
         directory[name_and_extension] = ""
         return
 
-    print_info("Created file " + name_and_extension + " in " + str("/" + "/".join(current_dir) ) )
+    print_info("Created file " + name_and_extension + " in " + str("/" + "/".join(current_dir)))
     d = current_dictionary()
     d[name_and_extension] = {
             "Metadata": {
@@ -153,6 +170,11 @@ def mkfile(argument):
 
 
 def edit_file(name_and_extension, content):
+
+    """
+    Edit the content of the file
+    """
+
     global fs
 
     # Check if the file exists
@@ -175,6 +197,11 @@ def edit_file(name_and_extension, content):
 
 
 def get_file_content(name_and_extension):
+
+    """
+    Return the content of the file
+    """
+
     global fs
 
     # Check if the file exists
@@ -188,6 +215,11 @@ def get_file_content(name_and_extension):
 
 
 def get_file_metadata(name_and_extension):
+
+    """
+    Return a dictionary with the metadata of the file
+    """
+
     global fs
 
     meta = ""
@@ -206,6 +238,11 @@ def get_file_metadata(name_and_extension):
 
 
 def rmdir(name):
+
+    """
+    Remove a directory
+    """
+
     global fs
 
     # Check if the directory exists
@@ -220,6 +257,11 @@ def rmdir(name):
 
 
 def rmfile(name_and_extension):
+
+    """
+    Delete a file from the current directory
+    """
+
     global fs
 
     # Check if the file exists
@@ -234,6 +276,11 @@ def rmfile(name_and_extension):
 
 
 def tree(*args):
+
+    """
+    Prints the tree of the current directory
+    """
+
     global fs
 
     tree = ""
@@ -242,12 +289,12 @@ def tree(*args):
     if args[0] == "$null":
 
         directory = current_dictionary()
-        tree += "Contents of directory " + str("/" + "/".join(current_dir) ) + '/:' + "\n"
+        tree += "Contents of " + str("/" + "/".join(current_dir) ) + '/:' + "\n"
 
     elif args[0] in current_dictionary():
 
         directory = current_dictionary()[args[0]]
-        tree += "Contents of directory " + str("/" + "/".join(current_dir) ) + '/' + args[0] + '/:' + "\n"
+        tree += "Contents of " + str("/" + "/".join(current_dir) ) + '/' + args[0] + '/:' + "\n"
 
     for deep_1 in sorted(directory):
         if "." in deep_1:

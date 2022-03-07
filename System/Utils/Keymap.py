@@ -1,6 +1,11 @@
 # List of all keys and buttons.
 
-# TODO: Add more keys.
+"""
+Keymap.py
+
+    This file contains the keymap for the keyboard.
+    This file is used to translate the tkinter keyboard keys to simple strings.
+"""
 
 # Keyboard
 ENTER = "<Return>"
@@ -93,5 +98,3 @@ KEY_Z = "<Key-z>"
 MOUSE_LEFT = "<Button-1>"
 MOUSE_MIDDLE = "<Button-2>"
 MOUSE_RIGHT = "<Button-3>"
-
-
