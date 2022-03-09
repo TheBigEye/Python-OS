@@ -75,3 +75,6 @@ jobs:
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v1
+      
+    - name: Run test
+      run: python OS.py --test
