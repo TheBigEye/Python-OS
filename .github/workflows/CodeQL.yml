@@ -77,4 +77,6 @@ jobs:
       uses: github/codeql-action/analyze@v1
       
     - name: Run test
-      run: python OS.py --test
+      run: |
+        pip install -r requirements.txt
+        python OS.py --test
