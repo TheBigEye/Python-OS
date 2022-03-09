@@ -195,6 +195,9 @@ class Terminal(Frame):
 
         self.Terminal_entry.place(x=5.5, y=330)
 
+        self.Terminal_screen.bind("<Button-1>", lambda event: self.Terminal.lift())
+        self.Terminal_entry.bind("<Button-1>", lambda event: self.Terminal.lift())
+
         #self.master.after(1000, self.Terminal.update_idletasks())
 
         # --------------------------------------------------------------------------- [Final] ----------------------------------------------------------------------------------

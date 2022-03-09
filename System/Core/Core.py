@@ -1,12 +1,25 @@
+"""
+    Module Name:
+        Core.py
+
+    Abstract:
+        This module implements the boot process of the OS and...
+        the routines that are executed in the first seconds of system startup.
+
+    Author:
+        TheBigEye 29-oct-2021
+"""
+
 import datetime
 import platform
 import sys
 
 from System.Core.FileSystem import fs_routines
 from System.Core.TaskSystem import ts_routines
-from System.Utils.Utils import print_error, print_log, print_warning
+from System.Utils.Utils import (json_get, json_set, print_error, print_log, print_warning)
 
-Kernel_lvl = 8 # Main kernel variable, 8 by default
+# Load the boot value from boot.json
+Kernel_lvl = json_get("Boot.json", "Boot")
 
 # Each screen has an ID
 isBSOD = False        # Black screen of death 0
@@ -56,11 +69,10 @@ def check_os():
     elif platform.system() == "Darwin": in_mac = True
 
 
-# Routines, are the first tasks that are executed in the first seconds of system startup
 def routines():
 
     """
-    This function is used to execute the first tasks that are executed in the first seconds of system startup.
+    Used to execute the first tasks in the first seconds of system startup.
     """
 
     check_os()
@@ -72,7 +84,8 @@ def routines():
     if in_linux: print_log("Running on Linux")
     elif in_windows: print_log("Running on Windows")
     elif in_mac: print_log("Running on Mac")
-    else: print_warning("Unknown OS, starting anyway...")
+    else:
+        print_warning("Unknown OS, starting anyway...")
 
     # Load the process system
     ts_routines()
@@ -104,4 +117,16 @@ def delete_logs():
     # Delete the files inside the Logs folder
     for file in logs_files:
         os.remove(os.path.join(logs_path, file))
-        print(os.path.join(logs_path, file))
+        print("Deleted log: " + os.path.join(logs_path, file))
+
+
+def set_boot(value):
+
+    """
+    This function is used to set the kernel level.
+    """
+
+    from System.Utils.Utils import print_info
+
+    json_set("Boot.json", "Boot", int(value))
+    print_info("Boot set to: " + str(value))

@@ -1,3 +1,14 @@
+"""
+    Module Name:
+        FileSystem.py
+
+    Abstract:
+        This module implements the file system and related functions
+
+    Author:
+        TheBigEye 21-Jan-2022
+"""
+
 import datetime
 import json
 import os
@@ -6,7 +17,7 @@ import shelve
 
 from System.Utils.Utils import print_error, print_info, print_warning
 
-fs = shelve.open('Disk/FS/Filesystem', writeback=True)
+File_System = shelve.open('Disk/FS/Filesystem', writeback=True)
 current_dir = []
 
 def fs_routines():
@@ -19,13 +30,13 @@ def fs_routines():
         if boot_data["FS_mounted"] == "False":
             print_error("File system is not mounted")
 
-            # delete the .dat, bak and dir files in  Disk/FS/
+            # delete the .dat, bak and dir files in Disk/FS/ for avoid errors
             if os.path.exists("Disk/FS/Filesystem.dat"): os.remove("Disk/FS/Filesystem.dat")
             if os.path.exists("Disk/FS/Filesystem.bak"): os.remove("Disk/FS/Filesystem.bak")
             if os.path.exists("Disk/FS/Filesystem.dir"): os.remove("Disk/FS/Filesystem.dir")
 
-            fs = shelve.open('Disk/FS/Filesystem', writeback=True)
-            install(fs)
+            File_System = shelve.open('Disk/FS/Filesystem', writeback=True)
+            install(File_System)
 
             boot_data["FS_mounted"] = "True"
 
@@ -37,15 +48,15 @@ def fs_routines():
     check_boot()
     print_info("File system ready!")
 
-def install(fs):
+def install(File_System):
     # create root and others
-    username = "User"
+    Username = "User"
 
     # default filesystem
-    fs[""] = {
+    File_System[""] = {
         "Home": {
             "Programs": {},
-            username: {
+            Username: {
                 "Desktop": {},
                 "Documents": {},
                 "Music": {}
@@ -61,14 +72,14 @@ def install(fs):
     }
 
     # sync the filesystem
-    fs.sync()
+    File_System.sync()
 
 def current_dictionary():
     """Return a dictionary representing the files in the current directory"""
-    d = fs[""]
+    dir = File_System[""]
     for key in current_dir:
-        d = d[key]
-    return d
+        dir = dir[key]
+    return dir
 
 def ls():
 
@@ -117,15 +128,16 @@ def mkdir(name):
     Create a directory
     """
 
-    global fs
+    global File_System
 
     # Check if the directory already exists in the current directory
     if name in current_dictionary():
         return str("Directory " + name +" already exists in " + str("/" + "/".join(current_dir) ) )
 
     # create an empty directory there and sync back to shelve dictionary!
-    d = current_dictionary()[name] = {}
-    fs.sync()
+    dir = current_dictionary()
+    dir[name] = {}
+    File_System.sync()
 
     return str("Directory " + name + " created in " + str("/" + "/".join(current_dir) ) )
 
@@ -135,7 +147,7 @@ def mkfile(argument):
     Create a file in the current directory
     """
 
-    global fs
+    global File_System
 
     # Get the name and extension
     name = argument.split(".")[0]
@@ -157,8 +169,8 @@ def mkfile(argument):
         return
 
     print_info("Created file " + name_and_extension + " in " + str("/" + "/".join(current_dir)))
-    d = current_dictionary()
-    d[name_and_extension] = {
+    dir = current_dictionary()
+    dir[name_and_extension] = {
             "Metadata": {
                 "Extension": extension,
                 "Created": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
@@ -166,7 +178,7 @@ def mkfile(argument):
             },
             "Data": ""
         }
-    fs.sync()
+    File_System.sync()
 
 
 def edit_file(name_and_extension, content):
@@ -175,23 +187,23 @@ def edit_file(name_and_extension, content):
     Edit the content of the file
     """
 
-    global fs
+    global File_System
 
     # Check if the file exists
     if name_and_extension not in current_dictionary():
         return str("File " + name_and_extension + " does not exist")
 
-    d = current_dictionary()
-    d[name_and_extension] = {
+    dir = current_dictionary()
+    dir[name_and_extension] = {
             "Metadata": {
-                "Extension": d[name_and_extension]["Metadata"]["Extension"],
-                "Created": d[name_and_extension]["Metadata"]["Created"],
+                "Extension": dir[name_and_extension]["Metadata"]["Extension"],
+                "Created": dir[name_and_extension]["Metadata"]["Created"],
                 "Modified": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             },
             "Data": content
         }
 
-    fs.sync()
+    File_System.sync()
 
     return str("File " + name_and_extension + " edited")
 
@@ -202,7 +214,7 @@ def get_file_content(name_and_extension):
     Return the content of the file
     """
 
-    global fs
+    global File_System
 
     # Check if the file exists
     if name_and_extension not in current_dictionary():
@@ -210,8 +222,8 @@ def get_file_content(name_and_extension):
         return
 
     print_info("Getting content of file " + name_and_extension)
-    d = current_dictionary()
-    return d[name_and_extension]["Data"]
+    dir = current_dictionary()
+    return dir[name_and_extension]["Data"]
 
 
 def get_file_metadata(name_and_extension):
@@ -220,7 +232,7 @@ def get_file_metadata(name_and_extension):
     Return a dictionary with the metadata of the file
     """
 
-    global fs
+    global File_System
 
     meta = ""
 
@@ -230,10 +242,10 @@ def get_file_metadata(name_and_extension):
         return
 
     print_info("Getting metadata of file " + name_and_extension)
-    d = current_dictionary()
+    dir = current_dictionary()
     meta += "File: " + name_and_extension + "\n"
-    meta += "Created: " + d[name_and_extension]["Metadata"]["Created"] + "\n"
-    meta += "Modified: " + d[name_and_extension]["Metadata"]["Modified"] + "\n"
+    meta += "Created: " + dir[name_and_extension]["Metadata"]["Created"] + "\n"
+    meta += "Modified: " + dir[name_and_extension]["Metadata"]["Modified"] + "\n"
     return meta
 
 
@@ -243,15 +255,15 @@ def rmdir(name):
     Remove a directory
     """
 
-    global fs
+    global File_System
 
     # Check if the directory exists
     if name not in current_dictionary():
         return str("Directory " + name + " does not exist")
 
-    d = current_dictionary()
-    del d[name]
-    fs.sync()
+    dir = current_dictionary()
+    del dir[name]
+    File_System.sync()
 
     return str("Directory " + name + " deleted")
 
@@ -262,7 +274,7 @@ def rmfile(name_and_extension):
     Delete a file from the current directory
     """
 
-    global fs
+    global File_System
 
     # Check if the file exists
     if name_and_extension not in current_dictionary():
@@ -270,9 +282,9 @@ def rmfile(name_and_extension):
         return
 
     print_info("Deleting file " + name_and_extension)
-    d = current_dictionary()
-    del d[name_and_extension]
-    fs.sync()
+    dir = current_dictionary()
+    del dir[name_and_extension]
+    File_System.sync()
 
 
 def tree(*args):
@@ -281,7 +293,7 @@ def tree(*args):
     Prints the tree of the current directory
     """
 
-    global fs
+    global File_System
 
     tree = ""
 

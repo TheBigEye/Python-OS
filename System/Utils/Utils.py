@@ -7,7 +7,7 @@ from tkinter import PhotoImage
 
 from PIL import Image, ImageTk
 from System.Utils.Colormap import color_hex_rgb, color_str_rgb
-from System.Utils.Vars import Assets_directory, Loading, XCursor_2
+from System.Utils.Vars import Assets_directory, Disk_directory, Loading, XCursor_2
 
 # -------------------------------------------[ Logger ]------------------------------------------- #
 
@@ -236,7 +236,17 @@ def json_get(json_file, key):
                     data = json.load(f)
                     return data[key]
 
+    for root, dirs, files in os.walk(Disk_directory):
+        for file in files:
+
+            if file.endswith(json_file):
+                with open(os.path.join(root, file), 'r') as f:
+                    data = json.load(f)
+                    return data[key]
+
+
 def json_set(json_file, key, value):
+
     for root, dirs, files in os.walk(Assets_directory):
         for file in files:
 
@@ -246,5 +256,31 @@ def json_set(json_file, key, value):
                     data[key] = value
                     with open(os.path.join(root, file), 'w') as f:
                         json.dump(data, f, indent=4)
+
+    for root, dirs, files in os.walk(Disk_directory):
+        for file in files:
+
+            if file.endswith(json_file):
+                with open(os.path.join(root, file), 'r') as f:
+                    data = json.load(f)
+                    data[key] = value
+                    with open(os.path.join(root, file), 'w') as f:
+                        json.dump(data, f, indent=4)
+
+def Image_getcolor(image, x, y):
+    # get pixel color and return into hex format, like "#ff0000"
+
+    for root, dirs, files in os.walk(Assets_directory):
+        for file in files:
+
+            if file.endswith(image):
+                img = Image.open(os.path.join(root, file))
+                img = img.convert("RGBA")
+                image_data = img.getdata()
+
+                color = image_data[y * img.size[0] + x]
+                color = "#%02x%02x%02x" % (color[0], color[1], color[2])
+                color = color.upper()
+                return color
 
 # -------------------------------------------[ End ]------------------------------------------- #

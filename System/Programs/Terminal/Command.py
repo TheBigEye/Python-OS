@@ -369,7 +369,7 @@ def CMD(master, entry, output):
 
     def edit_file_command(command):
 
-        from System.Core.FileSystem import edit_file, get_file_content
+        from System.Core.FileSystem import edit_file
 
         command = command.replace("efile ", "")
 
@@ -569,7 +569,6 @@ def CMD(master, entry, output):
     def help_command():
         """Help command"""
 
-        output.insert(INSERT, 'Help: ─────────────────────────────────────────────────────────────────────' + '\n')
         output.insert(INSERT, 'print "text"             - print a string' +                                   '\n')
         output.insert(INSERT, 'echo "text"              - print a string' +                                   '\n')
         output.insert(INSERT, 'clear | cls              - clear the terminal' +                               '\n')
@@ -591,8 +590,7 @@ def CMD(master, entry, output):
         output.insert(INSERT, 'foreground "color"       - change the terminal foreground color' +             '\n')
         output.insert(INSERT, 'background "color"       - change the terminal background color' +             '\n')
         output.insert(INSERT, 'neofetch                 - show the terminal and system info' +                '\n')
-        output.insert(INSERT, '>>> python code          - run a python interpreter where you can code' +      '\n')
-        output.insert(INSERT, '───────────────────────────────────────────────────────────────────────────' + '\n\n')
+        output.insert(INSERT, '>>> python code          - run a python interpreter where you can code' +      '\n\n')
         output.see(END)
 
     if command.startswith("help"):
