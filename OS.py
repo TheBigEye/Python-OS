@@ -15,8 +15,8 @@ import tkinter as tk
 
 from System.Core.Core import (
     isBSOD, isRSOD, isGSOD, isBIOS, isINSTALLER,
-    isBootloader, isLogin, isDesktop,
-    isBoot, routines, delete_logs, set_boot
+    isBootloader, isLogin, isDesktop, isBoot,
+    routines, delete_logs, set_boot, bug_check
 )
 
 from System.UI.Boot.BIOS import BIOS
@@ -24,8 +24,6 @@ from System.UI.Boot.Bootloader import Boot_loader
 from System.UI.Boot.Desktop import Desktop
 from System.UI.Boot.Installer import Os_Installer
 from System.UI.Boot.Login import Login
-from System.UI.Boot.RSOD import RSOD
-from System.UI.Boot.BSOD import BSOD
 
 from System.Utils.Colormap import Black
 from System.Utils.Utils import print_error, print_info, print_log, print_warning
@@ -81,25 +79,27 @@ def main():
 
         # Here the variables of the boot order are checked and the corresponding function is executed:
         if isBSOD:
-            BSOD(Os) # Black screen of death
-            print_error("The system has failed!.")
 
-            # Stop the program after 15 seconds.
-            Os.after(15000, Os.destroy)
+            bugcheck_msg = "Your PC ran into a problem and needs to be shut down."
+            bugcheck_id = "0x00000000"
+
+            bug_check(Os, bugcheck_msg, bugcheck_id , "#ffffff", "#dfdfdf", "#000000", 15)
+            print_error("BSOD! The system ran into a problem with code " + bugcheck_id + ".")
 
         elif isRSOD:
-            RSOD(Os) # Red screen of death
-            print_warning("The system has failed!!.")
 
-            # Stop the program after 8 seconds.
-            Os.after(8000, Os.destroy)
+            bugcheck_msg = "Your PC ran into a problem and needs to be shut down."
+            bugcheck_id = "0x00000001"
+
+            bug_check(Os, bugcheck_msg, bugcheck_id , "#ffffff", "#dfdfdf", "#ba0000", 12)
+            print_error("RSOD! The system has failed with code " + bugcheck_id + "!.")
 
         elif isGSOD:
-            BSOD(Os) # Green screen of death
-            print_info("The system has failed?.")
+            bugcheck_msg = "Your PC ran into a problem and needs to be shut down."
+            bugcheck_id = "0x00000002"
 
-            # Stop the program after 8 seconds.
-            Os.after(8000, Os.destroy)
+            bug_check(Os, bugcheck_msg, bugcheck_id , "#ffffff", "#dfdfdf", "#00ba00", 12)
+            print_error("The system has failed!.")
 
         elif isBIOS:
             BIOS(Os) # Start BIOS
