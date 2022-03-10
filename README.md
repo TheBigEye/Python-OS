@@ -57,6 +57,6 @@ And double click on OS.py file to run the project or just in the command line yo
 ```sh
 python OS.py
 ```
-**NOTE**: If you're on a on a minimal Linux installation, you need a desktop or window manager for tkinter to work, like xorg, xfce, etc.
+**NOTE**: If you're on a on a minimal Linux installation, you need a desktop or window manager for tkinter to work.
 
 
