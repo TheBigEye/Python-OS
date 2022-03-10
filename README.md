@@ -43,9 +43,9 @@ Python OS is an operating system simulator written in Python, with a graphical i
 
 Download the code and unzip it, it is necessary to have Python 3.10 and have the following modules installed 
 
-- ```Pillow```       Necessary so that the program can read the images and work.
-- ```Psutil```      Necessary for the neofetch command and some functions to work.
-- ```Tkinterweb```   Necessary for the browser to work.
+- [`Pillow`](https://github.com/python-pillow/Pillow)       Necessary so that the program can read the images and work.
+- [`Psutil`](https://github.com/giampaolo/psutil)      Necessary for the neofetch command and some functions to work.
+- [`Tkinterweb`](https://github.com/Andereoo/TkinterWeb)  Necessary for the browser to work.
 
 For a quick installation use the following command inside the project folder:
 
