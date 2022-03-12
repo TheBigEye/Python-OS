@@ -3,7 +3,7 @@ from tkinter.constants import INSERT
 
 from System.Programs.Terminal.Command import CMD
 from System.UI.Attributes.Draggable import drag_n_drop
-from System.Utils.Utils import Asset, Asset_color, json_get, json_set, print_warning
+from System.Utils.Utils import Asset, Asset_color, Data_get, Data_set
 
 __author__ = "TheBigEye"
 __version__ = "1.8"
@@ -14,14 +14,14 @@ def set_foreground(color):
     """Set the foreground color of the terminal"""
 
     # Save the json in Assets/GUI/Desktop/Terminal/Data/Terminal.json
-    json_set("Terminal.json", "Foreground", color)
+    Data_set("Terminal data", "Terminal.json", "Foreground", color)
 
 
 def get_foreground():
 
     """Get the foreground color of the terminal"""
 
-    return json_get("Terminal.json", "Foreground")
+    return Data_get("Terminal data", "Terminal.json", "Foreground")
 
 
 def set_background(color):
@@ -29,12 +29,12 @@ def set_background(color):
     """Set the background color of the terminal"""
 
     # Save the json in Assets/GUI/Desktop/Terminal/Data/Terminal.json
-    json_set("Terminal.json", "Background", color)
+    Data_set("Terminal data", "Terminal.json", "Background", color)
 
 
 def get_background():
 
-    return json_get("Terminal.json", "Background")
+    return Data_get("Terminal data", "Terminal.json", "Background")
 
 
 class Terminal(Frame):
@@ -67,12 +67,12 @@ class Terminal(Frame):
             CMD(self.Terminal, self.Terminal_entry, self.Terminal_screen)
             self.Terminal_screen.config(state="disabled")
 
-        self.Terminal_GUI_Image = Asset_color("Terminal.png", "#000000", self.background)  # Terminal image base
+        self.Terminal_image = Asset_color("Terminal", "Window.png", "#000000", self.background)  # Terminal image base
 
         self.Terminal = Label(
             self.master,
             bg="#CCCCCC",
-            image=self.Terminal_GUI_Image,
+            image=self.Terminal_image,
             borderwidth="0",
         )
 
@@ -99,8 +99,8 @@ class Terminal(Frame):
 
         # ----------------------------------------------------------------- [Close terminal button] -------------------------------------------------------------------------
 
-        self.Close_button_image = Asset("Close_button.png")  # Terminal close button
-        self.Close_button_red_image = Asset("Close_button_red.png")  # Terminal close red button
+        self.Close_button_image = Asset("Window", "Close_button.png")  # Terminal close button
+        self.Close_button_red_image = Asset("Window", "Close_button_red.png")  # Terminal close red button
 
         def Close_Terminal():
             """Close the Terminal"""
@@ -126,14 +126,14 @@ class Terminal(Frame):
 
         # ----------------------------------------------------------------- [Maximize terminal button] ----------------------------------------------------------------------
 
-        self.Maximize_button_image = Asset("Maximize_button.png")  # Terminal maximize button
-        self.Maximize_button_light_image = Asset("Maximize_button_light.png")  # Terminal maximize button light
+        self.Maximize_button_image = Asset("Window", "Maximize_button.png")  # Terminal maximize button
+        self.Maximize_button_light_image = Asset("Window", "Maximize_button_light.png")  # Terminal maximize button light
 
         def Maximize_Terminal():
             """Maximize the Terminal"""
 
             self.Terminal.place(x=0, y=0)
-            self.Terminal.config(image=self.Terminal_GUI_Image)
+            self.Terminal.config(image=self.Terminal_image)
 
         self.Maximize_button = Button(
             self.Terminal,
@@ -153,14 +153,14 @@ class Terminal(Frame):
 
         # ----------------------------------------------------------------- [Minimize terminal button] ----------------------------------------------------------------------
 
-        self.Minimize_button_image = Asset("Minimize_button.png")  # Terminal minimize button
-        self.Minimize_button_light_image = Asset("Minimize_button_light.png")  # Terminal minimize button light
+        self.Minimize_button_image = Asset("Window", "Minimize_button.png")  # Terminal minimize button
+        self.Minimize_button_light_image = Asset("Window", "Minimize_button_light.png")  # Terminal minimize button light
 
         def Minimize_Terminal():
             """Minimize the Terminal"""
 
             self.Terminal.place(x=0, y=0)
-            self.Terminal.config(image=self.Terminal_GUI_Image)
+            self.Terminal.config(image=self.Terminal_image)
 
         self.Minimize_button = Button(
             self.Terminal,
@@ -197,13 +197,9 @@ class Terminal(Frame):
 
         self.Terminal_screen.bind("<Button-1>", lambda event: self.Terminal.lift())
         self.Terminal_entry.bind("<Button-1>", lambda event: self.Terminal.lift())
-
-        #self.master.after(1000, self.Terminal.update_idletasks())
-
         # --------------------------------------------------------------------------- [Final] ----------------------------------------------------------------------------------
 
         # draggable terminal window
-        if (draggable):
-
+        if draggable:
             drag_n_drop(self.Terminal)
 

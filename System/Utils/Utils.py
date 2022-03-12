@@ -148,27 +148,41 @@ def Execute(master, Loading_time: float, Function, *args):
     master.after(1000, Normal_cursor)
 
 
-def Asset(file_name_and_extension):
+def Asset(Folder_name, file_name_and_extension):
 
     """
-    This function will return the image file from the file name inside Assets folder
+    This function will return the image file from the file name of a folder within the Assets folder
     """
 
+    # First: Search the folder inside from Assets folder and save the path
     for root, dirs, files in os.walk(Assets_directory):
-        for file in files:
+        for folder in dirs:
+            if folder == Folder_name:
+                folder_path = os.path.join(root, folder)
+                break
 
+    # Second: Search the file inside the folder and save the path
+    for root, dirs, files in os.walk(folder_path):
+        for file in files:
             if file.endswith(file_name_and_extension):
                 return PhotoImage(file = os.path.join(root, file))
 
     print_warning("Asset not found: " + file_name_and_extension)
-    return None
+
 
 # my masterpiece!!
-def Asset_color(file_name_and_extension, from_color, to_color):
+def Asset_color(Folder_name ,file_name_and_extension, from_color, to_color):
 
+    # First: Search the folder inside from Assets folder and save the path
     for root, dirs, files in os.walk(Assets_directory):
-        for file in files:
+        for folder in dirs:
+            if folder == Folder_name:
+                folder_path = os.path.join(root, folder)
+                break
 
+    # Second: Search the file inside the folder and save the path
+    for root, dirs, files in os.walk(folder_path):
+        for file in files:
             if file.endswith(file_name_and_extension):
                 img = Image.open(os.path.join(root, file))
                 img = img.convert("RGBA")
@@ -199,11 +213,18 @@ def Asset_color(file_name_and_extension, from_color, to_color):
                 return ImageTk.PhotoImage(img)
 
 
-def Asset_colored(file_name_and_extension, hue_value):
+def Asset_colored(Folder_name, file_name_and_extension, hue_value):
 
+    # First: Search the folder inside from Assets folder and save the path
     for root, dirs, files in os.walk(Assets_directory):
-        for file in files:
+        for folder in dirs:
+            if folder == Folder_name:
+                folder_path = os.path.join(root, folder)
+                break
 
+    # Second: Search the file inside the folder and save the path
+    for root, dirs, files in os.walk(folder_path):
+        for file in files:
             if file.endswith(file_name_and_extension):
                 img = Image.open(os.path.join(root, file))
                 img = img.convert("RGBA")
@@ -282,5 +303,41 @@ def Image_getcolor(image, x, y):
                 color = "#%02x%02x%02x" % (color[0], color[1], color[2])
                 color = color.upper()
                 return color
+
+def Data_set(Folder_name, json_file, key, value):
+    
+        # First: Search the folder inside from Assets folder and save the path
+        for root, dirs, files in os.walk(Assets_directory + "/Datas"):
+            for folder in dirs:
+                if folder == Folder_name:
+                    folder_path = os.path.join(root, folder)
+                    break
+
+        # Second: Search the file inside the folder and save the path
+        for root, dirs, files in os.walk(folder_path):
+            for file in files:
+                if file.endswith(json_file):
+                    with open(os.path.join(root, file), 'r') as f:
+                        data = json.load(f)
+                        data[key] = value
+                        with open(os.path.join(root, file), 'w') as f:
+                            json.dump(data, f, indent=4)
+
+def Data_get(Folder_name, json_file, key):
+
+        # First: Search the folder inside from Assets folder and save the path
+        for root, dirs, files in os.walk(Assets_directory + "/Datas"):
+            for folder in dirs:
+                if folder == Folder_name:
+                    folder_path = os.path.join(root, folder)
+                    break
+
+        # Second: Search the file inside the folder and save the path
+        for root, dirs, files in os.walk(folder_path):
+            for file in files:
+                if file.endswith(json_file):
+                    with open(os.path.join(root, file), 'r') as f:
+                        data = json.load(f)
+                        return data[key]
 
 # -------------------------------------------[ End ]------------------------------------------- #

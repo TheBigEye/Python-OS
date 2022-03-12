@@ -15,7 +15,7 @@ def Boot_loader(master):
 
     master.configure(background=Black)  # Set the background color to black.
 
-    Logon = Asset_colored("logon.png", 1)
+    Logon = Asset_colored("Bootloader", "logon.png", 1)
     Boot_Logo = Label(master, image=Logon, borderwidth=0.1)
 
     Boot_Logo.place(x= 408, y= 160)
@@ -25,7 +25,7 @@ def Boot_loader(master):
 
     # Make a list of frames
     frames = [
-        PhotoImage(file= Assets_directory + "/GUI/Bootloader/Loading 3.gif", format="gif -index %i" % (i))
+        PhotoImage(file= Assets_directory + "/UI/Boot/Bootloader/Loading.gif", format="gif -index %i" % (i))
         for i in range(frames_count)
     ]
 

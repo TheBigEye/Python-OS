@@ -12,6 +12,7 @@
 import os
 import sys
 import tkinter as tk
+from tkinter import PhotoImage
 
 from System.Core.Core import (
     isBSOD, isRSOD, isGSOD, isBIOS, isINSTALLER,
@@ -44,7 +45,10 @@ def main():
     Os.resizable(False, False)  # Window resizing.
 
     if os.name == "nt": # Window
-        Os.iconbitmap(Assets_directory + "/Icons/icon.ico")
+
+        icon = PhotoImage(file=Assets_directory + "/Icon.png")
+
+        Os.iconphoto(False, icon)
         Os.configure(background = Black, cursor = XCursor_2)
     else:
         Os.configure(background = Black)
@@ -83,7 +87,7 @@ def main():
             bugcheck_msg = "Your PC ran into a problem and needs to be shut down."
             bugcheck_id = "0x00000000"
 
-            bug_check(Os, bugcheck_msg, bugcheck_id , "#ffffff", "#dfdfdf", "#000000", 15)
+            bug_check(Os, bugcheck_msg, bugcheck_id , "#ffffff", "#dfdfdf", "#000000", 30)
             print_error("BSOD! The system ran into a problem with code " + bugcheck_id + ".")
 
         elif isRSOD:
@@ -151,7 +155,7 @@ elif len(parameters) == 2:
         print_info("\t--help: Prints this message")
         print_info("\t--test: Runs the test")
         print_info("\t--dlogs: Delete logs")
-        print_info("\t--krnl int: Start the system with a specific value")
+        print_info("\t--boot int: Start the system with a specific value")
         print_info("")
         print_info("The program will start if no parameter is given.")
 

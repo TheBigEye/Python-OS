@@ -2,10 +2,10 @@ import time
 from tkinter import Button, Label
 
 from System.Programs.Terminal.Terminal import Terminal
-from System.Programs.Welcome.Welcome import Welcome_window
-from System.UI.Browser import Display_Browser
-from System.UI.FileManager import Display_FileManager
-from System.UI.MessageBox import MessageBox
+from System.Programs.Welcome_dialog.Welcome import Welcome_dialog
+from System.Programs.Browser.Browser import Browser
+from System.Programs.File_manager.File_manager import File_manager
+from System.UI.Message_box import Message_box
 from System.Utils.Utils import Asset, Asset_colored, Execute, internet_on, print_log
 
 __author__ = 'TheBigEye'
@@ -34,15 +34,15 @@ def Desktop(master):
 
     master.configure(background = "#000000")
 
-    Wallpaper = Asset("Night_dusk.png")
+    Wallpaper = Asset("Wallpapers", "Night_dusk.png")
 
     Desktop_wallpaper = Label(master, image= Wallpaper, borderwidth=0)
     Desktop_wallpaper.place(x=0, y=0) # set the position of the wallpaper to the center of the screen
 
 
- # ---------------------------------------------------------------[Welcome window]------------------------------------------------------------------
+ # ---------------------------------------------------------------[Welcome dialog]------------------------------------------------------------------
 
-    Welcome_window(master, draggable=False)
+    Welcome_dialog(master, draggable=False)
 
 
  # -------------------------------------------------------------[ Errors types ]----------------------------------------------------------------
@@ -52,30 +52,30 @@ def Desktop(master):
     # Lista de los cuadros de dialogo que se usan, Error, advertencia, peligro, e info
     def Settings_error():
         Close_start_menu()
-        MessageBox(master, "Error", "Settsvc.py" ,"Settings not found", False)
+        Message_box(master, "Error", "Settsvc.py" ,"Settings not found", False)
 
     def Print_error():
         Close_start_menu()
-        MessageBox(master, "Info", "Info", "Printing not found", False)
+        Message_box(master, "Info", "Info", "Printing not found", False)
 
     def This_PC_error():
         Close_start_menu()
-        MessageBox(master, "Warning", "This PC", "This PC not found", True)
+        Message_box(master, "Warning", "This PC", "This PC not found", True)
 
     def FileManager_error():
         Close_start_menu()
-        MessageBox(master, "Error", "Explorer.py", "File Manager not found", False)
+        Message_box(master, "Error", "Explorer.py", "File Manager not found", False)
 
 
  # ----------------------------------------------------------------[ Programas ]--------------------------------------------------------------------
 
-    global File_manager, Terminal, Registry, Browser
+    global File_manager, Terminal, Browser
 
     # LLama al metodo del Explorador de archivos en forma de aplicacion
     def File_manager():
         Close_start_menu()
 
-        Display_FileManager(master, "This PC", draggable=True)
+        File_manager(master, "This PC", draggable=True)
 
 
     # LLama a la terminal
@@ -88,13 +88,13 @@ def Desktop(master):
     def Browser():
         Close_start_menu()
 
-        Display_Browser(master, draggable=True)
+        Browser(master, draggable=True)
 
  # ------------------------------------------------------------[ Barra de tareas ]------------------------------------------------------------------
 
-    global Taskbar_UI_Image, Taskbar
+    global Taskbar_image, Taskbar
 
-    Taskbar_UI_Image = Asset("Taskbar.png")
+    Taskbar_image = Asset("Taskbar", "Taskbar.png")
 
     # Barra de tareas
     Taskbar = Label(
@@ -102,7 +102,7 @@ def Desktop(master):
         width = 1024,
         height = 29,
         borderwidth = "0",
-        image = Taskbar_UI_Image,
+        image = Taskbar_image,
         background = "black",
         foreground = "gray",
         relief = "raised",
@@ -110,10 +110,8 @@ def Desktop(master):
 
     Taskbar.place(x= 109, y= 571)
 
-
-
-    global Startbar_UI_Image, Startbar
-    Startbar_UI_Image = Asset("Startbar.png")
+    global Startbar_image, Startbar
+    Startbar_image = Asset("Taskbar", "Startbar.png")
 
     # Barra de inicio
     Startbar = Label(
@@ -121,7 +119,7 @@ def Desktop(master):
         width = 109,
         height = 29,
         borderwidth = "0",
-        image = Startbar_UI_Image,
+        image = Startbar_image,
         background = "white",
         foreground = "gray",
         relief = "raised",
@@ -133,20 +131,20 @@ def Desktop(master):
  # ------------------------------------------------------------[ Menu de inicio ]-------------------------------------------------------------------
 
     # Widget base del menu de inicio
-    global Start_menu_UI, Start_menu
-    Start_menu_UI = Asset("StartMenu.png")
+    global Start_menu_image, Start_menu
+    Start_menu_image = Asset("Start menu", "Start_menu.png")
 
     Start_menu = Label(
         master,
         width = 314,
         height = 440,
-        image = Start_menu_UI,
+        image = Start_menu_image,
         borderwidth = "0"
     )
 
-    global Start_menu_button, Start_menu_active_button, Open_start_menu, Close_start_menu, Open_start_button, Close_start_button
-    Start_menu_button = Asset("Start_Button.png")
-    Start_menu_active_button = Asset_colored("Start_Button_active.png", 1)
+    global Start_button, Start_button_light, Open_start_menu, Close_start_menu, Open_start_button, Close_start_button
+    Start_button = Asset("Start menu", "Start_button.png")
+    Start_button_light = Asset_colored("Start menu", "Start_button_light.png", 1)
 
     # Abre
     def Open_start_menu():
@@ -174,7 +172,7 @@ def Desktop(master):
         bg = "#070E11",
         relief="raised",
         command=Open_start_menu,
-        image= Start_menu_button
+        image= Start_button
     )
     Open_start_button.place(x=4, y=2)
 
@@ -186,23 +184,23 @@ def Desktop(master):
         bg = "#070E11",
         relief="raised",
         command=Close_start_menu,
-        image= Start_menu_button
+        image= Start_button_light
     )
     Close_start_button.place_forget()
 
-    Open_start_button.bind("<Enter>", lambda event: Open_start_button.config(image = Start_menu_active_button))
-    Open_start_button.bind("<Leave>", lambda event: Open_start_button.config(image = Start_menu_button))
+    Open_start_button.bind("<Enter>", lambda event: Open_start_button.config(image = Start_button_light))
+    Open_start_button.bind("<Leave>", lambda event: Open_start_button.config(image = Start_button))
 
-    Close_start_button.bind("<Enter>", lambda event: Close_start_button.config(image = Start_menu_active_button))
-    Close_start_button.bind("<Leave>", lambda event: Close_start_button.config(image = Start_menu_button))
+    Close_start_button.bind("<Enter>", lambda event: Close_start_button.config(image = Start_button_light))
+    Close_start_button.bind("<Leave>", lambda event: Close_start_button.config(image = Start_button))
 
  # ----------------------------------------------------[ Botones de la barra de inicio ]------------------------------------------------------------
 
 
     # Icono de modulos
-    global Modules_startbar_icon, Modules_startbar_active_icon, Modules_startbar_button
-    Modules_startbar_icon = Asset("Modules_button.png")
-    Modules_startbar_active_icon = Asset_colored("Modules_button_active.png", 1)
+    global Modules_bbutton, Modules_button_light, Modules_startbar_button
+    Modules_button = Asset("Taskbar", "Modules_button.png")
+    Modules_button_light = Asset_colored("Taskbar", "Modules_button_light.png", 1)
 
     Modules_startbar_button = Button(
         Startbar,
@@ -211,18 +209,18 @@ def Desktop(master):
         borderwidth="0",
         relief="raised",
         bg = "#070E11",
-        image= Modules_startbar_icon
+        image= Modules_button
     )
     Modules_startbar_button.place(x=35, y=2)
 
-    Modules_startbar_button.bind("<Enter>", lambda event: Modules_startbar_button.config(image = Modules_startbar_active_icon))
-    Modules_startbar_button.bind("<Leave>", lambda event: Modules_startbar_button.config(image = Modules_startbar_icon))
+    Modules_startbar_button.bind("<Enter>", lambda event: Modules_startbar_button.config(image = Modules_button_light))
+    Modules_startbar_button.bind("<Leave>", lambda event: Modules_startbar_button.config(image = Modules_button))
 
 
     # icono de busqueda
-    global Search_startbar_icon, Search_startbar_active_icon, Search_startbar_button
-    Search_startbar_icon = Asset("Search_button.png")
-    Search_startbar_active_icon = Asset_colored("Search_button_active.png", 1)
+    global Search_button, Search_button_light, Search_startbar_button
+    Search_button = Asset("Taskbar", "Search_button.png")
+    Search_button_light = Asset_colored("Taskbar", "Search_button_active.png", 1)
 
     Search_startbar_button = Button(
         Startbar,
@@ -231,22 +229,22 @@ def Desktop(master):
         borderwidth="0",
         relief="raised",
         bg = "#070E11",
-        image= Search_startbar_icon,
+        image= Search_button,
         command=Terminal_programm
     )
     Search_startbar_button.place(x=66, y=2)
 
-    Search_startbar_button.bind("<Enter>", lambda event: Search_startbar_button.config(image = Search_startbar_active_icon))
-    Search_startbar_button.bind("<Leave>", lambda event: Search_startbar_button.config(image = Search_startbar_icon))
+    Search_startbar_button.bind("<Enter>", lambda event: Search_startbar_button.config(image = Search_button_light))
+    Search_startbar_button.bind("<Leave>", lambda event: Search_startbar_button.config(image = Search_button))
 
  # ----------------------------------------------------[ Botones de la barra de tareas ]------------------------------------------------------------
 
 
 
     # Icono de la aplicacion de terminal en la barra de tareas
-    global Terminal_taskbar_icon, Terminal_taskbar_active_icon, Terminal_taskbar_button
-    Terminal_taskbar_icon = Asset("Terminal_taskbar_icon.png")
-    Terminal_taskbar_active_icon = Asset("Terminal_taskbar_active_icon.png")
+    global Terminal_button, Terminal_button_light, Terminal_taskbar_button
+    Terminal_button= Asset("Terminal", "Terminal_button.png")
+    Terminal_button_light = Asset("Terminal", "Terminal_button_light.png")
 
     Terminal_taskbar_button = Button(
         Taskbar,
@@ -256,18 +254,17 @@ def Desktop(master):
         relief="raised",
         bg="#070E11",
         command=Terminal_programm,
-        image = Terminal_taskbar_icon
+        image = Terminal_button
     )
-    #Terminal_taskbar_button.place(x=8, y=2) #48
 
-    Terminal_taskbar_button.bind("<Enter>", lambda event: Terminal_taskbar_button.config(image = Terminal_taskbar_active_icon))
-    Terminal_taskbar_button.bind("<Leave>", lambda event: Terminal_taskbar_button.config(image = Terminal_taskbar_icon))
+    Terminal_taskbar_button.bind("<Enter>", lambda event: Terminal_taskbar_button.config(image = Terminal_button_light))
+    Terminal_taskbar_button.bind("<Leave>", lambda event: Terminal_taskbar_button.config(image = Terminal_button))
 
 
     # Icono del explorador de archivos en la barra de tareas
-    global File_manager_taskbar_icon, File_manager_taskbar_active_icon, File_manager_taskbar_button
-    File_manager_taskbar_icon = Asset("FileManager_taskbar_icon.png")
-    File_manager_taskbar_active_icon = Asset("FileManager_taskbar_active_icon.png")
+    global File_manager_button, File_manager_button_light, File_manager_taskbar_button
+    File_manager_button = Asset("File manager", "File_manager_button.png")
+    File_manager_button_light = Asset("File manager", "File_manager_button_light.png")
 
     File_manager_taskbar_button = Button(
         Taskbar,
@@ -277,18 +274,17 @@ def Desktop(master):
         relief="flat",
         bg="#070E11",
         command=File_manager,
-        image = File_manager_taskbar_icon
+        image = File_manager_button
     )
-    #File_manager_taskbar_button.place(x=42, y=2)#82
 
-    File_manager_taskbar_button.bind("<Enter>", lambda event: File_manager_taskbar_button.config(image = File_manager_taskbar_active_icon))
-    File_manager_taskbar_button.bind("<Leave>", lambda event: File_manager_taskbar_button.config(image = File_manager_taskbar_icon))
+    File_manager_taskbar_button.bind("<Enter>", lambda event: File_manager_taskbar_button.config(image = File_manager_button_light))
+    File_manager_taskbar_button.bind("<Leave>", lambda event: File_manager_taskbar_button.config(image = File_manager_button))
 
 
     # Icono del navegador en la barra de tareas
-    global Browser_taskbar_icon, Browser_taskbar_active_icon, Browser_taskbar_button
-    Browser_taskbar_icon = Asset("Browser_taskbar_icon.png")
-    Browser_taskbar_active_icon = Asset("Browser_taskbar_active_icon.png")
+    global Browser_button, Browser_button_light, Browser_taskbar_button
+    Browser_button = Asset("Browser", "Browser_button.png")
+    Browser_button_light = Asset("Browser", "Browser_button_light.png")
 
     Browser_taskbar_button = Button(
         Taskbar,
@@ -298,12 +294,12 @@ def Desktop(master):
         relief="raised",
         bg="#070E11",
         command = Browser,
-        image = Browser_taskbar_icon
+        image = Browser_button
     )
     #Browser_taskbar_button.place(x=76, y=2) 116
 
-    Browser_taskbar_button.bind("<Enter>", lambda event: Browser_taskbar_button.config(image = Browser_taskbar_active_icon))
-    Browser_taskbar_button.bind("<Leave>", lambda event: Browser_taskbar_button.config(image = Browser_taskbar_icon))
+    Browser_taskbar_button.bind("<Enter>", lambda event: Browser_taskbar_button.config(image = Browser_button_light))
+    Browser_taskbar_button.bind("<Leave>", lambda event: Browser_taskbar_button.config(image = Browser_button))
 
     # se crea una lista de los botones de la barra de tarea
     global taskbar_buttons
@@ -319,7 +315,7 @@ def Desktop(master):
 
     # Widget base para los iconos de la barra del reloj
     global Clokcbar_taskbar_icons, Clockbar_icons
-    Clockbar_taskbar_icons = Asset("Taskbar_Icons.png")
+    Clockbar_taskbar_icons = Asset("Taskbar", "Taskbar_Icons.png")
 
     Clockbar_icons = Label(
         Taskbar,
@@ -369,7 +365,7 @@ def Desktop(master):
 
     # Icono del estado de la bateria
     global Battery_taskbar_icon, Battery_status_icon
-    Battery_taskbar_icon = Asset("Battery.png")
+    Battery_taskbar_icon = Asset("Taskbar", "Battery.png")
 
     Battery_status_icon = Button(
         Clockbar_icons,
@@ -389,10 +385,10 @@ def Desktop(master):
 
     if internet_on() == True:
         # Connected
-        Internet_icon = Asset("Internet_Connected.png")
+        Internet_icon = Asset("Taskbar", "Internet_connected.png")
     else:
         # Disconnected
-        Internet_icon = Asset("Internet_Warning.png")
+        Internet_icon = Asset("Taskbar", "Internet_warning.png")
 
     Internet_status_icon = Button(
         Clockbar_icons,
@@ -409,7 +405,7 @@ def Desktop(master):
 
     # Sound volume icon
     global Volume_icon, Volume_status_icon
-    Volume_icon = Asset("Volume.png")
+    Volume_icon = Asset("Taskbar", "Volume.png")
 
     Volume_status_icon = Button(
         Clockbar_icons,
