@@ -23,4 +23,4 @@
 - Startup screen
 - Cmd Screen
 - Internet, screen resolution and file options
-- The love of her ._.
+- The love of she ._.
