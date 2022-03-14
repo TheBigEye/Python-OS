@@ -1,6 +1,0 @@
-2022-03-12 10:03:44.794386 | [LOG] [routines] [ln: 81] ----------- Starting system execution -----------
-2022-03-12 10:03:44.885955 | [LOG] [routines] [ln: 82] Started log at: 2022-03-12 10:03:44.796392
-2022-03-12 10:03:44.965953 | [LOG] [routines] [ln: 86] Running on Windows
-2022-03-12 10:03:44.968955 | [INFO] Processes has finished loading
-2022-03-12 10:03:44.976959 | [INFO] File system ready!
-2022-03-12 10:03:45.776820 | [ERROR] BSOD! The system ran into a problem with code 0x00000000.

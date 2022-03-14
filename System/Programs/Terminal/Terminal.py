@@ -67,7 +67,7 @@ class Terminal(Frame):
             CMD(self.Terminal, self.Terminal_entry, self.Terminal_screen)
             self.Terminal_screen.config(state="disabled")
 
-        self.Terminal_image = Asset_color("Terminal", "Window.png", "#000000", self.background)  # Terminal image base
+        self.Terminal_image = Asset_color("Terminal", "Window.png", "null", "#ff00ff", self.background)  # Terminal image base
 
         self.Terminal = Label(
             self.master,

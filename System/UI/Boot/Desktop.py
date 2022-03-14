@@ -6,7 +6,7 @@ from System.Programs.Welcome_dialog.Welcome import Welcome_dialog
 from System.Programs.Browser.Browser import Browser
 from System.Programs.File_manager.File_manager import File_manager
 from System.UI.Message_box import Message_box
-from System.Utils.Utils import Asset, Asset_colored, Execute, internet_on, print_log
+from System.Utils.Utils import Asset, Asset_color, Asset_colored, Execute, internet_on, print_log
 
 __author__ = 'TheBigEye'
 __version__ = '2.0'
@@ -143,8 +143,8 @@ def Desktop(master):
     )
 
     global Start_button, Start_button_light, Open_start_menu, Close_start_menu, Open_start_button, Close_start_button
-    Start_button = Asset("Start menu", "Start_button.png")
-    Start_button_light = Asset_colored("Start menu", "Start_button_light.png", 1)
+    Start_button = Asset_color("Start menu", "Start_icon.png", "24x24", "#ff00ff", "#002C4F")
+    Start_button_light = Asset_color("Start menu", "Start_icon.png", "24x24", "#ff00ff", "#00345B")
 
     # Abre
     def Open_start_menu():
@@ -166,10 +166,9 @@ def Desktop(master):
     # Los botones se van reemplazando uno al otro para usar diferentes funciones a la vez
     Open_start_button = Button(
         Startbar,
-        width=28,
-        height=25,
         borderwidth="0",
-        bg = "#070E11",
+        bg = "#002C4F",
+        activebackground = "#002C4F",
         relief="raised",
         command=Open_start_menu,
         image= Start_button
@@ -178,10 +177,9 @@ def Desktop(master):
 
     Close_start_button = Button(
         Startbar,
-        width=28,
-        height=25,
         borderwidth="0",
-        bg = "#070E11",
+        bg = "#002C4F",
+        activebackground = "#002C4F",
         relief="raised",
         command=Close_start_menu,
         image= Start_button_light
@@ -199,16 +197,15 @@ def Desktop(master):
 
     # Icono de modulos
     global Modules_bbutton, Modules_button_light, Modules_startbar_button
-    Modules_button = Asset("Taskbar", "Modules_button.png")
-    Modules_button_light = Asset_colored("Taskbar", "Modules_button_light.png", 1)
+    Modules_button = Asset_color("Taskbar", "Modules_icon.png", "24x24", "#ff00ff", "#002C4F")
+    Modules_button_light = Asset_color("Taskbar", "Modules_icon.png", "24x24", "#ff00ff", "#00345B")
 
     Modules_startbar_button = Button(
         Startbar,
-        width=28,
-        height=25,
         borderwidth="0",
         relief="raised",
-        bg = "#070E11",
+        bg = "#002C4F",
+        activebackground = "#002C4F",
         image= Modules_button
     )
     Modules_startbar_button.place(x=35, y=2)
@@ -219,16 +216,15 @@ def Desktop(master):
 
     # icono de busqueda
     global Search_button, Search_button_light, Search_startbar_button
-    Search_button = Asset("Taskbar", "Search_button.png")
-    Search_button_light = Asset_colored("Taskbar", "Search_button_active.png", 1)
+    Search_button = Asset_color("Taskbar", "Search_icon.png", "24x24", "#ff00ff", "#002C4F")
+    Search_button_light = Asset_color("Taskbar", "Search_icon.png", "24x24", "#ff00ff", "#00345B")
 
     Search_startbar_button = Button(
         Startbar,
-        width=28,
-        height=25,
         borderwidth="0",
         relief="raised",
-        bg = "#070E11",
+        bg = "#002C4F",
+        activebackground = "#002C4F",
         image= Search_button,
         command=Terminal_programm
     )
@@ -243,16 +239,15 @@ def Desktop(master):
 
     # Icono de la aplicacion de terminal en la barra de tareas
     global Terminal_button, Terminal_button_light, Terminal_taskbar_button
-    Terminal_button= Asset("Terminal", "Terminal_button.png")
-    Terminal_button_light = Asset("Terminal", "Terminal_button_light.png")
+    Terminal_button= Asset_color("Terminal", "Terminal_icon.png", "24x24", "#ff00ff", "#00142D")
+    Terminal_button_light = Asset_color("Terminal", "Terminal_icon.png", "24x24", "#ff00ff", "#001B3D")
 
     Terminal_taskbar_button = Button(
         Taskbar,
-        width=28,
-        height=25,
         borderwidth="0",
-        relief="raised",
-        bg="#070E11",
+        relief="flat",
+        bg="#00142D",
+        activebackground = "#00142D",
         command=Terminal_programm,
         image = Terminal_button
     )
@@ -263,16 +258,15 @@ def Desktop(master):
 
     # Icono del explorador de archivos en la barra de tareas
     global File_manager_button, File_manager_button_light, File_manager_taskbar_button
-    File_manager_button = Asset("File manager", "File_manager_button.png")
-    File_manager_button_light = Asset("File manager", "File_manager_button_light.png")
+    File_manager_button = Asset_color("File manager", "File_manager_icon.png", "24x24", "#ff00ff", "#00142D")
+    File_manager_button_light = Asset_color("File manager", "File_manager_icon.png", "24x24", "#ff00ff", "#001B3D")
 
     File_manager_taskbar_button = Button(
         Taskbar,
-        width=28,
-        height=25,
         borderwidth="0",
         relief="flat",
-        bg="#070E11",
+        bg="#00142D",
+        activebackground = "#00142D",
         command=File_manager,
         image = File_manager_button
     )
@@ -283,20 +277,18 @@ def Desktop(master):
 
     # Icono del navegador en la barra de tareas
     global Browser_button, Browser_button_light, Browser_taskbar_button
-    Browser_button = Asset("Browser", "Browser_button.png")
-    Browser_button_light = Asset("Browser", "Browser_button_light.png")
+    Browser_button = Asset_color("Browser", "Browser_icon.png", "24x24", "#ff00ff", "#00142D")
+    Browser_button_light = Asset_color("Browser", "Browser_icon.png", "24x24", "#ff00ff", "#001B3D")
 
     Browser_taskbar_button = Button(
         Taskbar,
-        width=28,
-        height=25,
         borderwidth="0",
-        relief="raised",
-        bg="#070E11",
+        relief="flat",
+        bg="#00142D",
+        activebackground = "#00142D",
         command = Browser,
         image = Browser_button
     )
-    #Browser_taskbar_button.place(x=76, y=2) 116
 
     Browser_taskbar_button.bind("<Enter>", lambda event: Browser_taskbar_button.config(image = Browser_button_light))
     Browser_taskbar_button.bind("<Leave>", lambda event: Browser_taskbar_button.config(image = Browser_button))

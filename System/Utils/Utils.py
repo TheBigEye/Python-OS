@@ -171,7 +171,7 @@ def Asset(Folder_name, file_name_and_extension):
 
 
 # my masterpiece!!
-def Asset_color(Folder_name ,file_name_and_extension, from_color, to_color):
+def Asset_color(Folder_name ,file_name_and_extension, size, from_color, to_color):
 
     # First: Search the folder inside from Assets folder and save the path
     for root, dirs, files in os.walk(Assets_directory):
@@ -210,6 +210,13 @@ def Asset_color(Folder_name ,file_name_and_extension, from_color, to_color):
                         newData.append(item)
 
                 img.putdata(newData)
+
+                # resize image, arg example "100x200"
+                # get the height and width in the string, if the strring is "null" then cannot resize
+                if size != "null":
+                    size = size.split("x")
+                    img = img.resize((int(size[0]), int(size[1])), Image.ANTIALIAS)
+
                 return ImageTk.PhotoImage(img)
 
 
