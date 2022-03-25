@@ -34,7 +34,7 @@ Python OS is an operating system simulator written in Python, with a graphical i
 
 ### Some current ideas...
 - Antivirus (fake)
-- Control panel
+- Control pane
 - Draggable desktop icons
 - Internet
 - System configuration
