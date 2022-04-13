@@ -6,7 +6,7 @@
         This module implements the Python OS main window and executable.
 
     Author:
-        TheBigEye (Nahuel senek) 2-Jul-2021
+        TheBigEye 2-Jul-2021
 """
 
 import os
