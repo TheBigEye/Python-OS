@@ -1,56 +1,60 @@
-from tkinter import Label, PhotoImage
+from tkinter import Label, PhotoImage, Frame
 
 from System.Utils.Colormap import Black
-from System.Utils.Utils import Asset, print_log, Asset_colored
+from System.Utils.Utils import Asset, Logger, Asset_colored
 from System.Utils.Vars import Assets_directory
 
 __author__ = 'TheBigEye'
 __version__ = '1.5'
 
-def Boot_loader(master):
 
-    print_log("Starting...")
+class Boot_loader(Frame):
 
-    global Logon
+    def __init__(self, master, time):
 
-    master.configure(background=Black)  # Set the background color to black.
+        super().__init__(master)
 
-    Logon = Asset_colored("Bootloader", "logon.png", 1)
-    Boot_Logo = Label(master, image=Logon, borderwidth=0.1)
+        self.master = master
+        self.time = time
 
-    Boot_Logo.place(x= 408, y= 160)
+        self.master.configure(background=Black)  # Set the background color to black.
 
-    # Animation...
-    frames_count = 95 # Frames per second
+        self.Logon = Asset_colored("Bootloader", "logon.png", 1)
+        self.Boot_Logo = Label(self.master, image=self.Logon, borderwidth=0.1)
 
-    # Make a list of frames
-    frames = [
-        PhotoImage(file= Assets_directory + "/UI/Boot/Bootloader/Loading.gif", format="gif -index %i" % (i))
-        for i in range(frames_count)
-    ]
+        self.Boot_Logo.place(x= 408, y= 160)
 
-    # Show and update the frames
-    def update(ind):
+        # Animation...
+        self.frames_count = 95 # Frames per second
 
-        frame = frames[ind]
-        ind += 1
+        # Make a list of frames
+        self.frames = [
+            PhotoImage(file= Assets_directory + "/UI/Boot/Bootloader/Loading.gif", format="gif -index %i" % (i))
+            for i in range(self.frames_count)
+        ]
 
-        if ind == frames_count:
-            ind = 0
+        # Show and update the frames
+        def update(ind):
 
-        loading.configure(image=frame)
-        master.after(8, update, ind)
+            frame = self.frames[ind]
+            ind += 1
 
-    loading = Label(master, borderwidth=0.1)
-    loading.place(x= 480, y= 400)
+            if ind == self.frames_count:
+                ind = 0
 
-    def End_bootloader():
+            self.loading.configure(image=frame)
+            self.master.after(8, update, ind)
 
-        Boot_Logo.place_forget()
-        loading.place_forget()
+        self.loading = Label(self.master, borderwidth=0.1)
+        self.loading.place(x= 480, y= 400)
 
-        print_log("Finishing...")
+        def End_bootloader():
 
-    master.after(1, update, 0)
+            self.Boot_Logo.place_forget()
+            self.loading.place_forget()
 
-    master.after(10000, End_bootloader)
+            Logger.log("Finishing...")
+
+        self.master.after(1, update, 0)
+
+        self.master.after(time, End_bootloader)

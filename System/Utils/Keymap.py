@@ -1,10 +1,14 @@
-# List of all keys and buttons.
-
 """
-Keymap.py
 
-    This file contains the keymap for the keyboard.
-    This file is used to translate the tkinter keyboard keys to simple strings.
+    Module name:
+        Keymap.py
+
+    Abstract:
+        This module contains all the keys ids, util for tkinter.
+
+    Author:
+        TheBigEye 6-sep-2021
+
 """
 
 # Keyboard

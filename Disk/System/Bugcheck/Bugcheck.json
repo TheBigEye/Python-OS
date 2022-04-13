@@ -1,0 +1,77 @@
+{
+    "Emote": "Ouch!",
+    "Messagge" : "Your PC ran into a problem and needs to be shutdown.",
+    "Comment" : "If this problem persists, please contact your PC manufacturer.",
+    "Shutdown_time": 16,
+
+    "Codes": {
+        "0x00000000": {
+            "name": "NO_ERROR",
+            "description": "No error has occurred."
+        },
+        "0x00000001": {
+            "name": "APC_INDEX_MISMATCH",
+            "description": "An APC was delivered with an APC index that is out of range."
+        },
+        "0x00000002": {
+            "name": "DEVICE_QUEUE_NOT_BUSY",
+            "description": "An attempt was made to execute a device driver without first calling DeviceQueueStart."
+        },
+        "0x00000003": {
+            "name": "INVALID_AFFINITY_SET",
+            "description": "An attempt was made to execute a thread on an invalid processor."
+        },
+        "0x00000004": {
+            "name": "INVALID_DATA_ACCESS_TRAP",
+            "description": "An invalid attempt was made to access memory using an invalid address."
+        },
+        "0x00000005": {
+            "name": "INVALID_PROCESS_ATTACH_ATTEMPT",
+            "description": "An attempt was made to attach to a process that is not part of the operating system."
+        },
+        "0x00000006": {
+            "name": "INVALID_PROCESS_DETACH_ATTEMPT",
+            "description": "An attempt was made to detach a process that is part of the operating system."
+        },
+        "0x00000007": {
+            "name": "INVALID_SOFTWARE_INTERRUPT",
+            "description": "An invalid software interrupt was specified."
+        },
+        "0x00000008": {
+            "name": "IRQL_NOT_DISPATCH_LEVEL",
+            "description": "An attempt was made to execute a thread at an unsupported IRQL level."
+        },
+        "0x00000009": {
+            "name": "IRQL_NOT_GREATER_OR_EQUAL",
+            "description": "An attempt was made to execute a thread at an unsupported IRQL level."
+        },
+        "0x0000000A": {
+            "name": "IRQL_NOT_LESS_OR_EQUAL",
+            "description": "An attempt was made to execute a thread at an unsupported IRQL level."
+        },
+        "0x0000000B": {
+            "name": "NO_EXCEPTION_HANDLING_SUPPORT",
+            "description": "An attempt was made to execute a thread in an exception handler."
+        },
+        "0x0000000C": {
+            "name": "MAXIMUM_WAIT_OBJECTS_EXCEEDED",
+            "description": "The maximum number of wait objects that a thread can wait on has been exceeded."
+        },
+        "0x0000000D": {
+            "name": "MUTEX_LEVEL_NUMBER_VIOLATION",
+            "description": "An attempt was made to release a mutex that is not owned by the calling thread."
+        },
+        "0x0000000E": {
+            "name": "NO_USER_MODE_CONTEXT",
+            "description": "An attempt was made to execute a thread in a user mode thread."
+        },
+        "0x0000000F": {
+            "name": "SPIN_LOCK_ALREADY_OWNED",
+            "description": "An attempt was made to acquire a spin lock that is already owned by the calling thread."
+        },
+        "0xDEADDEAD": {
+            "name": "MANUALLY_INITIATED_CRASH1",
+            "description": "The system has crashed by the user."
+        }
+    }
+}

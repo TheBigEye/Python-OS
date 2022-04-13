@@ -1,7 +1,7 @@
 from tkinter import Entry, Label, Text
 from tkinter.constants import DISABLED, INSERT, NORMAL
 
-from System.Programs.Terminal.Command import CMD
+from System.Programs.Terminal.Commands import CMD
 from System.Utils.Colormap import Black
 
 __author__ = 'TheBigEye'
@@ -13,17 +13,11 @@ def Os_Installer(master):  # Display the Post-Bios window (coming soon the OOBE)
 
     master.configure(background=Black)  # Sets the background to Blue
 
-
     def Command_handler(event):
         """Execute the commands"""
 
         CMD(Terminal, Terminal_entry, Terminal_screen)
 
-    #Post_Bios_GUI = PhotoImage(file="Assets/GUI/Post_BIOS.png")
-    #Post_Bios = Label(master, image=Post_Bios_GUI, borderwidth=0.1)
-    #Post_Bios.place(x=0, y=0)
-
-    #Terminal = Label(master, text="Post-BIOS", font=("Arial", 20), bg=Low_blue, fg="white", borderwidth=0.1)
     Terminal = Label(master, width=1024, height=600 ,bg=Black, borderwidth=0.1)
     Terminal.place(x=0, y=0)
 

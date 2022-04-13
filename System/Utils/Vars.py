@@ -1,11 +1,21 @@
+"""
+
+    Module name:
+        Vars.py
+
+    Abstract:
+        This module implements the variables that are used in the program.
+
+    Author:
+
+        TheBigEye 29-oct-2021
+
+"""
+
 import os
 import platform
 
-# Important variables
-
 # Relative paths (used to be able to execute the program from anywhere)
-# WARNING: don't touch this unless you know what you're doing.
-
 Assets_directory = os.path.join(os.getcwd(), "Assets")
 Assets_directory = Assets_directory.replace("\\", "/")
 
@@ -15,7 +25,7 @@ Disk_directory = Disk_directory.replace("\\", "/")
 Logs_directory = os.path.join(os.getcwd(), "Logs")
 Logs_directory = Logs_directory.replace("\\", "/")
 
-
+# Cursors
 if platform.system() == "Windows":
 
     Cursor = "@" + "Assets/Cursors/Windows/Cursor.cur"

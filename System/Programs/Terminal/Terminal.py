@@ -1,12 +1,15 @@
 from tkinter import Button, Entry, Frame, Label, Text
 from tkinter.constants import INSERT
 
-from System.Programs.Terminal.Command import CMD
+from System.Programs.Terminal.Commands import CMD
 from System.UI.Attributes.Draggable import drag_n_drop
 from System.Utils.Utils import Asset, Asset_color, Data_get, Data_set
 
 __author__ = "TheBigEye"
 __version__ = "1.8"
+
+#font = ("Cascadia Code", 9)
+font = ("Consolas", 10)
 
 
 def set_foreground(color):
@@ -80,7 +83,7 @@ class Terminal(Frame):
             self.Terminal,
             bd=2,
             relief="flat",
-            font=("Consolas", 10),
+            font=font,
             undo=True,
             wrap="word"
         )
@@ -105,7 +108,11 @@ class Terminal(Frame):
         def Close_Terminal():
             """Close the Terminal"""
 
-            self.Terminal.destroy()
+            # get the widgets from the widget and destroy them
+            for widget in self.Terminal.winfo_children():
+                widget.destroy()
+
+            self.Terminal.after(512, self.Terminal.destroy)
 
 
         self.Close_button = Button(
@@ -186,7 +193,7 @@ class Terminal(Frame):
             borderwidth="0",
             fg=self.foreground,
             bg=self.background,
-            font=("Consolas", 10)
+            font=font
         )
 
         self.Terminal_entry.config(insertbackground=self.foreground)

@@ -43,7 +43,7 @@ def Browser(master, draggable: bool = False):
 
     if (draggable == True):
 
-        pass
+        print("")
 
     Browser_frame = Label(
         Browser,

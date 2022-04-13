@@ -15,7 +15,7 @@ import os
 import random
 import shelve
 
-from System.Utils.Utils import print_error, print_info, print_warning
+from System.Utils.Utils import Logger
 
 File_System = shelve.open('Disk/FS/Filesystem', writeback=True)
 current_dir = []
@@ -27,32 +27,33 @@ def fs_routines():
         boot_data = json.load(f)
 
     def check_boot():
-        if boot_data["FS_mounted"] == "False":
-            print_error("File system is not mounted")
+        if boot_data["FS_mounted"] != "False":
+            return
+        Logger.fail("File system is not mounted, installing...")
 
-            # delete the .dat, bak and dir files in Disk/FS/ for avoid errors
-            if os.path.exists("Disk/FS/Filesystem.dat"): os.remove("Disk/FS/Filesystem.dat")
-            if os.path.exists("Disk/FS/Filesystem.bak"): os.remove("Disk/FS/Filesystem.bak")
-            if os.path.exists("Disk/FS/Filesystem.dir"): os.remove("Disk/FS/Filesystem.dir")
+        # delete the .dat, bak and dir files in Disk/FS/ for avoid errors
+        if os.path.exists("Disk/FS/Filesystem.dat"): os.remove("Disk/FS/Filesystem.dat")
+        if os.path.exists("Disk/FS/Filesystem.bak"): os.remove("Disk/FS/Filesystem.bak")
+        if os.path.exists("Disk/FS/Filesystem.dir"): os.remove("Disk/FS/Filesystem.dir")
 
-            File_System = shelve.open('Disk/FS/Filesystem', writeback=True)
-            install(File_System)
+        File_System = shelve.open('Disk/FS/Filesystem', writeback=True)
+        install(File_System)
 
-            boot_data["FS_mounted"] = "True"
+        boot_data["FS_mounted"] = "True"
 
-            with open("Disk/Boot.json", "w") as f:
-                json.dump(boot_data, f, indent=4)
+        with open("Disk/Boot.json", "w") as f:
+            json.dump(boot_data, f, indent=4)
 
-            print_info("File system installed")
+        Logger.info("File system installed successfully")
 
     check_boot()
-    print_info("File system ready!")
+    Logger.info("File system ready!")
 
 def install(File_System):
     # create root and others
     Username = "User"
 
-    # default filesystem
+    # default filesystem structure
     File_System[""] = {
         "Home": {
             "Programs": {},
@@ -105,6 +106,7 @@ def cd(directory):
 
     # if the directory contains a dot and extension like .txt, cannot cd into it
     if "." in directory and directory.split(".")[1] != "":
+
         return str("Cannot cd into file")
 
     global current_dir
@@ -157,7 +159,7 @@ def mkfile(argument):
 
     # Check if the file already exists in the current directory
     if name_and_extension in current_dictionary():
-        print_warning("File " + name + "." + extension + " already exists, overwriting")
+        Logger.warning("File {} already exists, overwriting", name_and_extension)
 
         # add a random number to the name, imposible to have a file with the same name :)
         name = name + "-" + str(random.randint(0, 512) + random.randint(0, 512))
@@ -168,7 +170,8 @@ def mkfile(argument):
         directory[name_and_extension] = ""
         return
 
-    print_info("Created file " + name_and_extension + " in " + str("/" + "/".join(current_dir)))
+    Logger.info("Created file {} in {}", name_and_extension, str("/" + "/".join(current_dir)))
+
     dir = current_dictionary()
     dir[name_and_extension] = {
             "Metadata": {
@@ -218,10 +221,11 @@ def get_file_content(name_and_extension):
 
     # Check if the file exists
     if name_and_extension not in current_dictionary():
-        print_error("File " + name_and_extension + " does not exist")
+        Logger.fail("File {} does not exist", name_and_extension)
         return
 
-    print_info("Getting content of file " + name_and_extension)
+    Logger.info("Getting content of file {}", name_and_extension)
+
     dir = current_dictionary()
     return dir[name_and_extension]["Data"]
 
@@ -238,10 +242,11 @@ def get_file_metadata(name_and_extension):
 
     # Check if the file exists
     if name_and_extension not in current_dictionary():
-        print_error("File " + name_and_extension + " does not exist")
+        Logger.fail("File {} does not exist", name_and_extension)
         return
 
-    print_info("Getting metadata of file " + name_and_extension)
+    Logger.info("Getting metadata of file {}", name_and_extension)
+
     dir = current_dictionary()
     meta += "File: " + name_and_extension + "\n"
     meta += "Created: " + dir[name_and_extension]["Metadata"]["Created"] + "\n"
@@ -278,10 +283,11 @@ def rmfile(name_and_extension):
 
     # Check if the file exists
     if name_and_extension not in current_dictionary():
-        print_error("File " + name_and_extension + " does not exist")
+        Logger.fail("File {} does not exist", name_and_extension)
         return
 
-    print_info("Deleting file " + name_and_extension)
+    Logger.info("Deleting file {}", name_and_extension)
+
     dir = current_dictionary()
     del dir[name_and_extension]
     File_System.sync()

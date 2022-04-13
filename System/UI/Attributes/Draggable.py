@@ -44,9 +44,13 @@ def drag_motion(event):
     global widget, x, y
     widget.lift()
     widget = event.widget
-    x = widget.winfo_x() - widget._drag_start_x + event.x
-    y = widget.winfo_y() - widget._drag_start_y + event.y
+    x = (widget.winfo_x() - widget._drag_start_x / 2) + (event.x / 2)
+    y = (widget.winfo_y() - widget._drag_start_y / 2) + (event.y / 2)
     widget.master.after(1, lambda: widget.place(x = x, y = y))
+    widget.update()
+
+    # evoiding the blinking bug
+    widget.master.update()
 
 
 def make_draggable(widget):

@@ -1,4 +1,21 @@
-# Color list :)
+"""
+
+    Module name:
+        Colormap.py
+
+    Abstract:
+        This module contains:
+            - A list of colors
+            - A function to convert colors to rgb
+            - A function to convert colors to hex
+            - A function to convert colors to hsv
+
+        in general, the module contains color utilities
+
+    Author:
+        TheBigEye 6-sep-2021
+
+"""
 
 # Colors VGA (16 only | name | code |)
 White =        "#FFFFFF"
@@ -20,13 +37,22 @@ Purple =       "#800080"
 
 # NOTE: I know this is somewhat useless assuming writing the hex value is more flexible in tkinter
 
-
 def color_str_rgb(string):
     """
     Convert string color to rgb
+
+    Arguments:
+        `string : [str]` The string color to convert
+
+    Returns:
+        `rgb : [tuple]` The rgb color
+
+    Example:
+        >>> color_str_rgb("white")
+        (255, 255, 255)
     """
 
-    from System.Utils.Utils import print_error
+    from System.Utils.Utils import Logger
 
     string = string.lower()
 
@@ -55,16 +81,26 @@ def color_str_rgb(string):
     elif string == "lightmagenta" or string == "lightfuchsia": return (255, 128, 255)
 
     else:
-        print_error(string + " color not found")
+        Logger.fail("Color {} not found", string)
         return (0, 0, 0)
 
 
 def color_hex_rgb(hex):
     """
     Convert hex color to rgb
+
+    Arguments:
+        `hex : [str]` The hex color to convert
+
+    Returns:
+        `rgb : [tuple]` The rgb color
+
+    Example:
+        >>> color_hex_rgb("#FFFFFF")
+        (255, 255, 255)
     """
 
-    from System.Utils.Utils import print_error
+    from System.Utils.Utils import Logger
 
     if hex[0] == "#":
         hex = hex[1:]
@@ -72,7 +108,7 @@ def color_hex_rgb(hex):
         hex = tuple(int(hex[i:i+2], 16) for i in (0, 2 ,4))
         return hex
     else:
-        print_error(hex + " hex color not found")
+        Logger.fail("Hex color {} not found", hex)
         return (0, 0, 0)
 
 
@@ -81,12 +117,12 @@ def color_rgb_hex(rgb):
     Convert rgb color to hex
     """
 
-    from System.Utils.Utils import print_error
+    from System.Utils.Utils import Logger
 
     if type(rgb) == tuple:
         return "#" + "".join(["%02x" % i for i in rgb])
     else:
-        print_error(rgb + " rgb color not found")
+        Logger.fail("RGB color {} not found", rgb)
         return "#000000"
 
 
@@ -95,7 +131,7 @@ def color_rgb_hsv(rgb):
     Convert rgb color to hsv
     """
 
-    from System.Utils.Utils import print_error
+    from System.Utils.Utils import Logger
 
     if type(rgb) == tuple:
         r = rgb[0]/255
@@ -106,14 +142,10 @@ def color_rgb_hsv(rgb):
         max_value = max(r, g, b)
         delta = max_value - min_value
 
-        if delta == 0:
-            hue = 0
-        elif max_value == r:
-            hue = 60 * (((g - b) / delta) % 6)
-        elif max_value == g:
-            hue = 60 * (((b - r) / delta) + 2)
-        elif max_value == b:
-            hue = 60 * (((r - g) / delta) + 4)
+        if delta == 0:  hue = 0
+        elif max_value == r: hue = 60 * (((g - b) / delta) % 6)
+        elif max_value == g: hue = 60 * (((b - r) / delta) + 2)
+        elif max_value == b: hue = 60 * (((r - g) / delta) + 4)
 
         saturation = 0 if max_value == 0 else delta / max_value
 
@@ -122,7 +154,7 @@ def color_rgb_hsv(rgb):
         hsv = (hue, saturation, value)
         return hsv
     else:
-        print_error(rgb + " rgb color not found")
+        Logger.fail("RGB color {} not found", rgb)
         return (0, 0, 0)
 
 
@@ -131,7 +163,7 @@ def color_hsv_rgb(hsv):
     Convert hsv color to rgb
     """
 
-    from System.Utils.Utils import print_error
+    from System.Utils.Utils import Logger
 
     if type(hsv) == tuple:
         hue = hsv[0]
@@ -144,20 +176,14 @@ def color_hsv_rgb(hsv):
         q = value * (1 - hue_f * saturation)
         t = value * (1 - (1 - hue_f) * saturation)
 
-        if hue_i == 0:
-            rgb = (value, t, p)
-        elif hue_i == 1:
-            rgb = (q, value, p)
-        elif hue_i == 2:
-            rgb = (p, value, t)
-        elif hue_i == 3:
-            rgb = (p, q, value)
-        elif hue_i == 4:
-            rgb = (t, p, value)
-        elif hue_i == 5:
-            rgb = (value, p, q)
+        if hue_i == 0: rgb = (value, t, p)
+        elif hue_i == 1: rgb = (q, value, p)
+        elif hue_i == 2:  rgb = (p, value, t)
+        elif hue_i == 3: rgb = (p, q, value)
+        elif hue_i == 4: rgb = (t, p, value)
+        elif hue_i == 5: rgb = (value, p, q)
 
         return rgb
     else:
-        print_error(hsv + " hsv color not found")
+        Logger.fail("HSV color {} not found", hsv)
         return (0, 0, 0)

@@ -6,7 +6,7 @@ from System.Programs.Welcome_dialog.Welcome import Welcome_dialog
 from System.Programs.Browser.Browser import Browser
 from System.Programs.File_manager.File_manager import File_manager
 from System.UI.Message_box import Message_box
-from System.Utils.Utils import Asset, Asset_color, Asset_colored, Execute, internet_on, print_log
+from System.Utils.Utils import Asset, Asset_color, Asset_colored, Execute, internet_on, Logger
 
 __author__ = 'TheBigEye'
 __version__ = '2.0'
@@ -28,7 +28,7 @@ def Desktop(master):
 
  # ---------------------------------------------------------------[ Desktop ]-----------------------------------------------------------------------
 
-    print_log("Desktop loaded and running")
+    Logger.log("Desktop loaded and running")
 
     global Wallpaper, Desktop_wallpaper
 

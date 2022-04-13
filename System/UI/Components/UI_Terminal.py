@@ -1,4 +1,4 @@
-from tkinter import Frame, Label
+from tkinter import Frame
 from System.Utils.Utils import Asset
 
 

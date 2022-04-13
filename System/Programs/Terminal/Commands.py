@@ -4,7 +4,7 @@ import time
 from tkinter.constants import END, INSERT
 
 import psutil
-from System.Utils.Utils import print_error, print_log
+from System.Utils.Utils import Logger
 
 __author__ = 'TheBigEye'
 __version__ = '1.0'
@@ -384,7 +384,7 @@ def CMD(master, entry, output):
     if command.startswith("efile "):
         edit_file_command(command)
 
-    
+
     def metafile_command(command):
 
         from System.Core.FileSystem import get_file_content, get_file_metadata
@@ -482,7 +482,7 @@ def CMD(master, entry, output):
 
         set_foreground(color)
 
-        output.insert(INSERT, "Foreground changed to " + command + ", please restart to see the change", "\n\n")
+        output.insert(INSERT, "Foreground changed to " + command + ", please restart to see the change" + "\n\n")
         output.see(END)
 
     if command.startswith("foreground"):
@@ -511,7 +511,7 @@ def CMD(master, entry, output):
 
         set_background(color)
 
-        output.insert(INSERT, "Background changed to " + command + ", please restart to see the change", "\n\n")
+        output.insert(INSERT, "Background changed to " + command + ", please restart to see the change" + "\n\n")
         output.see(END)
 
     if command.startswith("background"):

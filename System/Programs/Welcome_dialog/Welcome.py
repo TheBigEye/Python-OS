@@ -2,8 +2,8 @@ from tkinter import Button, Frame, Label
 from tkinter.constants import INSERT
 
 from System.UI.Attributes.Draggable import drag_n_drop
-from System.Programs.Terminal.Command import CMD
-from System.Utils.Utils import Asset, Asset_colored, json_get
+from System.Programs.Terminal.Commands import CMD
+from System.Utils.Utils import Asset
 
 __author__ = "TheBigEye"
 __version__ = "1.8"

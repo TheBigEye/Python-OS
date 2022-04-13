@@ -3,10 +3,6 @@
     "Background": "#000E14",
     "Default": {
         "Foreground": "#F4FAEC",
-        "Background": "#000E14",
-        "Cursor": "#F4FAEC",
-        "CursorAccent": "#000E14",
-        "Selection": "#F4FAEC",
-        "SelectedText": "#000E14"
+        "Background": "#000E14"
     }
 }

@@ -1,4 +1,3 @@
-from tkinter import *
 from System.UI.Components.UI_Slider import UI_Slider
 from System.UI.Components.UI_Checkbutton import UI_Checkbutton
 from System.UI.Components.UI_Button import UI_Button

@@ -1,5 +1,5 @@
 
-from System.Utils.Utils import print_error, print_info, print_warning
+from System.Utils.Utils import Logger
 
 # Processes system -----------------------------------------------------------------------------------------------------------------------
 
@@ -10,7 +10,7 @@ def ts_routines():
     Processes system routines.
     """
 
-    print_info("Processes has finished loading")
+    Logger.info("Processes has finished loading")
 
 
 TaskSystem_directory = "Disk/TaskSystem.json"
