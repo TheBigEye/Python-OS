@@ -5,13 +5,13 @@
     <a href="https://github.com/TheBigEye/Python-OS#gh-light-mode-only"> <!-- light mode -->
         <img
              width="100%"
-             src="https://capsule-render.vercel.app/api?type=transparent&height=200&section=header&text=Python OS&fontSize=79&animation=fadeIn&fontAlignY=38&desc=An oprtating system simulator written in Python&descAlignY=64&descAlign=50&descSize=22" alt="Nice lightning!"
+             src="https://capsule-render.vercel.app/api?type=transparent&height=150&section=header&text=Python OS&fontSize=79&animation=fadeIn&fontAlignY=38&desc=An oprtating system simulator written in Python&descAlignY=75&descAlign=50&descSize=22" alt="Nice lightning!"
          />
     </a>
     <a href="https://github.com/TheBigEye#gh-dark-mode-only"> <!-- dark mode -->
         <img
              width="100%"
-             src="https://capsule-render.vercel.app/api?type=transparent&height=200&section=header&text=Python OS&fontSize=79&animation=fadeIn&fontAlignY=38&desc=An oprtating system simulator written in Python&descAlignY=64&descAlign=50&descSize=22&fontColor=f0f0f0" alt="Too dark!!"
+             src="https://capsule-render.vercel.app/api?type=transparent&height=150&section=header&text=Python OS&fontSize=79&animation=fadeIn&fontAlignY=38&desc=An oprtating system simulator written in Python&descAlignY=75&descAlign=50&descSize=22&fontColor=f0f0f0" alt="Too dark!!"
          />
     </a>
 </p>
