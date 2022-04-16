@@ -52,7 +52,7 @@
 - It is composed of a wallpaper along with a taskbar
 - The taskbar contains a clock, volume and internet icons.
 - A start menu.
-- Draggabble window (Bugged)
+- Draggabble window
 
 #### Programs:
 - **Terminal** - you can write and execute commands
