@@ -16,21 +16,39 @@
     </a>
 </p>
 
-<!-- Views -->
+<!-- Badges -->
 <p align="center"> 
      <a href="https://github.com/TheBigEye#gh-light-mode-only"> <!-- light mode -->
           <img 
+               src="https://img.shields.io/badge/Python-FFD43B?style=for-the-badge&logo=python&logoColor=blue&color=4f4f4f" 
+               Title="Python"  
+          />
+          <img 
                src="https://komarev.com/ghpvc/?username=Eye-Python-OS&label=Views&style=for-the-badge" 
-               alt="Views counter" 
+               Title="Views" 
+          />
+          <img 
+               src="https://img.shields.io/badge/VSCode-0078D4?style=for-the-badge&logo=visual%20studio%20code&logoColor=blue&color=4f4f4f" 
+               Title="VScode" 
           />
      </a>
      <a href="https://github.com/TheBigEye#gh-dark-mode-only"> <!-- dark mode -->
           <img 
+               src="https://img.shields.io/badge/Python-FFD43B?style=for-the-badge&logo=python&logoColor=blue&color=4f4f4f" 
+               Title="Python"  
+          />
+          <img 
                src="https://komarev.com/ghpvc/?username=Eye-Python-OS&label=Views&color=000000&style=for-the-badge" 
-               alt="Views counter" 
+               Title="Views" 
+          />
+          <img 
+               src="https://img.shields.io/badge/VSCode-0078D4?style=for-the-badge&logo=visual%20studio%20code&logoColor=blue&color=4f4f4f" 
+               Title="VScode" 
           />
      </a>
 </p>
+
+
 
 <!-- Light or dark according to the github theme that the user has when viewing it -->
 
