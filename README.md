@@ -94,7 +94,7 @@
 - **Draggable desktop icons**
 - **Internet**
 - **System configuration**
-- **Reboot**
+- **Reboot and shutdown**
 
 ## Installation
 
