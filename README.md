@@ -28,7 +28,7 @@
                Title="Views" 
           />
           <img 
-               src="https://img.shields.io/badge/VSCode-0078D4?style=for-the-badge&logo=visual%20studio%20code&logoColor=blue&color=4f4f4f" 
+               src="https://img.shields.io/badge/VSCode-0078D4?style=for-the-badge&logo=visual%20studio%20code&logoColor=ffffff&color=blue" 
                Title="VScode" 
           />
      </a>
@@ -42,7 +42,7 @@
                Title="Views" 
           />
           <img 
-               src="https://img.shields.io/badge/VSCode-0078D4?style=for-the-badge&logo=visual%20studio%20code&logoColor=blue&color=4f4f4f" 
+               src="https://img.shields.io/badge/VSCode-0078D4?style=for-the-badge&logo=visual%20studio%20code&logoColor=blue&color=000000" 
                Title="VScode" 
           />
      </a>
