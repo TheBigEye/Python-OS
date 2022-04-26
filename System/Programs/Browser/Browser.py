@@ -9,7 +9,7 @@ __version__ = '1.1'
 # TODO: remove and replace it with a more efficient function.
 
 
-def Browser(master, draggable: bool = False):
+def Browser(master):
 
 # Documentation ---------------------------------------------------------------------------------------------------------------
 
@@ -30,7 +30,7 @@ def Browser(master, draggable: bool = False):
 # Browser ---------------------------------------------------------------------------------------------------------------
 
     global Browser, Browser_GUI_Image
-    Browser_GUI_Image = Asset("Browser.png")
+    Browser_GUI_Image = Asset("Browser","Browser.png")
 
     Browser = Label(
         master,
@@ -40,10 +40,6 @@ def Browser(master, draggable: bool = False):
     )
 
     Browser.place(x= 32, y= 32)
-
-    if (draggable == True):
-
-        print("")
 
     Browser_frame = Label(
         Browser,

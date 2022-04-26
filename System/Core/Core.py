@@ -25,7 +25,8 @@ from System.UI.Boot.Desktop import Desktop
 from System.UI.Boot.Installer import Os_Installer
 from System.UI.Boot.Login import Login
 
-from System.Utils.Utils import json_get, json_set, Logger
+from System.Utils.Utils import json_get, json_set
+from System.Utils.Logger import Logger
 from System.Utils.Vars import Disk_directory
 
 # Load the boot value from boot.json
@@ -127,7 +128,7 @@ def set_boot(value):
     This function is used to set the kernel level (boot order).
     """
 
-    from System.Utils.Utils import print_info
+    from System.Utils.Logger import Logger
 
     str_value = str(value)
     int_value = int(value)

@@ -1,7 +1,8 @@
-from tkinter import Label, PhotoImage, Frame
+from tkinter import Frame, Label, PhotoImage
 
 from System.Utils.Colormap import Black
-from System.Utils.Utils import Asset, Logger, Asset_colored
+from System.Utils.Logger import Logger
+from System.Utils.Utils import Asset, Asset_colored
 from System.Utils.Vars import Assets_directory
 
 __author__ = 'TheBigEye'

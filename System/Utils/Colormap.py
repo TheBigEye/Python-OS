@@ -52,7 +52,7 @@ def color_str_rgb(string):
         (255, 255, 255)
     """
 
-    from System.Utils.Utils import Logger
+    from System.Utils.Logger import Logger
 
     string = string.lower()
 
@@ -100,7 +100,7 @@ def color_hex_rgb(hex):
         (255, 255, 255)
     """
 
-    from System.Utils.Utils import Logger
+    from System.Utils.Logger import Logger
 
     if hex[0] == "#":
         hex = hex[1:]
@@ -117,7 +117,7 @@ def color_rgb_hex(rgb):
     Convert rgb color to hex
     """
 
-    from System.Utils.Utils import Logger
+    from System.Utils.Logger import Logger
 
     if type(rgb) == tuple:
         return "#" + "".join(["%02x" % i for i in rgb])
@@ -131,7 +131,7 @@ def color_rgb_hsv(rgb):
     Convert rgb color to hsv
     """
 
-    from System.Utils.Utils import Logger
+    from System.Utils.Logger import Logger
 
     if type(rgb) == tuple:
         r = rgb[0]/255
@@ -163,7 +163,7 @@ def color_hsv_rgb(hsv):
     Convert hsv color to rgb
     """
 
-    from System.Utils.Utils import Logger
+    from System.Utils.Logger import Logger
 
     if type(hsv) == tuple:
         hue = hsv[0]

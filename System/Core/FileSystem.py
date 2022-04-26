@@ -15,7 +15,7 @@ import os
 import random
 import shelve
 
-from System.Utils.Utils import Logger
+from System.Utils.Logger import Logger
 
 File_System = shelve.open('Disk/FS/Filesystem', writeback=True)
 current_dir = []

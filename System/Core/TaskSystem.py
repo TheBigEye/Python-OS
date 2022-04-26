@@ -1,5 +1,5 @@
 
-from System.Utils.Utils import Logger
+from System.Utils.Logger import Logger
 
 # Processes system -----------------------------------------------------------------------------------------------------------------------
 

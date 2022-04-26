@@ -4,7 +4,7 @@ import time
 from tkinter.constants import END, INSERT
 
 import psutil
-from System.Utils.Utils import Logger
+from System.Utils.Logger import Logger
 
 __author__ = 'TheBigEye'
 __version__ = '1.0'

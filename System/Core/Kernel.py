@@ -13,7 +13,7 @@ import json
 import sys
 from tkinter import BOTH, Label, Misc
 
-from System.Utils.Utils import Logger
+from System.Utils.Logger import Logger
 from System.Utils.Vars import Disk_directory
 
 # TODO: implement a bootloader class for able restart the system

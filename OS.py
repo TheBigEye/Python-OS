@@ -16,10 +16,12 @@ from tkinter import PhotoImage
 
 from System.Core.Core import boot_check, delete_logs, routines, set_boot
 from System.Utils.Colormap import Black
-from System.Utils.Utils import Logger
+from System.Utils.Logger import Logger
 from System.Utils.Vars import Assets_directory, XCursor_2
 
-# -------------------------------------------[ Main ]------------------------------------------- #
+# ------------------------------------------[ Main ]------------------------------------------- #
+
+# FIXME: Here, somewhere in this module, there is a big performance loss (slow start)
 
 def main():
 
@@ -36,10 +38,9 @@ def main():
     if os.name == "nt": # Window
         icon = PhotoImage(file=Assets_directory + "/Icon.png")
         Os.iconphoto(False, icon)
-        Os.configure(background = Black, cursor = XCursor_2)
+        Os.configure(background= Black, cursor = XCursor_2)
     else:
-        Os.configure(background = Black)
-
+        Os.configure(background= Black)
 
     # In case the device screen resolution is too lower, a warning will be displayed
     if (Os.winfo_screenwidth() < 1024 or Os.winfo_screenheight() < 600):
@@ -55,46 +56,47 @@ def args_check():
 
     """
     This function gets the arguments from the command line.
+
+    Example:
+        >>> python OS.py --help --version --delete-logs --set-boot
     """
 
     args = sys.argv[1:]
 
+    def help_arg():
+        print("""
+        --help | --h:                Shows this help.
+        --version | --v:             Shows the version of the program.
+        --delete-logs | --dl:        Deletes the logs.
+        --set-boot int | --b int:     Sets the boot value.
+        """)
+
+    def version_arg():
+        print("""
+        Python OS version: 1.0.0
+        """)
+
+    def delete_logs_arg():
+        delete_logs()
+
+    def set_boot_arg():
+        set_boot(sys.argv[2])
+
     if len(args) == 0:
         main()
-        return
+    else:
+        match args[0]:
+            case "--help" | "--h": help_arg()
+            case "--version" | "--v": version_arg()
+            case "--delete-logs" | "--dl": delete_logs_arg()
+            case "--set-boot" | "--b": set_boot_arg()
+            case _:
+                Logger.fail("Invalid argument, STOPING..")
+                sys.exit()
 
-    if args[0] == "--help":
-        print("------------------------------------------------------")
-        print("--help:          Show this help")
-        print("--version:       Show the version of the program")
-        print("--delete-logs:   Delete all logs")
-        print("--set-boot:      Set the boot value")
-        print("------------------------------------------------------")
-        return
 
-    if args[0] == "--version":
-        print("Python OS v1.0")
-        return
-
-    if args[0] == "--delete-logs":
-        print("Deleting logs...")
-        delete_logs()
-        return
-
-    # --set-boot int
-    if args[0] == "--set-boot":
-        if len(args) == 2:
-            try:
-                set_boot(int(args[1]))
-            except ValueError:
-                print("ERROR: The boot value must be an integer.")
-                return
-        else:
-            print("ERROR: The boot value must be an integer.")
-            return
-
+# AVOID running the program directly by importing it
 if __name__ == "__main__":
     args_check()
 
 # -------------------------------------------[ End ]------------------------------------------- #
-

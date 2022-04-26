@@ -1,12 +1,13 @@
 import time
 from tkinter import Button, Label
 
-from System.Programs.Terminal.Terminal import Terminal
-from System.Programs.Welcome_dialog.Welcome import Welcome_dialog
 from System.Programs.Browser.Browser import Browser
 from System.Programs.File_manager.File_manager import File_manager
+from System.Programs.Terminal.Terminal import Terminal
+from System.Programs.Welcome_dialog.Welcome import Welcome_dialog
 from System.UI.Message_box import Message_box
-from System.Utils.Utils import Asset, Asset_color, Asset_colored, Execute, internet_on, Logger
+from System.Utils.Logger import Logger
+from System.Utils.Utils import Asset, Asset_color, Asset_colored, Execute, internet_on
 
 __author__ = 'TheBigEye'
 __version__ = '2.0'
@@ -85,10 +86,10 @@ def Desktop(master):
         Execute(master, 1000, Terminal, master, True)
 
     # LLama al navegador
-    def Browser():
+    def Browser_programm():
         Close_start_menu()
 
-        Browser(master, draggable=True)
+        Browser(master)
 
  # ------------------------------------------------------------[ Barra de tareas ]------------------------------------------------------------------
 
@@ -286,7 +287,7 @@ def Desktop(master):
         relief="flat",
         bg="#00142D",
         activebackground = "#00142D",
-        command = Browser,
+        command = Browser_programm,
         image = Browser_button
     )
 
