@@ -11,26 +11,24 @@
 """
 
 import datetime
+import os
 import platform
 import sys
-import os
 from tkinter import Misc
 
 from System.Core.FileSystem import fs_routines
 from System.Core.Kernel import bug_check
 from System.Core.TaskSystem import ts_routines
-
 from System.UI.Boot.BIOS import BIOS
 from System.UI.Boot.Desktop import Desktop
 from System.UI.Boot.Installer import Os_Installer
 from System.UI.Boot.Login import Login
-
-from System.Utils.Utils import json_get, json_set
 from System.Utils.Logger import Logger
-from System.Utils.Vars import Disk_directory
+from System.Utils.Utils import json_get, json_set
+from System.Utils.Vars import Assets_directory
 
 # Load the boot value from boot.json
-Kernel_lvl = json_get(Disk_directory, "Boot.json", "Boot")
+Kernel_lvl = json_get(Assets_directory + "/Data/Boot data", "Boot.json", "Boot")
 
 # Each screen has an ID
 isBSOD = False        # Black screen of death 0
@@ -68,9 +66,7 @@ match Kernel_lvl:
 
 def check_os():
 
-    """
-    This function is used to check if the system is running on Linux, Windows or Mac.
-    """
+    """ This function is used to check if the system is running on Linux, Windows or Mac. """
 
     global in_linux, in_windows, in_mac
 
@@ -81,13 +77,11 @@ def check_os():
 
 def routines():
 
-    """
-    Used to execute the first tasks in the first seconds of system startup.
-    """
+    """ Used to execute the first tasks in the first seconds of system startup """
 
     check_os()
 
-    Logger.log("----------- Starting system execution -----------")
+    Logger.log("--------------- Starting system execution ---------------")
     Logger.log("System started at: {}", datetime.datetime.now())
 
     # In what os is running the system?
@@ -106,9 +100,7 @@ def routines():
 
 def delete_logs():
 
-    """
-    This function is used to delete the logs.
-    """
+    """ This function is used to delete the logs. """
 
     # Get the relative path of the Logs folder
     logs_path = os.path.join(os.getcwd(), "Logs")
@@ -124,9 +116,7 @@ def delete_logs():
 
 def set_boot(value):
 
-    """
-    This function is used to set the kernel level (boot order).
-    """
+    """ This function is used to set the kernel level (boot order). """
 
     from System.Utils.Logger import Logger
 
@@ -147,7 +137,7 @@ def set_boot(value):
             Logger.fail("Invalid value, must be 0-8, STOPING..")
             sys.exit()
 
-    json_set(Disk_directory, "Boot.json", "Boot", int_value)
+    json_set(Assets_directory + "Data/Boot data", "Boot.json", "Boot", int_value)
 
 
 class boot:

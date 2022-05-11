@@ -3,7 +3,7 @@ from tkinter.constants import INSERT
 
 from System.Programs.Terminal.Commands import CMD
 from System.UI.Attributes.Draggable import drag_n_drop
-from System.Utils.Utils import Asset, Asset_color, Data_get, Data_set
+from System.Utils.Utils import Asset, Asset_color, data_get, data_set
 
 __author__ = "TheBigEye"
 __version__ = "1.8"
@@ -17,14 +17,14 @@ def set_foreground(color):
     """Set the foreground color of the terminal"""
 
     # Save the json in Assets/GUI/Desktop/Terminal/Data/Terminal.json
-    Data_set("Terminal data", "Terminal.json", "Foreground", color)
+    data_set("Terminal data", "Terminal.json", "Foreground", color)
 
 
 def get_foreground():
 
     """Get the foreground color of the terminal"""
 
-    return Data_get("Terminal data", "Terminal.json", "Foreground")
+    return data_get("Terminal data", "Terminal.json", "Foreground")
 
 
 def set_background(color):
@@ -32,12 +32,12 @@ def set_background(color):
     """Set the background color of the terminal"""
 
     # Save the json in Assets/GUI/Desktop/Terminal/Data/Terminal.json
-    Data_set("Terminal data", "Terminal.json", "Background", color)
+    data_set("Terminal data", "Terminal.json", "Background", color)
 
 
 def get_background():
 
-    return Data_get("Terminal data", "Terminal.json", "Background")
+    return data_get("Terminal data", "Terminal.json", "Background")
 
 
 class Terminal(Frame):
@@ -71,6 +71,8 @@ class Terminal(Frame):
             self.Terminal_screen.config(state="disabled")
 
         self.Terminal_image = Asset_color("Terminal", "Window.png", "null", "#ff00ff", self.background)  # Terminal image base
+        self.Splash_image = Asset_color("Terminal", "Terminal_icon.png", "112x112", "#ff00ff", "#002C4F")  # Splash image
+
 
         self.Terminal = Label(
             self.master,
@@ -96,11 +98,11 @@ class Terminal(Frame):
 
         self.Terminal_screen.config(state="disabled")
 
-        self.Terminal.place(x=260, y=148)
+        self.Terminal.place(relx=.2, y=132)
         self.Terminal_screen.place(x=3.5, y=24)
 
 
-        # ----------------------------------------------------------------- [Close terminal button] -------------------------------------------------------------------------
+# ----------------------------------------------------------------- [Close terminal button] -------------------------------------------------------------------------
 
         self.Close_button_image = Asset("Window", "Close_button.png")  # Terminal close button
         self.Close_button_red_image = Asset("Window", "Close_button_red.png")  # Terminal close red button
@@ -131,7 +133,7 @@ class Terminal(Frame):
         self.Close_button.place(x=520, y=4)
 
 
-        # ----------------------------------------------------------------- [Maximize terminal button] ----------------------------------------------------------------------
+# ----------------------------------------------------------------- [Maximize terminal button] ----------------------------------------------------------------------
 
         self.Maximize_button_image = Asset("Window", "Maximize_button.png")  # Terminal maximize button
         self.Maximize_button_light_image = Asset("Window", "Maximize_button_light.png")  # Terminal maximize button light
@@ -185,7 +187,7 @@ class Terminal(Frame):
         self.Minimize_button.place(x=484, y=4)
 
 
-        # ---------------------------------------------------------------------- [Entry de terminal] ---------------------------------------------------------------------------
+# ---------------------------------------------------------------------- [Terminal input entry] ---------------------------------------------------------------------------
 
         self.Terminal_entry = Entry(
             self.Terminal,
@@ -202,11 +204,35 @@ class Terminal(Frame):
 
         self.Terminal_entry.place(x=5.5, y=330)
 
+        def Splash_screen(time):
+            """Splash screen"""
+
+            self.Splash = Label(
+                self.Terminal,
+                bg="#002C4F",
+                height="22",
+                width="76",
+            )
+
+            self.Splash.place(x=0.5, y=21)
+
+            self.Splash_logo = Label(
+                self.Splash,
+                image=self.Splash_image,
+                borderwidth="0",
+            )
+
+            # Put the logo in the middle of the window, .5 is the center of the window
+            self.Splash_logo.place(relx=.5, y=140, anchor="center")
+
+            self.Splash.after(time, self.Splash.destroy)
+
+        Splash_screen(5000)
+
         self.Terminal_screen.bind("<Button-1>", lambda event: self.Terminal.lift())
         self.Terminal_entry.bind("<Button-1>", lambda event: self.Terminal.lift())
-        # --------------------------------------------------------------------------- [Final] ----------------------------------------------------------------------------------
+# --------------------------------------------------------------------------- [End] ----------------------------------------------------------------------------------
 
         # draggable terminal window
         if draggable:
             drag_n_drop(self.Terminal)
-

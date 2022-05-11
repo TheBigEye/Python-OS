@@ -1,9 +1,0 @@
-[2022-04-12 22:37:38]  | [LOG][routines] ----------- Starting system execution -----------
-[2022-04-12 22:37:38]  | [LOG][routines] System started at: 2022-04-12 22:37:38.801770
-[2022-04-12 22:37:38]  | [LOG][routines] Running on Windows
-[2022-04-12 22:37:38]  | [INFO][ts_routines] Processes has finished loading
-[2022-04-12 22:37:38]  | [INFO][fs_routines] File system ready!
-[2022-04-12 22:37:40]  | [LOG][boot_check] Starting from normal boot
-[2022-04-12 22:37:50]  | [LOG][End_bootloader] Finishing...
-[2022-04-12 22:37:51]  | [LOG][Desktop] Desktop loaded and running
-[2022-04-12 22:37:54]  | [WARN][Asset] The file Taskbar_Icons.png does not exist in the folder Taskbar

@@ -16,6 +16,7 @@ import random
 import shelve
 
 from System.Utils.Logger import Logger
+from System.Utils.Vars import Assets_directory
 
 File_System = shelve.open('Disk/FS/Filesystem', writeback=True)
 current_dir = []
@@ -23,7 +24,7 @@ current_dir = []
 def fs_routines():
 
     # laod boot data
-    with open('Disk/Boot.json', 'r') as f:
+    with open(Assets_directory + "/Data/Boot data/Boot.json", "r") as f:
         boot_data = json.load(f)
 
     def check_boot():
@@ -41,38 +42,29 @@ def fs_routines():
 
         boot_data["FS_mounted"] = "True"
 
-        with open("Disk/Boot.json", "w") as f:
+        with open(Assets_directory + "/Data/Boot data/Boot.json", "w") as f:
             json.dump(boot_data, f, indent=4)
 
-        Logger.info("File system installed successfully")
+        Logger.log("File system installed successfully")
 
     check_boot()
     Logger.info("File system ready!")
 
 def install(File_System):
-    # create root and others
     Username = "User"
 
-    # default filesystem structure
-    File_System[""] = {
-        "Home": {
-            "Programs": {},
-            Username: {
-                "Desktop": {},
-                "Documents": {},
-                "Music": {}
-            }
-        },
-        "System": {
-            "Core": {
-                "Temp": {},
-            },
-            "Boot": {},
-            "Lib": {}
-        }
-    }
+    # Load the File system structure file
+    with open('Assets/Data/Boot data/FS', 'r') as fs_structure:
+        # Read the file
+        fs_data = fs_structure.read()
 
-    # sync the filesystem
+        # Get the %User% from the structure and change it to the username
+        fs_data = fs_data.replace("%User%", Username)
+
+    # Set the structure to the File system
+    File_System[""] = json.loads(fs_data)
+
+    # sync the File system
     File_System.sync()
 
 def current_dictionary():

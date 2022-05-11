@@ -83,7 +83,7 @@ def Desktop(master):
     def Terminal_programm():
         Close_start_menu()
 
-        Execute(master, 1000, Terminal, master, True)
+        Execute(master, 800, Terminal, master, True)
 
     # LLama al navegador
     def Browser_programm():

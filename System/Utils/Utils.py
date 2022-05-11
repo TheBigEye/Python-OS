@@ -287,9 +287,9 @@ def Image_getcolor(image, x, y):
                 return color
 
 
-def Data_set(Folder_name, json_file, key, value):
+def data_set(Folder_name, json_file, key, value):
 
-    for root, dirs, files in os.walk(Assets_directory + "/Datas"):
+    for root, dirs, files in os.walk(Assets_directory + "/Data"):
         for folder in dirs:
             if folder == Folder_name:
                 folder_path = os.path.join(root, folder)
@@ -305,9 +305,9 @@ def Data_set(Folder_name, json_file, key, value):
                         json.dump(data, f, indent=4)
 
 
-def Data_get(Folder_name, json_file, key):
+def data_get(Folder_name, json_file, key):
 
-    for root, dirs, files in os.walk(Assets_directory + "/Datas"):
+    for root, dirs, files in os.walk(Assets_directory + "/Data"):
         for folder in dirs:
             if folder == Folder_name:
                 folder_path = os.path.join(root, folder)

@@ -37,6 +37,8 @@ def drag_finish(event):
 
 def drag_motion(event):
 
+    # TODO: Review this function aand improve it
+
     """
     This function is invoked when the user moves the mouse.
     """
@@ -44,9 +46,9 @@ def drag_motion(event):
     global widget, x, y
     widget.lift()
     widget = event.widget
-    x = (widget.winfo_x() - widget._drag_start_x / 2) + (event.x / 2)
-    y = (widget.winfo_y() - widget._drag_start_y / 2) + (event.y / 2)
-    widget.master.after(1, lambda: widget.place(x = x, y = y))
+    x = (widget.winfo_x() - widget._drag_start_x ) / 2 + (event.x) / 2
+    y = (widget.winfo_y() - widget._drag_start_y ) / 2 + (event.y) / 2
+    widget.master.after(10, lambda: widget.place(x = x, y = y))
     widget.update()
 
     # evoiding the blinking bug

@@ -23,11 +23,11 @@ from System.Utils.Vars import Assets_directory, XCursor_2
 
 # FIXME: Here, somewhere in this module, there is a big performance loss (slow start)
 
+isDEBUG = False # Debug mode
+
 def main():
 
-    """
-    This is the main function of the OS.
-    """
+    """ This is the main function of the OS. """
 
     Os = tk.Tk()  # Create the window that will be the base of the program.
     Os.title("Python OS")  # Window title.
@@ -41,6 +41,8 @@ def main():
         Os.configure(background= Black, cursor = XCursor_2)
     else:
         Os.configure(background= Black)
+
+
 
     # In case the device screen resolution is too lower, a warning will be displayed
     if (Os.winfo_screenwidth() < 1024 or Os.winfo_screenheight() < 600):
@@ -82,18 +84,24 @@ def args_check():
     def set_boot_arg():
         set_boot(sys.argv[2])
 
+    def debug_arg():
+        global isDEBUG
+        isDEBUG = True
+        Logger.info("----------- Debug mode activated -----------")
+        main()
+
     if len(args) == 0:
         main()
     else:
         match args[0]:
-            case "--help" | "--h": help_arg()
-            case "--version" | "--v": version_arg()
+            case "--help"        | "--h":  help_arg()
+            case "--version"     | "--v":  version_arg()
+            case "--debug"       | "--d":  debug_arg()
             case "--delete-logs" | "--dl": delete_logs_arg()
-            case "--set-boot" | "--b": set_boot_arg()
+            case "--set-boot"    | "--b":  set_boot_arg()
             case _:
-                Logger.fail("Invalid argument, STOPING..")
+                Logger.info("Invalid argument {}, use --help to see the help.", args[0])
                 sys.exit()
-
 
 # AVOID running the program directly by importing it
 if __name__ == "__main__":

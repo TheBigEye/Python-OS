@@ -1,0 +1,17 @@
+{
+    "Home": {
+        "Programs": {},
+        "%User%": {
+            "Desktop": {},
+            "Documents": {},
+            "Music": {}
+        }
+    },
+    "System": {
+        "Core": {
+            "Temp": {}
+        },
+        "Boot": {},
+        "Lib": {}
+    }
+}

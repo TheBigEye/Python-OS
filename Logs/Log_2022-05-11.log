@@ -1,0 +1,10 @@
+───────────────────────┬────────┬──────────────────────┬────────────────────────────────────────────────────────────────┐
+         Date          │  Type  │         Name         |                            Action                              │
+───────────────────────┴────────┴──────────────────────┴─────────────────────────────────────────────────────────────────
+[2022-05-11 08:14:06]  │ [LOG]  │ [routines]           ├ --------------- Starting system execution ---------------
+[2022-05-11 08:14:07]  │ [LOG]  │ [routines]           ├ System started at: 2022-05-11 08:14:07.187263
+[2022-05-11 08:14:07]  │ [LOG]  │ [routines]           ├ Running on Windows
+[2022-05-11 08:14:08]  │ [LOG]  │ [boot_check]         ├ Starting from normal boot
+[2022-05-11 08:14:18]  │ [LOG]  │ [End_bootloader]     ├ Finishing...
+[2022-05-11 08:14:20]  │ [LOG]  │ [Desktop]            ├ Desktop loaded and running
+[2022-05-11 08:14:23]  │ [WARN] │ [Asset]              ├ The file Taskbar_Icons.png does not exist in the folder Taskbar

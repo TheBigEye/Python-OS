@@ -1,8 +1,9 @@
+import random
 from tkinter import Frame, Label, PhotoImage
 
 from System.Utils.Colormap import Black
 from System.Utils.Logger import Logger
-from System.Utils.Utils import Asset, Asset_colored
+from System.Utils.Utils import Asset_colored
 from System.Utils.Vars import Assets_directory
 
 __author__ = 'TheBigEye'
@@ -23,7 +24,8 @@ class Boot_loader(Frame):
         self.Logon = Asset_colored("Bootloader", "logon.png", 1)
         self.Boot_Logo = Label(self.master, image=self.Logon, borderwidth=0.1)
 
-        self.Boot_Logo.place(x= 408, y= 160)
+        # Put the logo in the center of the screen.
+        self.Boot_Logo.place(relx=.5, y=276, anchor="center")
 
         # Animation...
         self.frames_count = 95 # Frames per second
@@ -43,11 +45,13 @@ class Boot_loader(Frame):
             if ind == self.frames_count:
                 ind = 0
 
+            rnd = random.randint(8, 24)
+
             self.loading.configure(image=frame)
-            self.master.after(8, update, ind)
+            self.master.after(rnd, update, ind)
 
         self.loading = Label(self.master, borderwidth=0.1)
-        self.loading.place(x= 480, y= 400)
+        self.loading.place(relx=.5, y=416, anchor="center")
 
         def End_bootloader():
 

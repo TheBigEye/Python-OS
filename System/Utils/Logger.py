@@ -66,9 +66,22 @@ class Logger:
         >>> Logger.fail("This is a fail message with {}", args)
     """
 
+    # Logger header
+    print("───────┬─────────────────────┬────────────────────────────────────────────────────┐")
+    print(" Type  |        Name         |                      Action                        |")
+    print("───────┴─────────────────────┴─────────────────────────────────────────────────────")
+
+    header = "───────────────────────┬────────┬──────────────────────┬────────────────────────────────────────────────────────────────┐" + "\n" + \
+             "         Date          │  Type  │         Name         |                            Action                              │" + "\n" + \
+             "───────────────────────┴────────┴──────────────────────┴─────────────────────────────────────────────────────────────────" + "\n"
+
     # make the logs file
     log_filename = "Log_" + datetime.datetime.now().strftime("%Y-%m-%d") + ".log"
     log_encoding = "utf-8"
+
+    # write the header in the log file
+    with open(Logs_directory + "/" + log_filename, "a", encoding=log_encoding) as log_file:
+        log_file.write(header)
 
     def log(message: str, *args):
 
@@ -96,24 +109,29 @@ class Logger:
         # Get the function name
         function_name = inspect.stack()[1][3]
 
-        log_label = Style.GREEN_BLOCK + "[LOG]" + Style.WHITE
-        function_label = Style.ITALIC + "[" + function_name + "]" + Style.WHITE
+        log_label = Style.GREEN + "[LOG]  │" + Style.WHITE
+        function_label = Style.WHITE + "[" + function_name + "]" + Style.WHITE
 
         # Get the args with .format and put them in the message {}
         if len(args) > 0:
             message = message.format(*args)
 
+        spaceSeparator = 28 - len(function_label)
+
         # Print the message in the console, the function name and the message have a separator
-        print(log_label + " " + function_label + " " + message)
+        print(log_label + " " + function_label + " " * spaceSeparator + "├ " + message)
+        # put the message in the terminal column 20
+
+
 
         # Save the message in the log file
         with open(Logs_directory + "/" + Logger.log_filename, "a", encoding=Logger.log_encoding) as log_file:
-            log_file.write("[" + date + "] " + " | " + "[LOG]" + "[" + function_name + "] " + message + "\n")
+            log_file.write("[" + date + "] " + " │ " + "[LOG]  │ " + "[" + function_name + "] " + " " * spaceSeparator + "├ " + message + "\n")
 
     def info(message: str, *args):
 
         """
-        Log an info message.
+        Log an info message (not save to the log file).
 
         arguments:
             `message : [String]` the message to log.
@@ -137,19 +155,18 @@ class Logger:
         # Get the function name
         function_name = inspect.stack()[1][3]
 
-        info_label = Style.BLUE_BLOCK + "[INFO]" + Style.WHITE
-        function_label = Style.ITALIC + "[" + function_name + "]" + Style.WHITE
+        info_label = Style.BLUE + "[INFO] │" + Style.WHITE
+        function_label = Style.WHITE + "[" + function_name + "]" + Style.WHITE
 
         # Get the args with .format and put them in the message {}
         if len(args) > 0:
             message = message.format(*args)
 
-        # Print the message in the console, the function name and the message have a separator
-        print(info_label + " " + function_label + " " + message)
+        spaceSeparator = 28 - len(function_label)
 
-        # Save the message in the log file
-        with open(Logs_directory + "/" + Logger.log_filename, "a", encoding=Logger.log_encoding) as log_file:
-            log_file.write("[" + date + "] " + " | " + "[INFO]" + "[" + function_name + "] " + message + "\n")
+        # Print the message in the console, the function name and the message have a separator
+        print(info_label + " " + function_label + " " * spaceSeparator + "├ " + message)
+
 
     def warning(message: str, *args):
         """
@@ -178,19 +195,22 @@ class Logger:
         # Get the function name
         function_name = inspect.stack()[1][3]
 
-        warning_label = Style.YELLOW_BLOCK + "[WARN]" + Style.WHITE
-        function_label = Style.ITALIC + "[" + function_name + "]" + Style.WHITE
+        warning_label = Style.YELLOW + "[WARN] │" + Style.WHITE
+        function_label = Style.WHITE + "[" + function_name + "]" + Style.WHITE
 
         # Get the args with .format and put them in the message {}
         if len(args) > 0:
             message = message.format(*args)
 
+        spaceSeparator = 28 - len(function_label)
+
         # Print the message in the console, the function name and the message have a separator
-        print(warning_label + " " + function_label + " " + message)
+        print(warning_label + " " + function_label + " " * spaceSeparator + "├ " + message)
 
         # Save the message in the log file
         with open(Logs_directory + "/" + Logger.log_filename, "a", encoding=Logger.log_encoding) as log_file:
-            log_file.write("[" + date + "] " + " | " + "[WARN]" + "[" + function_name + "] " + message + "\n")
+            log_file.write("[" + date + "] " + " │ " + "[WARN] │ " + "[" + function_name + "] " + " " * spaceSeparator + "├ " + message + "\n")
+
 
     def fail(message: str, *args):
 
@@ -218,16 +238,18 @@ class Logger:
         # Get the function name
         function_name = inspect.stack()[1][3]
 
-        fail_label = Style.RED_BLOCK + "[FAIL]" + Style.WHITE
-        function_label = Style.ITALIC + "[" + function_name + "]" + Style.WHITE
+        fail_label = Style.RED + "[FAIL] │" + Style.WHITE
+        function_label = Style.WHITE + "[" + function_name + "]" + Style.WHITE
 
         # Get the args with .format and put them in the message {}
         if len(args) > 0:
             message = message.format(*args)
 
+        spaceSeparator = 28 - len(function_label)
+
         # Print the message in the console, the function name and the message have a separator
-        print(fail_label + " " + function_label + " " + message)
+        print(fail_label + " " + function_label + " " * spaceSeparator + "├ " + message)
 
         # Save the message in the log file
         with open(Logs_directory + "/" + Logger.log_filename, "a", encoding=Logger.log_encoding) as log_file:
-            log_file.write("[" + date + "] " + " | " + "[FAIL]" + "[" + function_name + "] " + message + "\n")
+            log_file.write("[" + date + "] " + " │ " + "[FAIL] │ " + "[" + function_name + "] " + " " * spaceSeparator + "├ " + message + "\n")
