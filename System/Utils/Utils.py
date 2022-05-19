@@ -149,28 +149,8 @@ def Asset_color(Folder_name: str ,File_name_and_extension: str, Size: str, From_
                 img = img.convert("RGBA")
                 image_data = img.getdata()
 
-                # detect if from_color is in hex or string
-                if From_color[0] == "#":
-                    From_color = color_hex_rgb(From_color)
-                else:
-                    From_color = color_str_rgb(From_color)
-
-                # detect if to_color is in hex or string
-                if To_color[0] == "#":
-                    To_color = color_hex_rgb(To_color)
-                else:
-                    # convert string color rgb
-                    To_color = color_str_rgb(To_color)
-
-                # replace colors
-                newData = []
-                for item in image_data:
-                    if item[0] == From_color[0] and item[1] == From_color[1] and item[2] == From_color[2]:
-                        newData.append(To_color + (255,))
-                    else:
-                        newData.append(item)
-
-                img.putdata(newData)
+                # change image color
+                img.putdata(replace_color(image_data, From_color, To_color))
 
                 # resize image
                 if Size != "null":
@@ -182,6 +162,46 @@ def Asset_color(Folder_name: str ,File_name_and_extension: str, Size: str, From_
 
     Logger.warning("The file {} does not exist in the folder {}", File_name_and_extension, Folder_name)
 
+
+def replace_color(image_data, From_color: str, To_color: str):
+
+    """ Return a image file from a folder within the Assets folder
+
+    Arguments:
+        `image_data : [list]` The image data.
+        `From_color : [str]` The color A of the image (is the color which will be replaced).
+        `To_color : [str]` The color B of the image (replace ).
+
+    Returns:
+        `PhotoImage : [PhotoImage object]` The image file with the changes.
+
+    Example:
+        >>> # This example will return the new image data with the colors changes
+        >>> image_data = replace_color(image_data, "#FF00FF", "#F0CF00")
+    """
+
+    # detect if from_color is in hex or string
+    if From_color[0] == "#":
+        From_color = color_hex_rgb(From_color)
+    else:
+        From_color = color_str_rgb(From_color)
+
+    # detect if to_color is in hex or string
+    if To_color[0] == "#":
+        To_color = color_hex_rgb(To_color)
+    else:
+        # convert string color rgb
+        To_color = color_str_rgb(To_color)
+
+    # replace colors
+    newData = []
+    for item in image_data:
+        if item[0] == From_color[0] and item[1] == From_color[1] and item[2] == From_color[2]:
+            newData.append(To_color + (255,))
+        else:
+            newData.append(item)
+
+    return newData
 
 def Asset_colored(Folder_name, file_name_and_extension, hue_value):
 
@@ -251,7 +271,7 @@ def json_set(Folder, json_file, key, value):
     Set the value of a key from a json file.
 
     Arguments:
-        `Folder : [str]` The name of the folder where the json file is. 
+        `Folder : [str]` The name of the folder where the json file is.
         `json_file : [str]` The name (and extension) of the json file.
         `key : [str]` The key of the value you want to set.
         `value : [str]` The value of the key.

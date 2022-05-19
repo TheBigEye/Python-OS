@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 """
     Module Name:
         OS.py
@@ -23,8 +25,6 @@ from System.Utils.Vars import Assets_directory, XCursor_2
 
 # FIXME: Here, somewhere in this module, there is a big performance loss (slow start)
 
-isDEBUG = False # Debug mode
-
 def main():
 
     """ This is the main function of the OS. """
@@ -42,8 +42,6 @@ def main():
     else:
         Os.configure(background= Black)
 
-
-
     # In case the device screen resolution is too lower, a warning will be displayed
     if (Os.winfo_screenwidth() < 1024 or Os.winfo_screenheight() < 600):
         Logger.warning("The screen resolution is too low. The program may not work properly.")
@@ -54,7 +52,7 @@ def main():
     Os.mainloop() # Tkinter main loop
 
 
-def args_check():
+def run():
 
     """
     This function gets the arguments from the command line.
@@ -85,9 +83,9 @@ def args_check():
         set_boot(sys.argv[2])
 
     def debug_arg():
-        global isDEBUG
-        isDEBUG = True
-        Logger.info("----------- Debug mode activated -----------")
+        Logger.showConsole = True
+        Logger.header()
+        Logger.info("----------------- Debug mode activated -----------------")
         main()
 
     if len(args) == 0:
@@ -105,6 +103,6 @@ def args_check():
 
 # AVOID running the program directly by importing it
 if __name__ == "__main__":
-    args_check()
+    run()
 
 # -------------------------------------------[ End ]------------------------------------------- #

@@ -1,5 +1,5 @@
 import time
-from tkinter import Button, Label
+from tkinter import Button, Label, PhotoImage
 
 from System.Programs.Browser.Browser import Browser
 from System.Programs.File_manager.File_manager import File_manager
@@ -43,8 +43,7 @@ def Desktop(master):
 
  # ---------------------------------------------------------------[Welcome dialog]------------------------------------------------------------------
 
-    Welcome_dialog(master, draggable=False)
-
+    # Welcome_dialog(master, draggable=False)
 
  # -------------------------------------------------------------[ Errors types ]----------------------------------------------------------------
 
@@ -90,6 +89,7 @@ def Desktop(master):
         Close_start_menu()
 
         Browser(master)
+        Message_box(master, "Warning", "Browser", "this may not work very well", True)
 
  # ------------------------------------------------------------[ Barra de tareas ]------------------------------------------------------------------
 

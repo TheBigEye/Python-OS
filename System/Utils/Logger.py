@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 """
     Module Name:
         Logger.py
@@ -11,9 +13,9 @@
 
 import datetime
 import inspect
+import os
 
 from System.Utils.Vars import Logs_directory
-
 
 class Style:
 
@@ -66,22 +68,42 @@ class Logger:
         >>> Logger.fail("This is a fail message with {}", args)
     """
 
-    # Logger header
-    print("───────┬─────────────────────┬────────────────────────────────────────────────────┐")
-    print(" Type  |        Name         |                      Action                        |")
-    print("───────┴─────────────────────┴─────────────────────────────────────────────────────")
+    showConsole = False
 
-    header = "───────────────────────┬────────┬──────────────────────┬────────────────────────────────────────────────────────────────┐" + "\n" + \
-             "         Date          │  Type  │         Name         |                            Action                              │" + "\n" + \
-             "───────────────────────┴────────┴──────────────────────┴─────────────────────────────────────────────────────────────────" + "\n"
+    # Verify if the log folder exists, if not, create it
+    if not os.path.exists(Logs_directory):
+        os.makedirs(Logs_directory)
 
-    # make the logs file
+    # Verify if in the Logs folder exist more than 6 files if yes, delete the oldest one
+    log_files = os.listdir(Logs_directory)
+    if len(log_files) > 6:
+        log_files.sort()
+        os.remove(Logs_directory + "/" + log_files[0])
+
+    # Make the logs file
     log_filename = "Log_" + datetime.datetime.now().strftime("%Y-%m-%d") + ".log"
-    log_encoding = "utf-8"
 
-    # write the header in the log file
-    with open(Logs_directory + "/" + log_filename, "a", encoding=log_encoding) as log_file:
-        log_file.write(header)
+    console_header = []
+    file_header = [] # Store the log file header
+
+    # Logger header
+    console_header.append("---------------------------------------------------------------------------------------")
+    console_header.append("| Type |        Name         |                         Action                         |")
+    console_header.append("---------------------------------------------------------------------------------------")
+
+    def header():
+        for line in Logger.console_header:
+            print(line)
+
+    # File header
+    file_header.append("-------------------------------------------------------------------------------------------------------------------------")
+    file_header.append("|        Date          |  Type  |         Name         |                            Action                              |")
+    file_header.append("-------------------------------------------------------------------------------------------------------------------------")
+
+    # Write the header in the log file
+    with open(Logs_directory + "/" + log_filename, "a", encoding="utf8") as log_file:
+        for line in file_header:
+            log_file.write(line + "\n")
 
     def log(message: str, *args):
 
@@ -109,24 +131,22 @@ class Logger:
         # Get the function name
         function_name = inspect.stack()[1][3]
 
-        log_label = Style.GREEN + "[LOG]  │" + Style.WHITE
+        log_label = Style.GREEN + "[LOG] " + Style.WHITE + " |" + Style.WHITE
         function_label = Style.WHITE + "[" + function_name + "]" + Style.WHITE
 
-        # Get the args with .format and put them in the message {}
+        # Get the args from {}
         if len(args) > 0:
             message = message.format(*args)
 
         spaceSeparator = 28 - len(function_label)
 
-        # Print the message in the console, the function name and the message have a separator
-        print(log_label + " " + function_label + " " * spaceSeparator + "├ " + message)
-        # put the message in the terminal column 20
-
-
+        # Print the message in the console
+        if (Logger.showConsole == True):
+            print(log_label + " " + function_label + " " * spaceSeparator + "|-> " + message)
 
         # Save the message in the log file
-        with open(Logs_directory + "/" + Logger.log_filename, "a", encoding=Logger.log_encoding) as log_file:
-            log_file.write("[" + date + "] " + " │ " + "[LOG]  │ " + "[" + function_name + "] " + " " * spaceSeparator + "├ " + message + "\n")
+        with open(Logs_directory + "/" + Logger.log_filename, "a", encoding="utf8") as log_file:
+            log_file.write("[" + date + "] " + " | " + "[LOG] " + " | " + "[" + function_name + "] " + " " * spaceSeparator + "|-> " + message + "\n")
 
     def info(message: str, *args):
 
@@ -155,17 +175,18 @@ class Logger:
         # Get the function name
         function_name = inspect.stack()[1][3]
 
-        info_label = Style.BLUE + "[INFO] │" + Style.WHITE
+        info_label = Style.BLUE + "[INFO]" + Style.WHITE + " |" + Style.WHITE
         function_label = Style.WHITE + "[" + function_name + "]" + Style.WHITE
 
-        # Get the args with .format and put them in the message {}
+        # Get the args from {}
         if len(args) > 0:
             message = message.format(*args)
 
         spaceSeparator = 28 - len(function_label)
 
-        # Print the message in the console, the function name and the message have a separator
-        print(info_label + " " + function_label + " " * spaceSeparator + "├ " + message)
+        # Print the message in the console
+        if (Logger.showConsole == True):
+            print(info_label + " " + function_label + " " * spaceSeparator + "|-> " + message)
 
 
     def warning(message: str, *args):
@@ -195,21 +216,22 @@ class Logger:
         # Get the function name
         function_name = inspect.stack()[1][3]
 
-        warning_label = Style.YELLOW + "[WARN] │" + Style.WHITE
+        warning_label = Style.YELLOW + "[WARN]" + Style.WHITE + " |" + Style.WHITE
         function_label = Style.WHITE + "[" + function_name + "]" + Style.WHITE
 
-        # Get the args with .format and put them in the message {}
+        # Get the args from {}
         if len(args) > 0:
             message = message.format(*args)
 
         spaceSeparator = 28 - len(function_label)
 
-        # Print the message in the console, the function name and the message have a separator
-        print(warning_label + " " + function_label + " " * spaceSeparator + "├ " + message)
+        # Print the message in the console
+        if (Logger.showConsole == True):
+            print(warning_label + " " + function_label + " " * spaceSeparator + "|-> " + message)
 
         # Save the message in the log file
-        with open(Logs_directory + "/" + Logger.log_filename, "a", encoding=Logger.log_encoding) as log_file:
-            log_file.write("[" + date + "] " + " │ " + "[WARN] │ " + "[" + function_name + "] " + " " * spaceSeparator + "├ " + message + "\n")
+        with open(Logs_directory + "/" + Logger.log_filename, "a", encoding="utf8") as log_file:
+            log_file.write("[" + date + "] " + " | " + "[WARN] | " + "[" + function_name + "] " + " " * spaceSeparator + "|-> " + message + "\n")
 
 
     def fail(message: str, *args):
@@ -238,18 +260,19 @@ class Logger:
         # Get the function name
         function_name = inspect.stack()[1][3]
 
-        fail_label = Style.RED + "[FAIL] │" + Style.WHITE
+        fail_label = Style.RED + "[FAIL] |" + Style.WHITE
         function_label = Style.WHITE + "[" + function_name + "]" + Style.WHITE
 
-        # Get the args with .format and put them in the message {}
+        # Get the args from {}
         if len(args) > 0:
             message = message.format(*args)
 
         spaceSeparator = 28 - len(function_label)
 
-        # Print the message in the console, the function name and the message have a separator
-        print(fail_label + " " + function_label + " " * spaceSeparator + "├ " + message)
+        # Print the message in the console
+        if (Logger.showConsole == True):
+            print(fail_label + " " + function_label + " " * spaceSeparator + "|-> " + message)
 
         # Save the message in the log file
-        with open(Logs_directory + "/" + Logger.log_filename, "a", encoding=Logger.log_encoding) as log_file:
-            log_file.write("[" + date + "] " + " │ " + "[FAIL] │ " + "[" + function_name + "] " + " " * spaceSeparator + "├ " + message + "\n")
+        with open(Logs_directory + "/" + Logger.log_filename, "a", encoding="utf8") as log_file:
+            log_file.write("[" + date + "] " + " | " + "[FAIL] | " + "[" + function_name + "] " + " " * spaceSeparator + "|-> " + message + "\n")
