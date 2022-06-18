@@ -1,4 +1,4 @@
 {
-    "Boot": 8,
-    "FS_mounted": "True"
+    "Boot_phase": 8,
+    "FS_mounted": true
 }

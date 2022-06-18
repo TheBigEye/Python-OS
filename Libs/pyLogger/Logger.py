@@ -5,7 +5,7 @@
         Logger.py
 
     Abstract:
-        This  module implement the Logger and related functions.
+        This module implement the Logger and related functions.
 
     Author:
         TheBigEye 10-apr-2022
@@ -15,7 +15,7 @@ import datetime
 import inspect
 import os
 
-from System.Utils.Vars import Logs_directory
+Logs_directory = os.path.join(os.getcwd(), "Logs")
 
 class Style:
 
@@ -59,16 +59,14 @@ class Logger:
         >>> Logger.log("This is a log message")
         >>> Logger.info("This is an info message")
         >>> Logger.warning("This is a warning message")
-        >>> Logger.fail("This is a fail message")
+        >>> Logger.error("This is a error message")
 
         # Advanced usage
         >>> Logger.log("This is a log message with {}", args)
         >>> Logger.info("This is an info message with {}", args)
         >>> Logger.warning("This is a warning message with {}", args)
-        >>> Logger.fail("This is a fail message with {}", args)
+        >>> Logger.error("This is a error message with {}", args)
     """
-
-    showConsole = False
 
     # Verify if the log folder exists, if not, create it
     if not os.path.exists(Logs_directory):
@@ -76,6 +74,7 @@ class Logger:
 
     # Verify if in the Logs folder exist more than 6 files if yes, delete the oldest one
     log_files = os.listdir(Logs_directory)
+
     if len(log_files) > 6:
         log_files.sort()
         os.remove(Logs_directory + "/" + log_files[0])
@@ -83,19 +82,8 @@ class Logger:
     # Make the logs file
     log_filename = "Log_" + datetime.datetime.now().strftime("%Y-%m-%d") + ".log"
 
-    console_header = []
-    file_header = [] # Store the log file header
-
-    # Logger header
-    console_header.append("---------------------------------------------------------------------------------------")
-    console_header.append("| Type |        Name         |                         Action                         |")
-    console_header.append("---------------------------------------------------------------------------------------")
-
-    def header():
-        for line in Logger.console_header:
-            print(line)
-
     # File header
+    file_header = []
     file_header.append("-------------------------------------------------------------------------------------------------------------------------")
     file_header.append("|        Date          |  Type  |         Name         |                            Action                              |")
     file_header.append("-------------------------------------------------------------------------------------------------------------------------")
@@ -104,6 +92,15 @@ class Logger:
     with open(Logs_directory + "/" + log_filename, "a", encoding="utf8") as log_file:
         for line in file_header:
             log_file.write(line + "\n")
+
+    # Logger header
+    console_header = []
+    console_header.append("----------------------------------------------------------------------------------------")
+    console_header.append("| Type |        Name         |                          Action                         |")
+    console_header.append("----------------------------------------------------------------------------------------")
+
+    for line in console_header:
+        print(line)
 
     def log(message: str, *args):
 
@@ -141,12 +138,11 @@ class Logger:
         spaceSeparator = 28 - len(function_label)
 
         # Print the message in the console
-        if (Logger.showConsole == True):
-            print(log_label + " " + function_label + " " * spaceSeparator + "|-> " + message)
+        print(log_label + " " + function_label + " " * spaceSeparator + "| > " + message)
 
         # Save the message in the log file
         with open(Logs_directory + "/" + Logger.log_filename, "a", encoding="utf8") as log_file:
-            log_file.write("[" + date + "] " + " | " + "[LOG] " + " | " + "[" + function_name + "] " + " " * spaceSeparator + "|-> " + message + "\n")
+            log_file.write("[" + date + "] " + " | " + "[LOG] " + " | " + "[" + function_name + "] " + " " * spaceSeparator + "| > " + message + "\n")
 
     def info(message: str, *args):
 
@@ -168,25 +164,21 @@ class Logger:
             >>> Logger.info("This started sucessfully at {}", datetime.datetime.now())
         """
 
-
-        # Get the current date and time
         date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-
-        # Get the function name
         function_name = inspect.stack()[1][3]
 
         info_label = Style.BLUE + "[INFO]" + Style.WHITE + " |" + Style.WHITE
         function_label = Style.WHITE + "[" + function_name + "]" + Style.WHITE
 
-        # Get the args from {}
         if len(args) > 0:
             message = message.format(*args)
 
         spaceSeparator = 28 - len(function_label)
 
-        # Print the message in the console
-        if (Logger.showConsole == True):
-            print(info_label + " " + function_label + " " * spaceSeparator + "|-> " + message)
+        print(info_label + " " + function_label + " " * spaceSeparator + "| > " + message)
+
+        with open(Logs_directory + "/" + Logger.log_filename, "a", encoding="utf8") as log_file:
+            log_file.write("[" + date + "] " + " | " + "[INFO] " + "| " + "[" + function_name + "] " + " " * spaceSeparator + "| > " + message + "\n")
 
 
     def warning(message: str, *args):
@@ -202,42 +194,34 @@ class Logger:
 
         Examples:
             # Simple usage
-            >>> Logger.warning("This whould fail")
+            >>> Logger.warning("This whould error")
 
             # Advanced usage
-            >>> Logger.warning("This whould fail because {}", get_error())
+            >>> Logger.warning("This whould error because {}", get_error())
 
         """
 
-
-        # Get the current date and time
         date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-
-        # Get the function name
         function_name = inspect.stack()[1][3]
 
         warning_label = Style.YELLOW + "[WARN]" + Style.WHITE + " |" + Style.WHITE
         function_label = Style.WHITE + "[" + function_name + "]" + Style.WHITE
 
-        # Get the args from {}
         if len(args) > 0:
             message = message.format(*args)
 
         spaceSeparator = 28 - len(function_label)
 
-        # Print the message in the console
-        if (Logger.showConsole == True):
-            print(warning_label + " " + function_label + " " * spaceSeparator + "|-> " + message)
+        print(warning_label + " " + function_label + " " * spaceSeparator + "| > " + message)
 
-        # Save the message in the log file
         with open(Logs_directory + "/" + Logger.log_filename, "a", encoding="utf8") as log_file:
-            log_file.write("[" + date + "] " + " | " + "[WARN] | " + "[" + function_name + "] " + " " * spaceSeparator + "|-> " + message + "\n")
+            log_file.write("[" + date + "] " + " | " + "[WARN] | " + "[" + function_name + "] " + " " * spaceSeparator + "| > " + message + "\n")
 
 
-    def fail(message: str, *args):
+    def error(message: str, *args):
 
         """
-        This function is used to log a fail message.
+        This function is used to log a error message.
 
         arguments:
             `message : [String]` the message to log.
@@ -248,31 +232,38 @@ class Logger:
 
         Examples:
             # Simple usage
-            >>> Logger.fail("Oh no, something went wrong!") # Log a fail message
+            >>> Logger.error("Oh no, something went wrong!") # Log a error message
 
             # Advanced usage
-            >>> Logger.fail("Oh no, something went wrong with {}", class())
+            >>> Logger.error("Oh no, something went wrong with {}", class())
         """
 
-        # Get the current date and time
         date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-
-        # Get the function name
         function_name = inspect.stack()[1][3]
 
         fail_label = Style.RED + "[FAIL] |" + Style.WHITE
         function_label = Style.WHITE + "[" + function_name + "]" + Style.WHITE
 
-        # Get the args from {}
         if len(args) > 0:
             message = message.format(*args)
 
         spaceSeparator = 28 - len(function_label)
 
-        # Print the message in the console
-        if (Logger.showConsole == True):
-            print(fail_label + " " + function_label + " " * spaceSeparator + "|-> " + message)
+        print(fail_label + " " + function_label + " " * spaceSeparator + "| > " + message)
 
-        # Save the message in the log file
         with open(Logs_directory + "/" + Logger.log_filename, "a", encoding="utf8") as log_file:
-            log_file.write("[" + date + "] " + " | " + "[FAIL] | " + "[" + function_name + "] " + " " * spaceSeparator + "|-> " + message + "\n")
+            log_file.write("[" + date + "] " + " | " + "[FAIL] | " + "[" + function_name + "] " + " " * spaceSeparator + "| > " + message + "\n")
+
+
+    def clean_logs():
+        """
+        This function is used to remove all the logs files from the logs folder.
+        """
+
+        function_name = inspect.stack()[1][3]
+        print(Style.WHITE + "[" + function_name + "] " + Style.WHITE + " | " + Style.WHITE + "Cleaning logs files...")
+
+        # Remove the logs files
+        for file in os.listdir(Logs_directory):
+            if file.endswith(".log"):
+                os.remove(Logs_directory + "/" + file)

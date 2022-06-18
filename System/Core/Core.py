@@ -16,19 +16,15 @@ import platform
 import sys
 from tkinter import Misc
 
+from Libs.pyLogger.Logger import Logger
 from System.Core.FileSystem import fs_routines
 from System.Core.Kernel import bug_check
 from System.Core.TaskSystem import ts_routines
-from System.UI.Boot.BIOS import BIOS
-from System.UI.Boot.Desktop import Desktop
-from System.UI.Boot.Installer import Os_Installer
-from System.UI.Boot.Login import Login
-from System.Utils.Logger import Logger
-from System.Utils.Utils import json_get, json_set
+from System.Utils.Utils import get_json, set_json
 from System.Utils.Vars import Assets_directory
 
 # Load the boot value from boot.json
-Kernel_lvl = json_get(Assets_directory + "/Data/Boot data", "Boot.json", "Boot")
+Kernel_lvl = get_json("Assets/Data/Boot data/Boot.json", "Boot_phase")
 
 # Each screen has an ID
 isBSOD = False        # Black screen of death 0
@@ -60,7 +56,7 @@ match Kernel_lvl:
     case 7: isDesktop = True
     case 8: isBoot = True
     case _:
-        Logger.fail("Invalid value, must be 0-8, STOPING..")
+        Logger.error("Invalid value, must be 0-8, STOPING..")
         sys.exit()
 
 
@@ -81,7 +77,7 @@ def routines():
 
     check_os()
 
-    Logger.log("--------------- Starting system execution ---------------")
+    Logger.log("-------------- Starting system execution --------------")
     Logger.log("System started at: {}", datetime.datetime.now())
 
     # In what os is running the system?
@@ -118,7 +114,7 @@ def set_boot(value):
 
     """ This function is used to set the kernel level (boot order). """
 
-    from System.Utils.Logger import Logger
+    from Libs.pyLogger.Logger import Logger
 
     str_value = str(value)
     int_value = int(value)
@@ -134,10 +130,10 @@ def set_boot(value):
         case 7: Logger.info("{} | Kernel level set to: Desktop", str_value)
         case 8: Logger.info("{} | Kernel level set to: Boot", str_value)
         case _:
-            Logger.fail("Invalid value, must be 0-8, STOPING..")
+            Logger.error("Invalid value, must be 0-8, STOPING..")
             sys.exit()
 
-    json_set(Assets_directory + "Data/Boot data", "Boot.json", "Boot", int_value)
+    set_json("Assets/Data/Boot data/Boot.json", "Boot_phase", int_value)
 
 
 class boot:
@@ -155,20 +151,26 @@ class boot:
 
     def __init__(self, master: Misc, screen: Misc, time: int):
 
-        from System.UI.Boot.Bootloader import Boot_loader
+        from System.UI.Boot.Bootloader import Bootloader
 
         self.master = master
         self.screen = screen
 
-        Boot_loader(self.master, time)
+        Bootloader(self.master, time)
 
         self.master.after(time  + 1000, screen, self.master)
+
 
 
 def boot_check(master):
     """
     This function is used to check if the boot process is complete.
     """
+
+    from System.UI.Boot.BIOS import BIOS
+    from System.UI.Boot.Desktop import Desktop
+    from System.UI.Boot.Installer import Os_Installer
+    from System.UI.Boot.Login import Login
 
     # Here the variables of the boot order are checked and the corresponding function is executed:
     if isBSOD:
@@ -206,5 +208,5 @@ def boot_check(master):
 
     # In case the boot order fails, stop the program and write the following:
     else:
-        Logger.fail("Invalid or not found boot order, STOPPING...")
+        Logger.error("Invalid or not found boot order, STOPPING...")
         sys.exit()

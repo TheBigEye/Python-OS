@@ -1,8 +1,8 @@
 from tkinter import Button, Label
 from typing import Literal
 
-from System.UI.Attributes.Draggable import drag_n_drop
-from System.Utils.Utils import Asset
+from System.UI.Attributes.Draggable import drag_it
+from System.Utils.Utils import get_image
 
 __author__ = 'TheBigEye'
 __version__ = '1.1'
@@ -56,7 +56,7 @@ class Message_box(Label):
 
 
             global Error_Message_box_image, Error_Message_box
-            self.Error_Message_box_image = Asset("Error", "Window.png")
+            self.Error_Message_box_image = get_image("Assets/UI/Desktop/Message box/Error/Window.png")
 
             self.Error_Message_box = Label(
                 self.master,
@@ -90,7 +90,7 @@ class Message_box(Label):
             )
 
 
-            self.Error_logo_image = Asset("Error","Error.png")
+            self.Error_logo_image = get_image("Assets/UI/Desktop/Message box/Error/Error.png")
 
             self.Error_logo = Label (
                 self.Error_Message_box,
@@ -108,7 +108,7 @@ class Message_box(Label):
                 self.Error_Message_box.destroy()
 
 
-            self.Error_OK_button_image = Asset("Message box", "OK_button.png")
+            self.Error_OK_button_image = get_image("Assets/UI/Desktop/Message box/OK_button.png")
 
             self.Error_OK_button = Button(
                 self.Error_Message_box,
@@ -123,8 +123,8 @@ class Message_box(Label):
             self.Error_OK_button.place(x=343, y=78)
 
 
-            self.Error_close_button_image = Asset("Error", "Close_button.png")
-            self.Error_close_button_light_image = Asset("Error", "Close_button_red.png")
+            self.Error_close_button_image = get_image("Assets/UI/Desktop/Message box/Error/Close_button.png")
+            self.Error_close_button_light_image = get_image("Assets/UI/Desktop/Message box/Error/Close_button_red.png")
 
             self.Error_close_button = Button(
                 self.Error_Message_box,
@@ -144,7 +144,7 @@ class Message_box(Label):
 
             if self.draggable:
 
-                drag_n_drop(self.Error_Message_box)
+                drag_it(self.Error_Message_box)
 
             self.Error_title_label.place(x= 11, y= 1)
             self.Error_message_label.place(x= 20, y= 32)
@@ -163,7 +163,7 @@ class Message_box(Label):
 
 
             global Info_Message_box_image, Info_Message_box
-            self.Info_Message_box_image = Asset("Info", "Window.png")
+            self.Info_Message_box_image = get_image("Assets/UI/Desktop/Message box/Info/Window.png")
 
             self.Info_Message_box = Label(
                 self.master,
@@ -198,7 +198,7 @@ class Message_box(Label):
 
 
             global Info_Logo_Image, Info_Logo
-            self.Info_Logo_Image = Asset("Info", "Info.png")
+            self.Info_Logo_Image = get_image("Assets/UI/Desktop/Message box/Info/Info.png")
 
             self.Info_Logo = Label (
                 self.Info_Message_box,
@@ -218,7 +218,7 @@ class Message_box(Label):
 
 
             global Info_Ok_MessageBox_Image, Info_Ok_button
-            self.Info_Ok_MessageBox_Image = Asset("Message box", "OK_button.png")
+            self.Info_Ok_MessageBox_Image = get_image("Assets/UI/Desktop/Message box/OK_button.png")
 
             self.Info_Ok_button = Button(
                 self.Info_Message_box,
@@ -233,8 +233,8 @@ class Message_box(Label):
             self.Info_Ok_button.place(x=343, y=78)
 
 
-            self.Info_close_button_image = Asset("Info", "Close_button.png")
-            self.Info_close_button_light_image = Asset("Info", "Close_button_red.png")
+            self.Info_close_button_image = get_image("Assets/UI/Desktop/Message box/Info/Close_button.png")
+            self.Info_close_button_light_image = get_image("Assets/UI/Desktop/Message box/Info/Close_button_red.png")
 
             self.Info_close_button = Button(
                 self.Info_Message_box,
@@ -255,7 +255,7 @@ class Message_box(Label):
 
             if self.draggable:
 
-                drag_n_drop(self.Info_Message_box)
+                drag_it(self.Info_Message_box)
 
 
             self.Info_Title_label.place(x= 11, y= 1)
@@ -276,7 +276,7 @@ class Message_box(Label):
 
 
             global Warning_Message_box_image, Warning_Message_box
-            self.Warning_Message_box_image = Asset("Warning", "Window.png")
+            self.Warning_Message_box_image = get_image("Assets/UI/Desktop/Message box/Warning/Window.png")
 
             self.Warning_Message_box = Label(
                 self.master,
@@ -309,7 +309,7 @@ class Message_box(Label):
 
 
             global Warning_Logo_Image, Warning_Logo
-            self.Warning_Logo_Image = Asset("Warning", "Warning.png")
+            self.Warning_Logo_Image = get_image("Assets/UI/Desktop/Message box/Warning/Warning.png")
 
             self.Warning_Logo = Label (
                 self.Warning_Message_box,
@@ -329,7 +329,7 @@ class Message_box(Label):
 
 
             global Warning_Ok_MessageBox_Image, Warning_Ok_button
-            self.Warning_Ok_MessageBox_Image = Asset("Message box", "OK_button.png")
+            self.Warning_Ok_MessageBox_Image = get_image("Assets/UI/Desktop/Message box/OK_button.png")
 
             self.Warning_Ok_button = Button(
                 self.Warning_Message_box,
@@ -344,8 +344,8 @@ class Message_box(Label):
             self.Warning_Ok_button.place(x=343, y=78)
 
 
-            self.Warning_close_button_image = Asset("Warning", "Close_button.png")
-            self.Warning_close_button_light_image = Asset("Warning", "Close_button_red.png")
+            self.Warning_close_button_image = get_image("Assets/UI/Desktop/Message box/Warning/Close_button.png")
+            self.Warning_close_button_light_image = get_image("Assets/UI/Desktop/Message box/Warning/Close_button_red.png")
 
             self.Warning_close_button= Button(
                 self.Warning_Message_box,
@@ -365,7 +365,7 @@ class Message_box(Label):
 
             if (draggable == True):
 
-                drag_n_drop(self.Warning_Message_box)
+                drag_it(self.Warning_Message_box)
 
             self.Warning_Title_label.place(x= 11, y= 1)
             self.Warning_Message_label.place(x= 20, y= 32)

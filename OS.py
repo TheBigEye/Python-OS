@@ -11,49 +11,54 @@
         TheBigEye 2-Jul-2021
 """
 
-import os
-import sys
+import os as Current_OS
+import sys as System
 import tkinter as tk
 from tkinter import PhotoImage
 
-from System.Core.Core import boot_check, delete_logs, routines, set_boot
-from System.Utils.Colormap import Black
-from System.Utils.Logger import Logger
-from System.Utils.Vars import Assets_directory, XCursor_2
+from System.Core.Kernel import python_modules_check
 
 # ------------------------------------------[ Main ]------------------------------------------- #
 
 # FIXME: Here, somewhere in this module, there is a big performance loss (slow start)
 
-def main():
+class main(tk.Tk):
+    """ This class implements the main window of the OS. """
 
-    """ This is the main function of the OS. """
+    def __init__(self):
+        """ Initializes the system """
 
-    Os = tk.Tk()  # Create the window that will be the base of the program.
-    Os.title("Python OS")  # Window title.
+        from System.Core.Core import boot_check, routines
+        from System.Core.Kernel import screen_check
+        from System.Utils.Vars import Assets_directory, XCursor_2
 
-    Os.geometry("1024x600")  # Window size.
-    Os.resizable(False, False)  # Window resizing.
+        super().__init__()
 
-    if os.name == "nt": # Window
-        icon = PhotoImage(file=Assets_directory + "/Icon.png")
-        Os.iconphoto(False, icon)
-        Os.configure(background= Black, cursor = XCursor_2)
-    else:
-        Os.configure(background= Black)
+        self.title("Python OS")
+        self.geometry("1024x600")
+        self.resizable(False, False)
 
-    # In case the device screen resolution is too lower, a warning will be displayed
-    if (Os.winfo_screenwidth() < 1024 or Os.winfo_screenheight() < 600):
-        Logger.warning("The screen resolution is too low. The program may not work properly.")
+        self.icon = PhotoImage(file = Assets_directory + "/Icon.png")
 
-    routines() # Execute system routines
-    boot_check(Os) # Start the boot process
+        if Current_OS.name == "nt":
+            self.configure(cursor = XCursor_2)
+            self.configure(background= "#000000")
+            self.iconphoto(False, self.icon)
+        else:
+            self.configure(background= "#000000")
 
-    Os.mainloop() # Tkinter main loop
+        screen_check(self) # Check if the screen is big
+        routines() # Execute the routines (essential for the system)
+        boot_check(self) # Start the boot process
 
+        self.mainloop()
+
+    def stop(self):
+        """ Stops the system """
+        self.destroy()
+        System.exit()
 
 def run():
-
     """
     This function gets the arguments from the command line.
 
@@ -61,7 +66,10 @@ def run():
         >>> python OS.py --help --version --delete-logs --set-boot
     """
 
-    args = sys.argv[1:]
+    from Libs.pyLogger.Logger import Logger
+    from System.Core.Core import set_boot
+
+    arguments = System.argv[1:]
 
     def help_arg():
         print("""
@@ -76,32 +84,24 @@ def run():
         Python OS version: 1.0.0
         """)
 
-    def delete_logs_arg():
-        delete_logs()
-
-    def set_boot_arg():
-        set_boot(sys.argv[2])
-
-    def debug_arg():
-        Logger.showConsole = True
-        Logger.header()
-        Logger.info("----------------- Debug mode activated -----------------")
+    def debug():
+        Logger.info("---------------- Debug mode activated -----------------")
         main()
 
-    if len(args) == 0:
+    if len(arguments) == 0:
         main()
     else:
-        match args[0]:
+        match arguments[0]:
             case "--help"        | "--h":  help_arg()
+            case "--modules"     | "--mc":  python_modules_check()
             case "--version"     | "--v":  version_arg()
-            case "--debug"       | "--d":  debug_arg()
-            case "--delete-logs" | "--dl": delete_logs_arg()
-            case "--set-boot"    | "--b":  set_boot_arg()
+            case "--debug"       | "--d":  debug()
+            case "--delete-logs" | "--dl": Logger.clean_logs()
+            case "--set-boot"    | "--b":  set_boot(System.argv[2])
             case _:
-                Logger.info("Invalid argument {}, use --help to see the help.", args[0])
-                sys.exit()
+                Logger.info("Invalid argument {}, use --help to see the help.", arguments[0])
+                System.exit()
 
-# AVOID running the program directly by importing it
 if __name__ == "__main__":
     run()
 

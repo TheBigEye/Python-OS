@@ -1,7 +1,6 @@
 from tkinter import Button, Entry, Label
 
-from System.Utils.Colormap import White
-from System.Utils.Utils import Asset
+from System.Utils.Utils import get_image
 
 __author__ = 'TheBigEye'
 __version__ = '2.0'
@@ -16,7 +15,7 @@ def Login(master):  # Display the login window
 
     master.configure(background = Login_background_color)  # Sets the background to Blue
 
-    Login_GUI = Asset("Login.png")
+    Login_GUI = get_image("Assets/UI/Boot/Login/Login.png")
     Login = Label(master, image = Login_GUI, borderwidth="0.1")
     Login.place(x=0, y=0)
 
@@ -26,17 +25,17 @@ def Login(master):  # Display the login window
         width = 20,
         show = "•",
         borderwidth = "0.1",
-        fg = "White",
+        fg = "#ffffff",
         background = Login_entry_color,
         font = ("Segou UI", 10)
     )
 
-    Login_Password_Entry.config(insertbackground= White)
+    Login_Password_Entry.config(insertbackground= "#ffffff")
     Login_Password_Entry.insert(0,"Password") # the best password
     Login_Password_Entry.focus()
     Login_Password_Entry.place(x= 435, y= 344)
 
-    Login_Button_icon = Asset("Login_Button.png")
+    Login_Button_icon = get_image("Assets/UI/Boot/Login/Login.png")
     Login_Button = Button(Login,
         width = 30,
         height = 19,

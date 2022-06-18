@@ -2,7 +2,6 @@ from tkinter import Entry, Label, Text
 from tkinter.constants import DISABLED, INSERT, NORMAL
 
 from System.Programs.Terminal.Commands import CMD
-from System.Utils.Colormap import Black
 
 __author__ = 'TheBigEye'
 __version__ = '1.5'
@@ -11,14 +10,14 @@ def Os_Installer(master):  # Display the Post-Bios window (coming soon the OOBE)
 
     global Terminal, Terminal_screen
 
-    master.configure(background=Black)  # Sets the background to Blue
+    master.configure(background="#000000")  # Sets the background to Blue
 
     def Command_handler(event):
         """Execute the commands"""
 
         CMD(Terminal, Terminal_entry, Terminal_screen)
 
-    Terminal = Label(master, width=1024, height=600 ,bg=Black, borderwidth=0.1)
+    Terminal = Label(master, width=1024, height=600 ,bg="#000000", borderwidth=0.1)
     Terminal.place(x=0, y=0)
 
 

@@ -1,207 +1,268 @@
-from tkinter import Button, Label
+from ast import Str
+from tkinter import Button, Frame, Label
+from System.UI.Attributes.Draggable import drag_it
 
-from System.Utils.Utils import Asset
+from System.Utils.Utils import get_image
+from System.Core.FileSystem import *
 
 __author__ = 'TheBigEye'
 __version__ = '1.1'
 
-def File_manager(master, tab: str, draggable: bool = False):
+class Folder(Label):
+    """ Folder """
 
-    # Documentation ---------------------------------------------------------------------------------------------------------------
+    def __init__(self, master, x, y, name: str):
+        """ Put the folder in the screen """
 
-    """
-    Create and display the File manager.
+        Label.__init__(self, master)
 
-    Parameters
-    ----------
-    `master` : string
-        The parent where the File manager will be placed.
+        self.master = master
+        self.x = x
+        self.y = y
+        self.name = name
 
-    `tab` : string
-        The tab that the File manager will display when it appears on the screen, `This PC`, `Desktop`, `Documents`, etc...
+        self.image = get_image("Assets/UI/Files/Folder_icon.png", "24x24", "#ff00ff", "#ffffff")
+        self.image_selected = get_image("Assets/UI/Files/Folder_icon.png", "24x24", "#ff00ff", "#D6E5FF")
 
-    `draggable` : boolean
-        Specifies whether or not the File manager can be moved with the mouse., by default False
+        self.selection_normal = get_image("Assets/UI/Programs/File manager/Selection.png", "null", "#ff00ff", "#ffffff")
+        self.selection_selected = get_image("Assets/UI/Programs/File manager/Selection_selected.png", "null", "#ff00ff", "#ffffff")
 
-    """
-
-    # FileManager global variables ------------------------------------------------------------------------------------------------
-    global FileManager_GUI_Image, Close_FileManager_image, Navigation_Pane_Image, Control_Pane_Image # Images
-    global Window_bg # Colors
-    global FileManager, Close_FileManager, Close_FileManager_Button, List, Control_pane, Navigation_pane # Functions
-
-    global List_Pane_Image, List_Desktop_Image, List_Documents_Image, List_Downloads_Image
-    global This_PC_list, Desktop_list, Documents_list, Downloads_list
-
-    global This_PC_button_image, Desktop_button_image, Documents_button_image, Downloads_button_image
-    global This_PC_button, Desktop_button, Documents_button, Downloads_button
-
-    # File explorer ----------------------------------------------------------------------------------------------------------------
-
-    # Buttons
-    This_PC_button_image = Asset("This_PC_unselected.png")
-    Desktop_button_image = Asset("Desktop_unselected.png")
-    Documents_button_image = Asset("Documents_unselected.png")
-    Downloads_button_image = Asset("Downloads_unselected.png")
-
-    # Window components
-    FileManager_GUI_Image = Asset("FileManager.png") # FileManager image base
-    List_Pane_Image = Asset("List_pane.png") # Files and folder list
-    List_Desktop_Image = Asset("List_Desktop_pane.png") # Desktop files list
-    List_Documents_Image = Asset("List_Documents_pane.png") # Documents file list
-    List_Downloads_Image = Asset("List_Downloads_pane.png") # Downloads file list
-    Control_Pane_Image = Asset("Control_pane.png") # Window control pane (- [] X)
-    Navigation_Pane_Image = Asset("Navigation_pane.png") # Navigation pane
-    Close_FileManager_image = Asset("Close_white.png") # Window close button
-
-
-    Window_bg = "#000000"
-
-    FileManager = Label(
-        master,
-        bg= "white",
-        image=FileManager_GUI_Image,
-        borderwidth="0",
-    )
-
-    def Close_FileManager():
-        """Close the FileManager"""
-
-        FileManager.place_forget()
-
-
-    if (draggable == True):
-
-        pass
-
-    Control_pane = Label(
-        FileManager,
-        width=94,
-        height=24,
-        bg= Window_bg,
-        image=Control_Pane_Image,
-        borderwidth="0",
-    )
-
-    Navigation_pane = Label(
-        FileManager,
-        width=151,
-        height=374,
-        bg= "#212121",
-        image=Navigation_Pane_Image,
-        borderwidth="0",
-    )
-
-    Close_FileManager_Button = Button(
-        Control_pane,
-        width=10,
-        height=10,
-        bg="red",
-        image=Close_FileManager_image,
-        borderwidth="0",
-        command=Close_FileManager,
-    )
-
-    FileManager.place(x= 225, y= 148)
-    Control_pane.place(x= 593, y= 0)
-    Navigation_pane.place(x= 0, y= 0)
-
-    Close_FileManager_Button.place(x=73, y=7)
-
-
-    def List(parent, img):
-
-        global List_pane
-
-        List_pane = Label(
-            parent,
-            width=536,
-            height=350,
-            bg= Window_bg,
-            image=img,
+        self.selection_label = Label(
+            self.master,
+            bg="#CCCCCC",
+            image=self.selection_normal,
             borderwidth="0",
+            relief="flat"
         )
-        List_pane.place(x= 151, y= 24)
+
+        # if the file is selected, change the image
+        self.selection_label.bind("<Enter>", lambda event: select_folder(self))
+        self.selection_label.bind("<Leave>", lambda event: unselect_folder(self))
+
+        self.Folder = Label(
+            self.master,
+            bg="#CCCCCC",
+            image=self.image,
+            borderwidth="0",
+            relief="flat",
+            cursor="hand2"
+        )
+
+        self.name_label = Label(
+            self.master,
+            text=self.name,
+            bg="#ffffff",
+            font=("Consolas", 8),
+            borderwidth="0",
+            relief="flat"
+        )
+
+        self.name_label.bind("<Enter>", lambda event: select_folder(self))
+        self.name_label.bind("<Leave>", lambda event: unselect_folder(self))
+
+        def select_folder(self):
+            """ Select the folder """
+
+            self.selection_label.config(image=self.selection_selected)
+            self.Folder.config(image=self.image_selected)
+            self.name_label.config(bg="#D6E5FF")
+
+        def unselect_folder(self):
+            """ Unselect the folder """
+
+            self.selection_label.config(image=self.selection_normal)
+            self.Folder.config(image=self.image)
+            self.name_label.config(bg="#ffffff")
 
 
+        self.Folder.place(x=self.x + 1, y=self.y)
+        self.name_label.place(x=self.x + 25, y=(self.y) + 4)
+        self.selection_label.place(x=self.x - 4, y=self.y)
 
-# Functions -------------------------------------------------------------------------------------------------------------------
+class File(Label):
+    """ File """
 
-    def This_PC_list():
+    def __init__(self, master, x, y, name, icon):
+        """ Put a file in the scree """
 
-        List(FileManager, List_Pane_Image)
+        Label.__init__(self, master)
 
-    def Desktop_list():
+        self.master = master
+        self.x = x
+        self.y = y
+        self.name = name
 
-        List(FileManager, List_Desktop_Image)
+        self.icon = icon
+        self.file_icon = get_image("Assets/UI/Files/" + icon + "_icon.png", "24x24", "#ff00ff", "#ffffff")
+        self.file_icon_selected = get_image("Assets/UI/Files/" + icon + "_icon.png", "24x24", "#ff00ff", "#D6E5FF")
 
-    def Documents_list():
+        self.selection_normal = get_image("Assets/UI/Programs/File manager/Selection.png", "null", "#ff00ff", "#ffffff")
+        self.selection_selected = get_image("Assets/UI/Programs/File manager/Selection_selected.png", "null", "#ff00ff", "#ffffff")
 
-        List(FileManager, List_Documents_Image)
+        self.selection_label = Label(
+            self.master,
+            bg="#CCCCCC",
+            image=self.selection_normal,
+            borderwidth="0",
+            relief="flat"
+        )
 
-    def Downloads_list():
+        # if the file is selected, change the image
+        self.selection_label.bind("<Enter>", lambda event: select_file(self))
+        self.selection_label.bind("<Leave>", lambda event: unselect_file(self))
 
-        List(FileManager, List_Downloads_Image)
+        self.File = Label(
+            self.master,
+            bg="#CCCCCC",
+            image=self.file_icon,
+            borderwidth="0",
+            relief="flat",
+            cursor="hand2"
+        )
 
+        self.name_label = Label(
+            self.master,
+            text=self.name,
+            bg="#ffffff",
+            font=("Consolas", 8),
+            borderwidth="0",
+            relief="flat"
+        )
 
-# When init -------------------------------------------------------------------------------------------------------------------
+        self.name_label.bind("<Enter>", lambda event: select_file(self))
+        self.name_label.bind("<Leave>", lambda event: unselect_file(self))
 
-    if (tab == "This PC"):
-        This_PC_list()
+        def select_file(self):
+            """ Select the file """
 
-    elif (tab == "Desktop"):
-        Desktop_list()
+            self.selection_label.config(image=self.selection_selected)
+            self.File.config(image=self.file_icon_selected)
+            self.name_label.config(bg="#D6E5FF")
 
-    elif (tab == "Documents"):
-        Documents_list()
+        def unselect_file(self):
+            """ Unselect the file """
 
-    elif (tab == "Downloads"):
-        Downloads_list()
-
-# Tabs ------------------------------------------------------------------------------------------------------------------------
-
-    This_PC_button = Button(
-        Navigation_pane,
-        width=144,
-        height=20,
-        bg = "#212121",
-        relief="raised",
-        borderwidth="0",
-        image=This_PC_button_image,
-        command= This_PC_list
-    )
-
-
-    Desktop_button = Button(
-        Navigation_pane,
-        width=144,
-        height=20,
-        borderwidth="0",
-        image=Desktop_button_image,
-        command= Desktop_list
-    )
-
-
-    Documents_button = Button(
-        Navigation_pane,
-        width=144,
-        height=20,
-        borderwidth="0",
-        image=Documents_button_image,
-        command= Documents_list
-    )
+            self.selection_label.config(image=self.selection_normal)
+            self.File.config(image=self.file_icon)
+            self.name_label.config(bg="#ffffff")
 
 
-    Downloads_button = Button(
-        Navigation_pane,
-        width=144,
-        height=20,
-        borderwidth="0",
-        image=Downloads_button_image,
-        command= Downloads_list
-    )
+        self.File.place(x=self.x + 1, y=self.y)
+        self.name_label.place(x=self.x + 25, y=(self.y) + 4)
+        self.selection_label.place(x=self.x - 4, y=self.y)
 
-    This_PC_button.place(x= 3, y= 146)
-    Desktop_button.place(x= 3, y= 168)
-    Documents_button.place(x= 3, y= 192)
-    Downloads_button.place(x= 3, y= 216)
+class File_manager(Frame):
+
+    """
+    File manager
+    """
+
+    def __init__(self, master, draggable: bool = True):
+        """
+        File manager constructor
+        """
+
+        Frame.__init__(self, master)
+
+        self.master = master
+        self.draggable = draggable
+
+        self.File_manager_image = get_image("Assets/UI/Programs/File manager/Window.png")  # File manager image base
+        self.Splash_logo_image = get_image("Assets/UI/Programs/File manager/File_manager_icon.png", "112x112", "#ff00ff", "#002C4F")  # Splash image
+        self.Splash_image = get_image("Assets/UI/Programs/File manager/Splash.png")  # Splash image
+
+        self.File_manager = Label(
+            self.master,
+            bg="#CCCCCC",
+            image=self.File_manager_image,
+            borderwidth="0"
+        )
+
+        self.File_manager.place(relx=.2, y=128)
+
+        # se crea una lista de las carpetas y archivos
+        files_n_folders = []
+        # se agregan las carpetas y archivos a la lista
+        for folder in get_folders():
+            files_n_folders.append(folder)
+        for file in get_files():
+            files_n_folders.append(file)
+        # se ordena la lista de archivos y carpetas segun la extension
+        files_n_folders.sort(key=lambda x: x.split(".")[-1])
+
+        disc_extensions = [".mbr", ".img", ".iso"]
+        text_extensions = [".txt", ".text"]
+        executable_extensions = [".exe", ".bat", ".com", "py", "pyw", "pyc", "pyo", "pys"]
+        image_extensions = [".jpg", ".jpeg", ".png", ".bmp", ".gif", ".tiff", ".tif"]
+
+        # las carpetas y archivos se posicionan siegun el orden de la lista
+        for i in range(len(files_n_folders)): # if have a dot in the name is a file
+            if files_n_folders[i].find(".") != -1:
+                if files_n_folders[i].endswith(tuple(disc_extensions)):          File(self.File_manager, 160, (i * 25) + 42, files_n_folders[i], "CD")
+                elif files_n_folders[i].endswith(tuple(text_extensions)):        File(self.File_manager, 160, (i * 25) + 42, files_n_folders[i], "Text")
+                elif files_n_folders[i].endswith(tuple(executable_extensions)):  File(self.File_manager, 160, (i * 25) + 42, files_n_folders[i], "Python")
+                elif files_n_folders[i].endswith(tuple(image_extensions)):       File(self.File_manager, 160, (i * 25) + 42, files_n_folders[i], "Image")
+                elif files_n_folders[i].endswith(".torrent"):                    File(self.File_manager, 160, (i * 25) + 42, files_n_folders[i], "Torrent")
+                elif files_n_folders[i].endswith(".log"):                        File(self.File_manager, 160, (i * 25) + 42, files_n_folders[i], "Log")
+                else:
+                    File(self.File_manager, 160, (i * 25) + 42, files_n_folders[i], "Unknown")
+            else:
+                Folder(self.File_manager, 160, (i * 25) + 42, files_n_folders[i]) # folder
+
+
+        # ---------------------------------------------------------- Close button ------------------------------------------------------------
+
+        def close_window():
+            """
+            Close window
+            """
+
+            self.File_manager.destroy()
+
+        self.Close_button_image = get_image("Assets/UI/Window/Close_button.png")
+        self.Close_button_red_image = get_image("Assets/UI/Window/Close_button_red.png")
+
+        self.Close_button = Button(
+            self.File_manager,
+            bg="#CCCCCC",
+            image=self.Close_button_image,
+            borderwidth="0",
+            relief="flat",
+            width="13",
+            height="13",
+            cursor="hand2",
+            command=close_window
+        )
+
+        self.Close_button.bind("<Enter>", lambda event: self.Close_button.config(image = self.Close_button_red_image))
+        self.Close_button.bind("<Leave>", lambda event: self.Close_button.config(image = self.Close_button_image))
+
+        self.Close_button.place(x=668, y=4)
+
+        def Splash_screen(time):
+            """Splash screen"""
+
+            self.Splash = Label(
+                self.File_manager,
+                bg="#002C4F",
+                image=self.Splash_image,
+                borderwidth="0",
+            )
+
+            self.Splash.place(x=0, y=0)
+
+            self.Splash_logo = Label(
+                self.Splash,
+                image=self.Splash_logo_image,
+                borderwidth="0",
+            )
+
+            # Put the logo in the middle of the window, .5 is the center of the window
+            self.Splash_logo.place(relx=.5, y=170, anchor="center")
+
+            self.Splash.after(time, self.Splash.destroy)
+
+        Splash_screen(5000)
+
+        if self.draggable:
+            drag_it(self.File_manager)

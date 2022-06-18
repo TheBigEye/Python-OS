@@ -4,7 +4,7 @@ import time
 from tkinter.constants import END, INSERT
 
 import psutil
-from System.Utils.Logger import Logger
+from Libs.pyLogger.Logger import Logger
 
 __author__ = 'TheBigEye'
 __version__ = '1.0'
@@ -416,19 +416,6 @@ def CMD(master, entry, output):
         dir_command()
 
 
-    # delete_logs
-    def delete_logs_command():
-        from System.Core.Core import delete_logs
-
-        delete_logs()
-
-        output.insert(INSERT, "Deleted logs" + "\n")
-        output.see(END)
-
-    if command.startswith("dlogs"):
-        delete_logs_command()
-
-
     def get_processes_command():
 
         output.insert(INSERT, "Processes: " + "\n")
@@ -524,7 +511,7 @@ def CMD(master, entry, output):
 
         neo = ""
 
-        neo += os.getlogin() + "\n"
+        neo += os.getlogin().upper() + "\n"
         neo += "--------\n"
         neo += "OS: " + platform.system() + " " + platform.release() + "\n"
         neo += "Kernel: " + platform.version() + "\n"
@@ -583,14 +570,13 @@ def CMD(master, entry, output):
         output.insert(INSERT, 'efile file_name.ext "content"  - edit a file in the file system' +             '\n')
         output.insert(INSERT, 'metafile file_name.ext         - show the metadata, like content or date' +    '\n')
         output.insert(INSERT,                                                                                 '\n')
-        output.insert(INSERT, 'dlogs                    - delete system logs' +                               '\n')
         output.insert(INSERT, 'info                     - show the system info' +                             '\n')
         output.insert(INSERT, 'ps                       - show all processes' +                               '\n')
         output.insert(INSERT, 'reg                      - show the registry' +                                '\n')
         output.insert(INSERT, 'foreground "color"       - change the terminal foreground color' +             '\n')
         output.insert(INSERT, 'background "color"       - change the terminal background color' +             '\n')
         output.insert(INSERT, 'neofetch                 - show the terminal and system info' +                '\n')
-        output.insert(INSERT, '>>> python code          - run a python interpreter where you can code' +      '\n\n')
+        output.insert(INSERT, '>>> python_code          - run a python interpreter where you can code' +      '\n\n')
         output.see(END)
 
     if command.startswith("help"):

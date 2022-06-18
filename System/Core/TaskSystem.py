@@ -1,5 +1,5 @@
 
-from System.Utils.Logger import Logger
+from Libs.pyLogger.Logger import Logger
 
 # Processes system -----------------------------------------------------------------------------------------------------------------------
 

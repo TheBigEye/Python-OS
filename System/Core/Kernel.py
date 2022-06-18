@@ -10,22 +10,104 @@
 """
 
 import json
+import os
+import re
+import subprocess
 import sys
 from tkinter import BOTH, Label, Misc
 
-from System.Utils.Logger import Logger
+import psutil
+from Libs.pyLogger.Logger import Logger
 from System.Utils.Vars import Disk_directory
 
 # TODO: implement a bootloader class for able restart the system
 
 Bugcheck_data_directory = (Disk_directory + "/System/Bugcheck/Bugcheck.json")
 
+def screen_check(master: Misc):
+    """ This function checks if the system is running in a supported resolution. """
+
+    # get the window resolution from the master
+    window_height = master.winfo_height()
+    window_width = master.winfo_width()
+
+    # get the system resolution
+    system_height = master.winfo_screenheight()
+    system_width = master.winfo_screenwidth()
+
+    # check if the window resolution is greater than the system resolution, if so, then print a warning message
+    if window_height > system_height or window_width > system_width:
+        Logger.warning("The window resolution is greater than the system resolution.")
+        Logger.warning("The window resolution is: " + str(window_height) + "x" + str(window_width))
+        Logger.warning("The system resolution is: " + str(system_height) + "x" + str(system_width))
+
+def python_modules_check():
+    """ This function checks if the current python have the needed moduels. """
+
+    def module_not_found(module_name: str):
+        """ This function prints a warning message if the module is not found. """
+
+        Logger.warning("Oh no!, The module " + module_name + " not found, is required for the system to work.")
+
+    # check if tkinter, tkinterweb, psutils and pyllow are installed, if not, print a warning message, if all the modules are found, then print a success message
+    if not sys.modules.get("tkinter"): module_not_found("tkinter")
+    elif not sys.modules.get("psutil"): module_not_found("psutil")
+    elif not sys.modules.get("pyllow"):  module_not_found("pyllow")
+    else:
+        Logger.info("All the needed modules are installed.")
+
+def get_desktop_enviroment():
+    """ This function get the desktop enviroment. """
+    if sys.platform in ["win32", "cygwin"]:
+        return "windows"
+    elif sys.platform == "darwin":
+        return "mac"
+    else: # Most likely either a POSIX system or something not much common
+        desktop_session = os.environ.get("DESKTOP_SESSION")
+        if desktop_session is not None: # easier to match if we doesn't have  to deal with caracter cases
+            desktop_session = desktop_session.lower()
+            if desktop_session in ["gnome","unity", "cinnamon", "mate", "xfce4", "lxde", "fluxbox", "blackbox", "openbox", "icewm", "jwm", "afterstep", "trinity", "kde"]:
+                return desktop_session
+
+            ## Special cases ##
+            # Canonical sets $DESKTOP_SESSION to Lubuntu rather than LXDE if using LXDE.
+            # There is no guarantee that they will not do the same with the other desktop environments.
+            elif "xfce" in desktop_session or desktop_session.startswith("xubuntu"): return "xfce4"
+            elif desktop_session.startswith("ubuntu"): return "unity"
+            elif desktop_session.startswith("lubuntu"): return "lxde"
+            elif desktop_session.startswith("kubuntu"): return "kde"
+            elif desktop_session.startswith("razor"): return "razor-qt" # e.g. razorkwin
+            elif desktop_session.startswith("wmaker"): return "windowmaker" # e.g. wmaker-common
+
+        if os.environ.get('KDE_FULL_SESSION') == 'true':
+            return "kde"
+        elif os.environ.get('GNOME_DESKTOP_SESSION_ID'):
+            if not "deprecated" in os.environ.get('GNOME_DESKTOP_SESSION_ID'):
+                return "gnome2"
+        #From http://ubuntuforums.org/showthread.php?t=652320
+        elif is_running("xfce-mcs-manage"):
+            return "xfce4"
+        elif is_running("ksmserver"):
+            return "kde"
+
+    Logger.warning("Could not detect the desktop environment.")
+    return "unknown"
+
+def is_running(process):
+    """ This function checks if the given process is running. """
+    try: #Linux/Unix
+        s = subprocess.Popen(["ps", "axw"],stdout=subprocess.PIPE)
+    except: #Windows
+        s = subprocess.Popen(["tasklist", "/v"],stdout=subprocess.PIPE)
+    for x in s.stdout:
+        if re.search(process, x):
+            return True
+
+    Logger.warning("The process " + process + " is not running.")
+    return False
 
 class bug_check:
-
-    """
-    Show the BSOD, RSOD, GSOD or a custom SOD.
-    """
+    """ Show the BSOD, RSOD, GSOD or a custom SOD. """
 
     def __init__(self, master: Misc, error_id: str, msg_color: str, bg_color: str):
 
@@ -48,7 +130,7 @@ class bug_check:
         self.base = Label(self.master, bg=self.bg_color)
         self.base.pack(fill=BOTH, expand=True)
 
-        Logger.fail("RSOD! The system has failed with code {}", error_id)
+        Logger.error("BSOD! The system has failed with code {}", error_id)
 
         # Load the bugcheck data from the json file.
         with open(Bugcheck_data_directory, 'r') as f:
@@ -90,7 +172,7 @@ class bug_check:
             )
             self.message_label.place(x = 32, y = 195)
 
-            # The quick binds for shutdown 
+            # The quick binds for shutdown
             self.tip = Label(
                 self.base,
                 text = "Press Ctrl+Alt+Del to shutdown immediately",
@@ -137,8 +219,10 @@ class bug_check:
                 if self.shutdown_time > -1:
                     self.countdown.after(1000, start)
                 else:
-                    self.master.destroy()
-                    sys.exit()
+                    for widget in self.master.winfo_children():
+                        widget.destroy()
+
+                    master.after(2000, sys.exit)
 
             update()
 

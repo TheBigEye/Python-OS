@@ -15,7 +15,8 @@ import os
 import random
 import shelve
 
-from System.Utils.Logger import Logger
+from Libs.pyLogger.Logger import Logger
+from System.Utils.Utils import get_json, set_json
 from System.Utils.Vars import Assets_directory
 
 File_System = shelve.open('Disk/FS/Filesystem', writeback=True)
@@ -24,13 +25,14 @@ current_dir = []
 def fs_routines():
 
     # laod boot data
-    with open(Assets_directory + "/Data/Boot data/Boot.json", "r") as f:
-        boot_data = json.load(f)
+    with open(Assets_directory + "/Data/Boot data/Boot.json", "r") as boot_data_file:
+        boot_data = json.load(boot_data_file)
 
     def check_boot():
-        if boot_data["FS_mounted"] != "False":
+        if get_json(Assets_directory + "/Data/Boot data/Boot.json", "FS_mounted") != False:
             return
-        Logger.fail("File system is not mounted, installing...")
+
+        Logger.error("File system is not mounted, installing...")
 
         # delete the .dat, bak and dir files in Disk/FS/ for avoid errors
         if os.path.exists("Disk/FS/Filesystem.dat"): os.remove("Disk/FS/Filesystem.dat")
@@ -40,10 +42,7 @@ def fs_routines():
         File_System = shelve.open('Disk/FS/Filesystem', writeback=True)
         install(File_System)
 
-        boot_data["FS_mounted"] = "True"
-
-        with open(Assets_directory + "/Data/Boot data/Boot.json", "w") as f:
-            json.dump(boot_data, f, indent=4)
+        set_json(Assets_directory + "/Data/Boot data/Boot.json", "FS_mounted", True)
 
         Logger.log("File system installed successfully")
 
@@ -55,7 +54,6 @@ def install(File_System):
 
     # Load the File system structure file
     with open('Assets/Data/Boot data/FS', 'r') as fs_structure:
-        # Read the file
         fs_data = fs_structure.read()
 
         # Get the %User% from the structure and change it to the username
@@ -64,7 +62,7 @@ def install(File_System):
     # Set the structure to the File system
     File_System[""] = json.loads(fs_data)
 
-    # sync the File system
+    # save the File system
     File_System.sync()
 
 def current_dictionary():
@@ -72,6 +70,7 @@ def current_dictionary():
     dir = File_System[""]
     for key in current_dir:
         dir = dir[key]
+
     return dir
 
 def ls():
@@ -173,6 +172,13 @@ def mkfile(argument):
             },
             "Data": ""
         }
+
+    # convert dir[name_and_extension] to json sctructure and print it
+    for key in dir[name_and_extension]:
+        print(key, ":", dir[name_and_extension][key])
+
+
+
     File_System.sync()
 
 
@@ -213,7 +219,7 @@ def get_file_content(name_and_extension):
 
     # Check if the file exists
     if name_and_extension not in current_dictionary():
-        Logger.fail("File {} does not exist", name_and_extension)
+        Logger.error("File {} does not exist", name_and_extension)
         return
 
     Logger.info("Getting content of file {}", name_and_extension)
@@ -234,7 +240,7 @@ def get_file_metadata(name_and_extension):
 
     # Check if the file exists
     if name_and_extension not in current_dictionary():
-        Logger.fail("File {} does not exist", name_and_extension)
+        Logger.error("File {} does not exist", name_and_extension)
         return
 
     Logger.info("Getting metadata of file {}", name_and_extension)
@@ -275,7 +281,7 @@ def rmfile(name_and_extension):
 
     # Check if the file exists
     if name_and_extension not in current_dictionary():
-        Logger.fail("File {} does not exist", name_and_extension)
+        Logger.error("File {} does not exist", name_and_extension)
         return
 
     Logger.info("Deleting file {}", name_and_extension)
@@ -306,24 +312,131 @@ def tree(*args):
         directory = current_dictionary()[args[0]]
         tree += "Contents of " + str("/" + "/".join(current_dir) ) + '/' + args[0] + '/:' + "\n"
 
+    # if the direcotry not exists, return an error message
+    else:
+        return str("Directory " + args[0] + " does not exist at " + str("/" + "/".join(current_dir) ) )
+
     for deep_1 in sorted(directory):
-        if "." in deep_1:
-            continue
-        tree += "|----" + deep_1 + '\n'
+        # ignore files, like: something.extension
+        if "." not in deep_1:
 
-        for deep_2 in sorted(directory[deep_1]):
-            if "." in deep_2:
-                continue
-            tree += "|    |----" + deep_2 + '\n'
+            # if the directory is empty
+            if len(directory[deep_1]) == 0:
+                # Check if is the last dir in the current directory
+                if deep_1 == sorted(directory)[-1]:
+                    if len(directory) == 1:
+                        tree += "└─── " + deep_1 + "\n"
+                    else:
+                        tree += "├─── " + deep_1 + "\n"
+                else:
+                    if len(directory) == 1:
+                        tree += "└─── " + deep_1 + "\n"
+                    else:
+                        tree += "├─── " + deep_1 + "\n"
 
-            for deep_3 in sorted(directory[deep_1][deep_2]):
-                if "." in deep_3:
-                    continue
-                tree += "|    |    |----" + deep_3 + '\n'
+            else:
+                # Check if is the last dir in the current directory
+                if deep_1 == sorted(directory)[-1]:
+                    if deep_1 == sorted(directory)[-2]:
+                        tree += '└─── ' + deep_1 + "\n"
+                    else:
+                        if len(directory) == 1:
+                            tree += '├─── ' + deep_1 + "\n"
+                        else:
+                            tree += "└─── " + deep_1 + "\n"
 
-                for deep_4 in sorted(directory[deep_1][deep_2][deep_3]):
-                    if "." in deep_4:
-                        continue
-                    tree += "|    |    |    |----" + deep_4 + "... etc" + '\n'
+                else:
+                    if deep_1 == sorted(directory)[-2]:
+                        tree += '└─── ' + deep_1 + "\n"
+                    else:
+                        tree += '├─── ' + deep_1 + "\n"
+
+                for deep_2 in sorted(directory[deep_1]):
+                    # ignore files, like: something.extension
+                    if "." not in deep_2:
+                        # Check if is the last dir in the first directory
+                        if deep_2 == sorted(directory[deep_1])[-1]:
+
+                            if deep_2 == sorted(directory[deep_1])[-2]:
+                                tree += '    ├─── ' + deep_2 + "\n"
+                            else:
+                                if deep_1 == sorted(directory)[-1]:
+                                    tree += '    └─── ' + deep_2 + "\n"
+                                else:
+                                    if deep_1 == sorted(directory)[-2]:
+                                        tree += '    └─── ' + deep_2 + "\n"
+                                    else:
+                                        tree += "|   └─── " + deep_2 + "\n"
+                        else:
+                            if deep_2 == sorted(directory[deep_1])[-2]:
+                                if deep_1 == sorted(directory)[-1]:
+                                    tree += '    ├─── ' + deep_2 + "\n"
+                                else:
+                                    if deep_1 == sorted(directory)[-2]:
+                                        tree += '    ├─── ' + deep_2 + "\n"
+                                    else:
+                                        tree += '|   ├─── ' + deep_2 + "\n"
+
+                            else:
+                                if deep_2 == sorted(directory[deep_1])[-3]:
+                                    tree += "    ├─── " + deep_2 + "\n"
+                                else:
+                                    tree += "|   └─── " + deep_2 + "\n"
 
     return tree
+
+def get_folders():
+
+    """
+    Return a list with the folders of the current directory
+    """
+
+    global File_System
+
+    directory = current_dictionary()
+    folders = []
+
+    for deep_1 in sorted(directory):
+        # ignore files, like: something.extension
+        if "." not in deep_1:
+            folders.append(deep_1)
+
+    return folders
+
+def get_files():
+
+    """
+    Return a list with the files of the current directory
+    """
+
+    global File_System
+
+    directory = current_dictionary()
+    files = []
+
+    for deep_1 in sorted(directory):
+        # ignore files, like: something.extension
+        if "." in deep_1:
+            files.append(deep_1)
+
+    return files
+
+def get_files_and_folders_list():
+
+    """
+    Return a list with the files and folders of the current directory
+    """
+
+    global File_System
+
+    directory = current_dictionary()
+    files_and_folders = []
+
+    for deep_1 in sorted(directory):
+        # ignore files, like: something.extension
+        if "." in deep_1:
+            files_and_folders.append(deep_1)
+        else:
+            files_and_folders.append(deep_1)
+
+    return files_and_folders

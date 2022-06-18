@@ -14,11 +14,10 @@ import datetime
 import json
 import os
 import urllib.request
-from tkinter import PhotoImage
 
 from PIL import Image, ImageTk
-from System.Utils.Colormap import color_hex_rgb, color_str_rgb
-from System.Utils.Logger import Logger
+from System.Utils.Colormap import Color
+from Libs.pyLogger.Logger import Logger
 from System.Utils.Vars import Assets_directory, Loading, Logs_directory, XCursor_2
 
 # -------------------------------------------[ Time ]------------------------------------------- #
@@ -82,85 +81,91 @@ def Execute(master, Loading_time: float, Function, *args):
     master.after(1000, Normal_cursor)
 
 
-def Asset(Folder_name: str, File_name_and_extension: str):
+def get_image(path, Size="null", From_color="null", To_color="null", Hue=None, Saturation=None, Brightness=None):
 
-    """ Return the image file from the file name of a folder within the Assets folder
-
-    Arguments:
-        `Folder_name : [str]` The name of the folder where the image is.
-        `File_name_and_extension : [str]` The name (and extension) of the image file.
-
-    Returns:
-        `PhotoImage : [PhotoImage object]` The image file.
-
-    Example:
-        >>> an_image = Asset("Icons", "Icon.png")
-
-    """
-
-    # First: Search the folder inside from Assets folder and save the path
-    for root, dirs, files in os.walk(Assets_directory):
-        for folder in dirs:
-            if folder == Folder_name:
-                folder_path = os.path.join(root, folder)
-                break
-
-    # Second: Search the file inside the folder and save the path
-    for root, dirs, files in os.walk(folder_path):
-        for file in files:
-            if file.endswith(File_name_and_extension):
-                return PhotoImage(file = os.path.join(root, file))
-
-    Logger.warning("The file {} does not exist in the folder {}", File_name_and_extension, Folder_name)
-
-
-# My masterpiece!!
-def Asset_color(Folder_name: str ,File_name_and_extension: str, Size: str, From_color: str, To_color: str):
-
-    """ Return a image file from a folder within the Assets folder
+    """ Return a image file from a path
 
     Arguments:
-        `Folder_name : [str]` The name of the folder where the image is.
-        `File_name_and_extension : [str]` The name (and extension) of the image file.
+        `path : [str]` The path of the image.
         `Size : [str]` The new size of the image, if you not want to change the size, just put `"null"`.
         `From_color : [str]` The color A of the image (is the color which will be replaced).
         `To_color : [str]` The color B of the image (replace ).
+        `Hue : [int]` The hue of the image.
+        `Saturation : [int]` The saturation of the image.
+        `Brightness : [int]` The brightness of the image.
 
     Returns:
         `PhotoImage : [PhotoImage object]` The image file with the changes.
 
     Example:
-        >>> # This example will return the image from Images folder with a new size and background color
-        >>> an_image = Asset_color("Images", "Image.png", "100x100", "#FF00FF", "#F0CF00")
+        >>> # This example will return the new image data with the colors changes
+        >>> image_data = get_image("Assets/Images/Image.png", "100x100", "#FF00FF", "#F0CF00")
     """
 
-    # Search the folder inside from Assets folder (also subdirectories)
-    for root, dirs, files in os.walk(Assets_directory):
-        for folder in dirs:
-            if folder == Folder_name:
-                folder_path = os.path.join(root, folder)
-                break
+    # Check if the image file exists
+    if not os.path.exists(path):
+        Logger.error("The image file does not exist: " + path)
+        return None
 
-    # and earch the file inside the folder
-    for root, dirs, files in os.walk(folder_path):
-        for file in files:
-            if file.endswith(File_name_and_extension):
-                img = Image.open(os.path.join(root, file))
-                img = img.convert("RGBA")
-                image_data = img.getdata()
+    # Check if the image file is a image
+    if not path.endswith(".png"):
+        Logger.error("The image file is not a image: " + path)
+        return None
 
-                # change image color
-                img.putdata(replace_color(image_data, From_color, To_color))
+    # Open the image file
+    img = Image.open(path)
+    img = img.convert("RGBA")
+    image_data = img.getdata()
 
-                # resize image
-                if Size != "null":
-                    Size = Size.split("x")
-                    img = img.resize((int(Size[0]), int(Size[1])), Image.ANTIALIAS)
+    # change image color
+    if From_color != "null" and To_color != "null":
+        img.putdata(replace_color(image_data, From_color, To_color))
 
-                # return new image
-                return ImageTk.PhotoImage(img)
 
-    Logger.warning("The file {} does not exist in the folder {}", File_name_and_extension, Folder_name)
+    # change hue value
+    if Hue != None:
+        img = img.convert("HSV")
+        for i in range(img.size[0]):
+            for j in range(img.size[1]):
+                h, s, v = img.getpixel((i, j))
+                h = Hue
+                img.putpixel((i, j), (h, s, v))
+        img = img.convert("RGBA")
+
+    # change saturation value
+    if Saturation != None:
+        img = img.convert("HSV")
+        for i in range(img.size[0]):
+            for j in range(img.size[1]):
+                h, s, v = img.getpixel((i, j))
+                s = Saturation
+                img.putpixel((i, j), (h, s, v))
+        img = img.convert("RGBA")
+
+    # change brightness value
+    if Brightness != None:
+        img = img.convert("HSV")
+        for i in range(img.size[0]):
+            for j in range(img.size[1]):
+                h, s, v = img.getpixel((i, j))
+                v = Brightness
+                img.putpixel((i, j), (h, s, v))
+        img = img.convert("RGBA")
+
+    # resize image
+    if Size != "null":
+        Size = Size.split("x")
+        img = img.resize((int(Size[0]), int(Size[1])), Image.ANTIALIAS)
+
+    # return new image
+    return ImageTk.PhotoImage(img)
+
+def get_gif(path: str):
+    # get the value of a key from a json file
+
+    with open(path, 'rb') as f:
+        data = f.read()
+        return data
 
 
 def replace_color(image_data, From_color: str, To_color: str):
@@ -182,16 +187,16 @@ def replace_color(image_data, From_color: str, To_color: str):
 
     # detect if from_color is in hex or string
     if From_color[0] == "#":
-        From_color = color_hex_rgb(From_color)
+        From_color = Color.hex_to_rgb(From_color)
     else:
-        From_color = color_str_rgb(From_color)
+        From_color = Color.str_to_rgb(From_color)
 
     # detect if to_color is in hex or string
     if To_color[0] == "#":
-        To_color = color_hex_rgb(To_color)
+        To_color = Color.hex_to_rgb(To_color)
     else:
         # convert string color rgb
-        To_color = color_str_rgb(To_color)
+        To_color = Color.str_to_rgb(To_color)
 
     # replace colors
     newData = []
@@ -202,6 +207,33 @@ def replace_color(image_data, From_color: str, To_color: str):
             newData.append(item)
 
     return newData
+
+def resize_image(image_data, Size: str):
+
+    """ Return a image file from a folder within the Assets folder
+
+    Arguments:
+        `image_data : [list]` The image data.
+        `Size : [str]` The new size of the image, if you not want to change the size, just put `"null"`.
+
+    Returns:
+        `PhotoImage : [PhotoImage object]` The image file with the changes.
+
+    Example:
+        >>> # This example will return the new image data with the colors changes
+        >>> image_data = resize_image(image_data, "100x100")
+    """
+
+    data = []
+    if Size != "null":
+        Size = Size.split("x")
+        for i in range(int(Size[0]) * int(Size[1])):
+            data.append(image_data[i])
+    else:
+        data = image_data
+
+    return data
+
 
 def Asset_colored(Folder_name, file_name_and_extension, hue_value):
 
@@ -230,12 +262,13 @@ def Asset_colored(Folder_name, file_name_and_extension, hue_value):
 
 
 # Check if the internet is on.
-def internet_on():
+def check_internet():
     try:
         response = urllib.request.urlopen('http://www.google.com', timeout=1)
         if response.code == 200:
             return True
     except:
+        Logger.warning("Check your internet connection")
         return False
 
 
@@ -307,37 +340,20 @@ def Image_getcolor(image, x, y):
                 return color
 
 
-def data_set(Folder_name, json_file, key, value):
+def get_json(path: str, key: str):
+    # get the value of a key from a json file
 
-    for root, dirs, files in os.walk(Assets_directory + "/Data"):
-        for folder in dirs:
-            if folder == Folder_name:
-                folder_path = os.path.join(root, folder)
-                break
+    with open(path, 'r') as f:
+        data = json.load(f)
+        return data[key]
 
-    for root, dirs, files in os.walk(folder_path):
-        for file in files:
-            if file.endswith(json_file):
-                with open(os.path.join(root, file), 'r') as f:
-                    data = json.load(f)
-                    data[key] = value
-                    with open(os.path.join(root, file), 'w') as f:
-                        json.dump(data, f, indent=4)
+def set_json(path: str, key: str, value: str | bool | int | float):
+    # set the value of a key from a json file
 
-
-def data_get(Folder_name, json_file, key):
-
-    for root, dirs, files in os.walk(Assets_directory + "/Data"):
-        for folder in dirs:
-            if folder == Folder_name:
-                folder_path = os.path.join(root, folder)
-                break
-
-    for root, dirs, files in os.walk(folder_path):
-        for file in files:
-            if file.endswith(json_file):
-                with open(os.path.join(root, file), 'r') as f:
-                    data = json.load(f)
-                    return data[key]
+    with open(path, 'r') as f:
+        data = json.load(f)
+        data[key] = value
+        with open(path, 'w') as f:
+            json.dump(data, f, indent=4)
 
 # -------------------------------------------[ End ]------------------------------------------- #

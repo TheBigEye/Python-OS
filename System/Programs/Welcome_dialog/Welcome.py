@@ -1,9 +1,9 @@
 from tkinter import Button, Frame, Label
 from tkinter.constants import INSERT
 
-from System.UI.Attributes.Draggable import drag_n_drop
+from System.UI.Attributes.Draggable import drag_it
 from System.Programs.Terminal.Commands import CMD
-from System.Utils.Utils import Asset
+from System.Utils.Utils import get_image
 
 __author__ = "TheBigEye"
 __version__ = "1.8"
@@ -25,7 +25,7 @@ class Welcome_dialog(Frame):
         self.draggable = draggable
 
 
-        self.Welcome_window_image = Asset("Welcome dialog", "Window.png")  # Welcome dialog image base
+        self.Welcome_window_image = get_image("Assets/UI/Programs/Welcome dialog/Window.png")  # Welcome dialog image base
 
         self.Welcome_window = Label(
             self.master,
@@ -34,7 +34,7 @@ class Welcome_dialog(Frame):
             borderwidth="0"
         )
 
-        self.Welcome_screen_image = Asset("Welcome dialog", "Dialog.png")
+        self.Welcome_screen_image = get_image("Assets/UI/Programs/Welcome dialog/Dialog.png")
 
         self.Welcome_screen = Label(
             self.Welcome_window,
@@ -49,8 +49,8 @@ class Welcome_dialog(Frame):
 
         # ----------------------------------------------------------------- [Boton de cerrar ventana] -------------------------------------------------------------------------
 
-        self.Close_button_image = Asset("Window", "Close_button.png")  # Window close button
-        self.Close_button_red_image = Asset("Window", "Close_button_red.png")  # Window close red button
+        self.Close_button_image = get_image("Assets/UI/Window/Close_button.png")  # Window close button
+        self.Close_button_red_image = get_image("Assets/UI/Window/Close_button_red.png")  # Window close red button
 
         def Close_window():
             """Close the window"""
@@ -77,4 +77,4 @@ class Welcome_dialog(Frame):
 
         if (draggable):
 
-            drag_n_drop(self.Welcome_dialog)
+            drag_it(self.Welcome_dialog)

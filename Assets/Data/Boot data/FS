@@ -13,5 +13,14 @@
         },
         "Boot": {},
         "Lib": {}
+    },
+
+    "bootimage.mbr": {
+        "Metadata" : {
+            "Extension" : "mbr",
+            "Created" : "2022-05-20 07:11:34",
+            "Modified" : "2022-05-20 07:11:34"
+        },
+        "Data" : ""
     }
 }
