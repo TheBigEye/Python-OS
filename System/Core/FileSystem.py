@@ -440,3 +440,51 @@ def get_files_and_folders_list():
             files_and_folders.append(deep_1)
 
     return files_and_folders
+
+def get_current_directory():
+
+    """
+    Return the current directory
+    """
+
+    # example of current_dir: ['root', 'folder', 'folder2']
+    # return '/root/folder/folder2'
+    return "/" + "/".join(current_dir)
+
+def get_file_date(name_and_extension):
+
+    """
+    Return the created date of the file from the metadata
+    """
+
+    global File_System
+
+    # Check if the file exists
+    if name_and_extension not in current_dictionary():
+        Logger.error("File {} does not exist", name_and_extension)
+        return
+
+    # Get the metadata of the file
+    dir = current_dictionary()
+    meta = str(dir[name_and_extension]["Metadata"]["Created"])
+
+    # Return the created date of the file
+    return meta
+
+def get_file_size(name_and_extension):
+    # Get the file content and caculate the size in bytes
+    global File_System
+
+    # Check if the file exists
+    if name_and_extension not in current_dictionary():
+        Logger.error("File {} does not exist", name_and_extension)
+        return
+
+    # Get the metadata of the file
+    dir = current_dictionary()
+    content = str(dir[name_and_extension]["Data"])
+    content_size = len(content)
+
+    # Return the size in bytes
+    size = str(content_size) + " bytes"
+    return size

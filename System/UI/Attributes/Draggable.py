@@ -1,4 +1,3 @@
-from tkinter import dnd
 # Drag and drop functions
 
 def make_draggable_button(Button):

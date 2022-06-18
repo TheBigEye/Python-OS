@@ -1,85 +1,48 @@
 
-from tkinter import Button, Frame, Label, Tk
+from tkinter import Button, Label, Tk
+
+class Window_base(Label):
+    '''A gradient frame which uses a canvas to draw the background'''
+    def __init__(self, parent, borderwidth=0, relief="sunken"):
+        Label.__init__(self, parent, borderwidth=borderwidth, relief=relief)
+
+class Window(Label):
+    def __init__(self, parent, borderwidth=0, relief="flat"):
+        Label.__init__(self, parent)
+
+        WMB = Window_base(self)
+        WMB.place(x=10, y=10, width=300 , height=300)
+        inner_frame = Label(WMB)
+        inner_frame.configure(bg="#0100A6")
+        inner_frame.place(x=0, y=0, width=300 , height=300)
+
+        Titlebar = Label(inner_frame, text="Titlebar", font=["Tahoma", 10, "bold"], bg="#0100A6", fg="#FFFFFF")
+        Titlebar.pack(side="top", fill="both", anchor="w")
+
+        Buttons_bar = Label(Titlebar, bg="#0100A6", fg="#FFFFFF", relief="flat", width=8)
+        Buttons_bar.pack(side="top", anchor="e")
+
+        Close_button = Button(Buttons_bar, text="X", command=WMB.destroy)
+        Close_button.place(x=42, y=0, width=16, height=18)
+
+        Maximize_button = Button(Buttons_bar, text="[]", command=WMB.destroy)
+        Maximize_button.place(x=21, y=0, width=16, height=18)
+
+        Minimize_button = Button(Buttons_bar, text="_", command=WMB.destroy)
+        Minimize_button.place(x=4, y=0, width=16, height=18)
+
+        l1 = Label(inner_frame, width=40, height=10, borderwidth=1, bg="black", text="Hello World", fg="white", font=["Arial", 12, "bold"])
+        l1.pack(side="top", fill="both", expand=True)
 
 
-class Window(Frame):
-    def __init__(self, master, width, height, x, y, title, color, widgets, bgcolor):
-        Frame.__init__(self, master)
-        self.master = master
-        self.w = width
-        self.h = height
-        self.x = x
-        self.y = y
-        self.title = title
-        self.color = color
-        self.widgets = widgets
-        self.bgcolor = bgcolor
+class SampleApp(Tk):
+    def __init__(self):
+        Tk.__init__(self)
+        appWindow = Window(self)
+        appWindow.place(x=64, y=64, width=600 , height=600)
+        lol = Label(appWindow, width=40, height=10, text="Hello World", font=["Arial", 12, "bold"], bg="gray", fg="white")
+        lol.place(x=12, y=38, width=128 , height=128)
 
-        # make the window base
-        # window structure
-        # --------------------------------------------------
-        # | title                                        x | <------ title bar and close button
-        # |------------------------------------------------|
-        # |                                                | <------- window frame
-        # |                                                |
-        # |                                                |
-        # |                                                |
-        # |                                                |
-        # |                    widgets                     |
-        # |                                                |
-        # |                                                |
-        # |                                                |
-        # |                                                |
-        # |                                                |
-        # |                                                |
-        # --------------------------------------------------
-
-        # make the window base frame
-        window_base = Frame(self.master, width=self.w, height=self.h, bg=self.bgcolor)
-        window_base.place(x=self.x, y=self.y)
-
-
-        # make the title bar
-        title_bar = Frame(window_base, width=self.w, height=28, bg=self.color)
-        title_bar.place(x=0, y=0)
-
-        global close_window
-        def close_window():
-            window_base.destroy()
-
-        # make the close button
-        close_button = Button(title_bar, text="X", command=close_window, bg=self.color, fg="white")
-        close_button.place(x=self.w-30, y=0)
-
-        # make the window frame
-        window_frame = Frame(window_base, width=self.w, height=self.h-30, bg=self.bgcolor)
-        window_frame.place(x=0, y=30)
-
-        # put the widgets inside the window frame
-        for widget in self.widgets:
-            widget.master = window_frame
-            widget.place(x=self.x + 2, y=self.y + 24)
-            widget.lift()
-
-       # drag n drop
-        def drag_n_drop(event):
-            master.after(1, lambda: window_base.place(x=event.x_root-x, y=event.y_root-y))
-            for widget in self.widgets:
-                widget.place(x=event.x_root-x + 2, y=event.y_root-y + 24)
-                widget.lift()
-
-        window_frame.bind("<B1-Motion>", drag_n_drop)
-
-# test
 if __name__ == "__main__":
-    root = Tk()
-    root.configure(background="black")
-
-    # widgets
-    label = Label(text="Hello World!")
-
-    label2 = Label(text="Hello World2324!")
-
-
-    window = Window(root, width=512, height=400, x=100, y=100, title="test", color="red", widgets=[label, label2], bgcolor="white")
-    root.mainloop()
+    app = SampleApp()
+    app.mainloop()

@@ -6,7 +6,6 @@ from System.Programs.Terminal.Commands import CMD
 from System.UI.Attributes.Draggable import drag_it
 from System.Utils.Utils import get_image, get_json, set_json
 
-from tkinter import dnd
 
 __author__ = "TheBigEye"
 __version__ = "1.8"
