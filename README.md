@@ -74,7 +74,7 @@
 
 #### Programs:
 - **Terminal** - you can write and execute commands
-- **File manager** - for now it is a static image, functions will be added later.
+- **File manager** - You can see files and folders, change directories and see the size of each file
 - **Browser** - You can browse the internet (currently it only uses html 3, so most of the pages don't work very well)
 
 #### Miscellaneous:
