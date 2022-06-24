@@ -55,7 +55,7 @@
  <!-- Logo -->
 <img 
      align="right"
-     src="https://user-images.githubusercontent.com/63316583/156767604-3dae9cb2-a1af-4c2e-86fd-a003445cba60.svg"
+     src="https://user-images.githubusercontent.com/63316583/175645873-207b9d4c-7bd9-40b5-8883-ebda57b07dc2.svg"
      title="Python OS"
 />
 
