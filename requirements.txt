@@ -1,3 +1,4 @@
 psutil
 tkinterweb
 pillow
+tkintermapview

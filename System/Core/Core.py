@@ -11,20 +11,21 @@
 """
 
 import datetime
-import os
 import platform
 import sys
 from tkinter import Misc
 
 from Libs.pyLogger.Logger import Logger
+from Libs.pyUtils.pyData import JSON
 from System.Core.FileSystem import fs_routines
 from System.Core.Kernel import bug_check
 from System.Core.TaskSystem import ts_routines
-from System.Utils.Utils import get_json, set_json
 from System.Utils.Vars import Assets_directory
 
+BOOT_DATA_FILE = (Assets_directory + "/Data/System data/Boot/Boot.json")
+
 # Load the boot value from boot.json
-Kernel_lvl = get_json("Assets/Data/Boot data/Boot.json", "Boot_phase")
+Boot_phase = JSON.get(BOOT_DATA_FILE, "Boot_phase")
 
 # Each screen has an ID
 isBSOD = False        # Black screen of death 0
@@ -45,7 +46,7 @@ in_mac = False
 
 
 # Start the boot order
-match Kernel_lvl:
+match Boot_phase:
     case 0: isBSOD = True
     case 1: isRSOD = True
     case 2: isGSOD = True
@@ -76,14 +77,12 @@ def routines():
     """ Used to execute the first tasks in the first seconds of system startup """
 
     check_os()
-
-    Logger.log("-------------- Starting system execution --------------")
-    Logger.log("System started at: {}", datetime.datetime.now())
+    Logger.info("System started at: {}", datetime.datetime.now())
 
     # In what os is running the system?
-    if in_linux: Logger.log("Running on Linux")
-    elif in_windows: Logger.log("Running on Windows")
-    elif in_mac: Logger.log("Running on Mac")
+    if in_linux: Logger.info("Running on Linux")
+    elif in_windows: Logger.info("Running on Windows")
+    elif in_mac: Logger.info("Running on Mac")
     else:
         Logger.warning("Unknown OS, starting anyway...")
 
@@ -92,22 +91,6 @@ def routines():
 
     # Load the file system
     fs_routines()
-
-
-def delete_logs():
-
-    """ This function is used to delete the logs. """
-
-    # Get the relative path of the Logs folder
-    logs_path = os.path.join(os.getcwd(), "Logs")
-
-    # Get the list of files inside the Logs folder
-    logs_files = os.listdir(logs_path)
-
-    # Delete the files inside the Logs folder
-    for file in logs_files:
-        os.remove(os.path.join(logs_path, file))
-        print("Deleted log: " + os.path.join(logs_path, file))
 
 
 def set_boot(value):
@@ -133,7 +116,7 @@ def set_boot(value):
             Logger.error("Invalid value, must be 0-8, STOPING..")
             sys.exit()
 
-    set_json("Assets/Data/Boot data/Boot.json", "Boot_phase", int_value)
+    JSON.set(BOOT_DATA_FILE, "Boot_phase", int_value)
 
 
 class boot:
@@ -151,7 +134,7 @@ class boot:
 
     def __init__(self, master: Misc, screen: Misc, time: int):
 
-        from System.UI.Boot.Bootloader import Bootloader
+        from System.Shell.Boot.Bootloader import Bootloader
 
         self.master = master
         self.screen = screen
@@ -167,10 +150,10 @@ def boot_check(master):
     This function is used to check if the boot process is complete.
     """
 
-    from System.UI.Boot.BIOS import BIOS
-    from System.UI.Boot.Desktop import Desktop
-    from System.UI.Boot.Installer import Os_Installer
-    from System.UI.Boot.Login import Login
+    from System.Shell.Boot.BIOS import BIOS
+    from System.Shell.Boot.Desktop.Desktop import Desktop
+    from System.Shell.Boot.Installer import Os_Installer
+    from System.Shell.Boot.Login import Login
 
     # Here the variables of the boot order are checked and the corresponding function is executed:
     if isBSOD:
@@ -184,27 +167,27 @@ def boot_check(master):
 
     elif isBIOS:
         boot(master, BIOS, 0)
-        Logger.log("Starting from BIOS/UEFI")
+        Logger.info("Starting from BIOS/UEFI")
 
     elif isINSTALLER:
         boot(master, Os_Installer, 5000) # Start the installer
-        Logger.log("Starting from non-graphical mode")
+        Logger.info("Starting from non-graphical mode")
 
     elif isBootloader:
         boot(master, Desktop, 60000) # Starts the boot loader
-        Logger.log("Starting from bootloader")
+        Logger.info("Starting from bootloader")
 
     elif isLogin:
         boot(master, Login, 0) # Start the login
-        Logger.log("Starting from Login") # Not used
+        Logger.info("Starting from Login") # Not used
 
     elif isDesktop:
         boot(master, Desktop, 0) # Start the desktop
-        Logger.log("Starting from desktop")
+        Logger.info("Starting from desktop")
 
     elif isBoot:
         boot(master, Desktop, 10000) # Start the general boot
-        Logger.log("Starting from normal boot")
+        Logger.info("Starting from normal boot")
 
     # In case the boot order fails, stop the program and write the following:
     else:

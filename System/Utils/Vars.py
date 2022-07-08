@@ -14,6 +14,7 @@
 
 import os
 import platform
+from Libs.pyLogger.Logger import Logger
 
 # Relative paths (used to be able to execute the program from anywhere)
 Assets_directory = os.path.join(os.getcwd(), "Assets")
@@ -49,7 +50,7 @@ elif platform.system() == "Linux":
     else:
 
         # if don't have xorg server
-        print("Error while loading cursors. Please install xorg server.")
+        Logger.error("Error while loading cursors. Please install xorg server.")
 
         # set the default cursor
         Cursor = ""

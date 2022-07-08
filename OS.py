@@ -16,7 +16,9 @@ import sys as System
 import tkinter as tk
 from tkinter import PhotoImage
 
+from Libs.pyLogger.Logger import Logger
 from System.Core.Kernel import python_modules_check
+from Libs.pyUtils.pyFetch import Color, get_neofetch
 
 # ------------------------------------------[ Main ]------------------------------------------- #
 
@@ -28,27 +30,26 @@ class main(tk.Tk):
     def __init__(self):
         """ Initializes the system """
 
-        from System.Core.Core import boot_check, routines
+        from System.Core.Core import boot_check
         from System.Core.Kernel import screen_check
-        from System.Utils.Vars import Assets_directory, XCursor_2
+        from System.Utils.Vars import Assets_directory
 
         super().__init__()
 
         self.title("Python OS")
-        self.geometry("1024x600")
+        self.geometry("1024x600+64+32")
         self.resizable(False, False)
 
         self.icon = PhotoImage(file = Assets_directory + "/Icon.png")
 
         if Current_OS.name == "nt":
-            self.configure(cursor = XCursor_2)
             self.configure(background= "#000000")
-            self.iconphoto(False, self.icon)
+            self.iconphoto(True, self.icon)
         else:
             self.configure(background= "#000000")
 
         screen_check(self) # Check if the screen is big
-        routines() # Execute the routines (essential for the system)
+
         boot_check(self) # Start the boot process
 
         self.mainloop()
@@ -66,7 +67,6 @@ def run():
         >>> python OS.py --help --version --delete-logs --set-boot
     """
 
-    from Libs.pyLogger.Logger import Logger
     from System.Core.Core import set_boot
 
     arguments = System.argv[1:]
@@ -80,27 +80,23 @@ def run():
         """)
 
     def version_arg():
-        print("""
-        Python OS version: 1.0.0
-        """)
+        print("Python OS version: 1.0.0")
 
-    def debug():
-        Logger.info("---------------- Debug mode activated -----------------")
-        main()
+    def neofetch_arg():
+        print(get_neofetch("Assets/Data/logo.txt", Color.YELLOW, ["*", None, None, "#", None, None, None]))
 
     if len(arguments) == 0:
         main()
     else:
         match arguments[0]:
-            case "--help"        | "--h":  help_arg()
+            case "--help"        | "--h":   help_arg()
             case "--modules"     | "--mc":  python_modules_check()
-            case "--version"     | "--v":  version_arg()
-            case "--debug"       | "--d":  debug()
-            case "--delete-logs" | "--dl": Logger.clean_logs()
-            case "--set-boot"    | "--b":  set_boot(System.argv[2])
+            case "--version"     | "--v":   version_arg()
+            case "--delete-logs" | "--dl":  Logger.delete_logs()
+            case "--set-boot"    | "--b":   set_boot(System.argv[2])
+            case "--neofetch"    | "--nf":  neofetch_arg()
             case _:
-                Logger.info("Invalid argument {}, use --help to see the help.", arguments[0])
-                System.exit()
+                raise ValueError("Invalid argument {}, use --help to see the help.", arguments[0])
 
 if __name__ == "__main__":
     run()

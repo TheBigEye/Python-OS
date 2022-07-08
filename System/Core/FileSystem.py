@@ -16,35 +16,46 @@ import random
 import shelve
 
 from Libs.pyLogger.Logger import Logger
-from System.Utils.Utils import get_json, set_json
-from System.Utils.Vars import Assets_directory
+from Libs.pyUtils.pyData import JSON
+from System.Utils.Vars import Assets_directory, Disk_directory
 
-File_System = shelve.open('Disk/FS/Filesystem', writeback=True)
+FS_DISK_DATA_FILES = [
+    (Disk_directory + "/FS/Filesystem.dat"),
+    (Disk_directory + "/FS/Filesystem.bak"),
+    (Disk_directory + "/FS/Filesystem.dir")
+]
+
+FS_DISK_FILE= (Disk_directory + "/FS/Filesystem")
+BOOT_DATA_FILE = (Assets_directory + "/Data/System data/Boot/Boot.json")
+FS_STRUCTURE_FILE = (Assets_directory + "/Data/System data/File system/FS.txt")
+
+# read or make the file system data file
+File_System = shelve.open(FS_DISK_FILE, writeback=True)
 current_dir = []
 
 def fs_routines():
 
-    # laod boot data
-    with open(Assets_directory + "/Data/Boot data/Boot.json", "r") as boot_data_file:
+    # Laod boot data (NOT DELETE, NEEDED FOR LOAD CORRECTLY THE FILE SYSTEM)
+    with open(BOOT_DATA_FILE, "r") as boot_data_file:
         boot_data = json.load(boot_data_file)
 
     def check_boot():
-        if get_json(Assets_directory + "/Data/Boot data/Boot.json", "FS_mounted") != False:
+        if JSON.get(BOOT_DATA_FILE, "FS_mounted") != False:
             return
 
-        Logger.error("File system is not mounted, installing...")
+        Logger.error("File system is not mounted, installing ...")
 
-        # delete the .dat, bak and dir files in Disk/FS/ for avoid errors
-        if os.path.exists("Disk/FS/Filesystem.dat"): os.remove("Disk/FS/Filesystem.dat")
-        if os.path.exists("Disk/FS/Filesystem.bak"): os.remove("Disk/FS/Filesystem.bak")
-        if os.path.exists("Disk/FS/Filesystem.dir"): os.remove("Disk/FS/Filesystem.dir")
+        # delete the old file system
+        if os.path.exists(FS_DISK_DATA_FILES[0]): os.remove(FS_DISK_DATA_FILES[0]) # delete the .dat file
+        if os.path.exists(FS_DISK_DATA_FILES[1]): os.remove(FS_DISK_DATA_FILES[1]) # delete the .bak file
+        if os.path.exists(FS_DISK_DATA_FILES[2]): os.remove(FS_DISK_DATA_FILES[2]) # delete the .dir file
 
-        File_System = shelve.open('Disk/FS/Filesystem', writeback=True)
+        File_System = shelve.open(FS_DISK_FILE, writeback=True)
         install(File_System)
 
-        set_json(Assets_directory + "/Data/Boot data/Boot.json", "FS_mounted", True)
+        JSON.set(BOOT_DATA_FILE, "FS_mounted", True)
 
-        Logger.log("File system installed successfully")
+        Logger.debug("File system installed successfully")
 
     check_boot()
     Logger.info("File system ready!")
@@ -53,7 +64,7 @@ def install(File_System):
     Username = "User"
 
     # Load the File system structure file
-    with open('Assets/Data/Boot data/FS', 'r') as fs_structure:
+    with open(FS_STRUCTURE_FILE, 'r') as fs_structure:
         fs_data = fs_structure.read()
 
         # Get the %User% from the structure and change it to the username
@@ -70,7 +81,6 @@ def current_dictionary():
     dir = File_System[""]
     for key in current_dir:
         dir = dir[key]
-
     return dir
 
 def ls():
@@ -80,7 +90,6 @@ def ls():
     """
 
     list_dir = ""
-
     list_dir += "Contents of directory " + str("/" + "/".join(current_dir) ) + '/:' + "\n"
 
     # show orderly alphabetically
@@ -176,8 +185,6 @@ def mkfile(argument):
     # convert dir[name_and_extension] to json sctructure and print it
     for key in dir[name_and_extension]:
         print(key, ":", dir[name_and_extension][key])
-
-
 
     File_System.sync()
 
@@ -447,8 +454,6 @@ def get_current_directory():
     Return the current directory
     """
 
-    # example of current_dir: ['root', 'folder', 'folder2']
-    # return '/root/folder/folder2'
     return "/" + "/".join(current_dir)
 
 def get_file_date(name_and_extension):

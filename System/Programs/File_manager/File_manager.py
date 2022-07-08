@@ -1,9 +1,9 @@
-from System.UI.Attributes.Draggable import drag_it
+from tkinter import *
+from Libs.pyImage.Image import setImage
+from System.Shell.Attributes.Draggable import drag_it
 
-from System.Utils.Utils import get_image
 from System.Core.FileSystem import *
 
-from tkinter import *
 
 __author__ = 'TheBigEye'
 __version__ = '1.1'
@@ -21,11 +21,11 @@ class Folder(Label):
         self.y = y
         self.name = name
 
-        self.image = get_image("Assets/UI/Files/Folder_icon.png", "24x24", "#ff00ff", "#00142D")
-        self.image_selected = get_image("Assets/UI/Files/Folder_icon.png", "24x24", "#ff00ff", "#001228")
+        self.image = setImage("Assets/Shell/Icons/Folder_icon.png", (24, 24), "#ff00ff", "#00142D")
+        self.image_selected = setImage("Assets/Shell/Icons/Folder_icon.png", (24, 24), "#ff00ff", "#001228")
 
-        self.selection_normal = get_image("Assets/UI/Programs/File manager/Selection.png", "null", "#ff00ff", "#00142D")
-        self.selection_selected = get_image("Assets/UI/Programs/File manager/Selection_selected.png", "null", "#ff00ff", "#00142D")
+        self.selection_normal = setImage("Assets/Shell/Programs/File manager/Selection.png", None, "#ff00ff", "#00142D")
+        self.selection_selected = setImage("Assets/Shell/Programs/File manager/Selection_selected.png", None, "#ff00ff", "#00142D")
 
         self.selection_label = Label(
             self.master,
@@ -98,11 +98,11 @@ class File(Label):
         self.name = name
 
         self.icon = icon
-        self.file_icon = get_image("Assets/UI/Files/" + icon + "_icon.png", "24x24", "#ff00ff", "#00142D")
-        self.file_icon_selected = get_image("Assets/UI/Files/" + icon + "_icon.png", "24x24", "#ff00ff", "#001228")
+        self.file_icon = setImage("Assets/Shell/Icons/" + icon + "_icon.png", (24, 24), "#ff00ff", "#00142D")
+        self.file_icon_selected = setImage("Assets/Shell/Icons/" + icon + "_icon.png", (24, 24), "#ff00ff", "#001228")
 
-        self.selection_normal = get_image("Assets/UI/Programs/File manager/Selection.png", "null", "#ff00ff", "#00142D")
-        self.selection_selected = get_image("Assets/UI/Programs/File manager/Selection_selected.png", "null", "#ff00ff", "#00142D")
+        self.selection_normal = setImage("Assets/Shell/Programs/File manager/Selection.png", None, "#ff00ff", "#00142D")
+        self.selection_selected = setImage("Assets/Shell/Programs/File manager/Selection_selected.png", None, "#ff00ff", "#00142D")
 
         self.selection_label = Label(
             self.master,
@@ -205,9 +205,9 @@ class File_manager(Frame):
         self.master = master
         self.draggable = draggable
 
-        self.File_manager_image = get_image("Assets/UI/Programs/File manager/Window.png")  # File manager image base
-        self.Splash_logo_image = get_image("Assets/UI/Programs/File manager/File_manager_icon.png", "112x112", "#ff00ff", "#002C4F")  # Splash image
-        self.Splash_image = get_image("Assets/UI/Programs/File manager/Splash.png")  # Splash image
+        self.File_manager_image = setImage("Assets/Shell/Programs/File manager/Window.png")  # File manager image base
+        self.Splash_logo_image = setImage("Assets/Shell/Programs/File manager/File_manager_icon.png", (112, 112), "#ff00ff", "#002C4F")  # Splash image
+        self.Splash_image = setImage("Assets/Shell/Programs/File manager/Splash.png")  # Splash image
 
         self.File_manager = Label(
             self.master,
@@ -260,8 +260,18 @@ class File_manager(Frame):
             def parse_dir_bar(self, value):
                 """ Parse the directory bar """
 
+                # remove the / from the value
+                value = value[1:]
                 cd(value)
                 render_filesystem(self)
+
+            def update_dir_bar(self):
+                """ Clean the directory bar """
+
+                self.dir_bar.delete(0, END)
+                self.dir_bar.insert(0, get_current_directory())
+                # quit the focus from the dir_bar
+                self.File_manager.focus()
 
             self.dir_bar = Entry(
                 self.File_manager,
@@ -281,12 +291,12 @@ class File_manager(Frame):
             # on click focus, delete the text
             self.dir_bar.bind("<Button-1>", lambda event: self.dir_bar.delete(0, END))
             # on click outside, put the current directory in the dir_bar
-            self.File_manager.bind("<Button-1>", lambda event: self.dir_bar.insert(0, get_current_directory()))
+            self.File_manager.bind("<Button-1>", lambda event: update_dir_bar(self))
 
             self.dir_bar.bind("<Return>", lambda event: parse_dir_bar(self, str(self.dir_bar.get())))
 
             # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-            self.go_button_image = get_image("Assets/UI/Programs/File manager/Go_arrow.png")
+            self.go_button_image = setImage("Assets/Shell/Programs/File manager/Go_arrow.png")
 
             def go_arrow(self):
                 """ Open a folder """
@@ -306,7 +316,7 @@ class File_manager(Frame):
             self.go_button.place(x=548, y=28)
 
             # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-            self.back_button_image = get_image("Assets/UI/Programs/File manager/Back_arrow.png")
+            self.back_button_image = setImage("Assets/Shell/Programs/File manager/Back_arrow.png")
 
 
             def back_arrow(self):
@@ -337,8 +347,8 @@ class File_manager(Frame):
 
                 self.File_manager.destroy()
 
-            self.Close_button_image = get_image("Assets/UI/Window/Close_button.png")
-            self.Close_button_red_image = get_image("Assets/UI/Window/Close_button_red.png")
+            self.Close_button_image = setImage("Assets/Shell/Window/Close_button.png")
+            self.Close_button_red_image = setImage("Assets/Shell/Window/Close_button_red.png")
 
             self.Close_button = Button(
                 self.File_manager,

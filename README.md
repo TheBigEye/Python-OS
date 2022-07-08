@@ -70,7 +70,7 @@
 - It is composed of a wallpaper along with a taskbar
 - The taskbar contains a clock, volume and internet icons.
 - A start menu.
-- Draggabble window
+- Draggabble windows
 
 #### Programs:
 - **Terminal** - you can write and execute commands
@@ -103,6 +103,7 @@ Download the code and unzip it, it is necessary to have Python 3.10 and have the
 - [`Pillow`](https://github.com/python-pillow/Pillow)       Necessary so that the program can read the images and work.
 - [`Psutil`](https://github.com/giampaolo/psutil)      Necessary for the neofetch command and some functions to work.
 - [`Tkinterweb`](https://github.com/Andereoo/TkinterWeb)  Necessary for the browser to work.
+- [`TkinterMapView`](https://github.com/TomSchimansky/TkinterMapView)  Necessary for the Map Viewer to work.
 
 For a quick installation use the following command inside the project folder:
 

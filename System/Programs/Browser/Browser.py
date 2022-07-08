@@ -1,6 +1,6 @@
 from tkinter import Label
 import tkinterweb
-from System.Utils.Utils import get_image
+from Libs.pyImage.Image import setImage
 from System.Utils.Vars import Assets_directory
 
 __author__ = 'TheBigEye'
@@ -30,7 +30,7 @@ def Browser(master):
 # Browser ---------------------------------------------------------------------------------------------------------------
 
     global Browser, Browser_GUI_Image
-    Browser_GUI_Image = get_image("Assets/UI/Programs/Browser/Browser.png")
+    Browser_GUI_Image = setImage("Assets/Shell/Programs/Browser/Browser.png")
 
     Browser = Label(
         master,

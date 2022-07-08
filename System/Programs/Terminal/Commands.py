@@ -1,10 +1,10 @@
-import os
 import platform
 import time
 from tkinter.constants import END, INSERT
 
 import psutil
 from Libs.pyLogger.Logger import Logger
+from Libs.pyUtils.pyFetch import get_neofetch
 
 __author__ = 'TheBigEye'
 __version__ = '1.0'
@@ -510,21 +510,11 @@ def CMD(master, entry, output):
         from System.Programs.Terminal.Terminal import (get_background, get_foreground)
 
         neo = ""
-
-        neo += os.getlogin().upper() + "\n"
-        neo += "--------\n"
-        neo += "OS: " + platform.system() + " " + platform.release() + "\n"
-        neo += "Kernel: " + platform.version() + "\n"
-        neo += "Uptime: " + str(psutil.boot_time() - psutil.boot_time()) + "\n"
-        neo += "Shell: " + "Py-OS" + "\n"
-        neo += "Terminal: " + "Iris CLI" + "\n"
-        neo += "CPU: " + str(psutil.cpu_percent()) + "%\n"
-        neo += "Memory: " + str(psutil.virtual_memory().percent) + "%\n\n"
-
         neo += "--------\n"
         neo += "Foreground: " + get_foreground() + "\n"
         neo += "Background: " + get_background() + "\n"
 
+        output.insert(INSERT, get_neofetch("Assets/Data/mini_logo.txt", None) + "\n")
         output.insert(INSERT, neo + "\n")
         output.see(END)
 

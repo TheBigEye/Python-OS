@@ -1,11 +1,10 @@
-import time
 from tkinter import Button, Entry, Frame, Label, Text
 from tkinter.constants import INSERT
 
+from Libs.pyImage.Image import setImage
+from Libs.pyUtils.pyData import JSON
 from System.Programs.Terminal.Commands import CMD
-from System.UI.Attributes.Draggable import drag_it
-from System.Utils.Utils import get_image, get_json, set_json
-
+from System.Shell.Attributes.Draggable import drag_it
 
 __author__ = "TheBigEye"
 __version__ = "1.8"
@@ -13,28 +12,27 @@ __version__ = "1.8"
 #font = ("Cascadia Code", 9)
 font = ("Consolas", 10)
 
-
 def set_foreground(color):
 
     """Set the foreground color of the terminal"""
 
-    set_json("Assets/Data/Terminal data/Terminal.json", "Foreground", color)
+    JSON.set("Assets/Data/Terminal data/Terminal.json", "Foreground", color)
 
 def get_foreground():
 
     """Get the foreground color of the terminal"""
 
-    return get_json("Assets/Data/Terminal data/Terminal.json", "Foreground")
+    return JSON.get("Assets/Data/Terminal data/Terminal.json", "Foreground")
 
 def set_background(color):
 
     """Set the background color of the terminal"""
 
-    set_json("Assets/Data/Terminal data/Terminal.json", "Background", color)
+    JSON.set("Assets/Data/Terminal data/Terminal.json", "Background", color)
 
 def get_background():
 
-    return get_json("Assets/Data/Terminal data/Terminal.json", "Background")
+    return JSON.get("Assets/Data/Terminal data/Terminal.json", "Background")
 
 
 class Terminal(Frame):
@@ -67,9 +65,9 @@ class Terminal(Frame):
             CMD(self.Terminal, self.Terminal_entry, self.Terminal_screen)
             self.Terminal_screen.config(state="disabled")
 
-        self.Terminal_image = get_image("Assets/UI/Programs/Terminal/Window.png", "null", "#ff00ff", self.background)  # Terminal image base
-        self.Splash_logo_image = get_image("Assets/UI/Programs/Terminal/Terminal_icon.png", "112x112", "#ff00ff", "#002C4F")  # Splash image
-        self.Splash_image = get_image("Assets/UI/Programs/Terminal/Splash.png")  # Splash image
+        self.Terminal_image = setImage("Assets/Shell/Programs/Terminal/Window.png", None, "#ff00ff", self.background)  # Terminal image base
+        self.Splash_logo_image = setImage("Assets/Shell/Programs/Terminal/Terminal_icon.png", (112, 112), "#ff00ff", "#002C4F")  # Splash image
+        self.Splash_image = setImage("Assets/Shell/Programs/Terminal/Splash.png")  # Splash image
 
 
         self.Terminal = Label(
@@ -102,8 +100,8 @@ class Terminal(Frame):
 
 # ----------------------------------------------------------------- [Close terminal button] -------------------------------------------------------------------------
 
-        self.Close_button_image = get_image("Assets/UI/Window/Close_button.png")  # Terminal close button
-        self.Close_button_red_image = get_image("Assets/UI/Window/Close_button_red.png")  # Terminal close red button
+        self.Close_button_image = setImage("Assets/Shell/Window/Close_button.png")  # Terminal close button
+        self.Close_button_red_image = setImage("Assets/Shell/Window/Close_button_red.png")  # Terminal close button
 
         def Close_Terminal():
             """Close the Terminal"""
@@ -132,8 +130,8 @@ class Terminal(Frame):
 
 # ----------------------------------------------------------------- [Maximize terminal button] ----------------------------------------------------------------------
 
-        self.Maximize_button_image = get_image("Assets/UI/Window/Maximize_button.png")  # Terminal maximize button
-        self.Maximize_button_light_image = get_image("Assets/UI/Window/Maximize_button_light.png")  # Terminal maximize button light
+        self.Maximize_button_image = setImage("Assets/Shell/Window/Maximize_button.png")  # Terminal maximize button
+        self.Maximize_button_light_image = setImage("Assets/Shell/Window/Maximize_button_light.png")  # Terminal maximize button light
 
         def Maximize_Terminal():
             """Maximize the Terminal"""
@@ -159,8 +157,8 @@ class Terminal(Frame):
 
         # ----------------------------------------------------------------- [Minimize terminal button] ----------------------------------------------------------------------
 
-        self.Minimize_button_image = get_image("Assets/UI/Window/Minimize_button.png")  # Terminal minimize button
-        self.Minimize_button_light_image = get_image("Assets/UI/Window/Minimize_button_light.png")  # Terminal minimize button light
+        self.Minimize_button_image = setImage("Assets/Shell/Window/Minimize_button.png")  # Terminal minimize button
+        self.Minimize_button_light_image = setImage("Assets/Shell/Window/Minimize_button_light.png")  # Terminal minimize button light
 
         def Minimize_Terminal():
             """Minimize the Terminal"""

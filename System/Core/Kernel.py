@@ -18,11 +18,9 @@ from tkinter import BOTH, Label, Misc
 
 import psutil
 from Libs.pyLogger.Logger import Logger
-from System.Utils.Vars import Disk_directory
+from System.Utils.Vars import Assets_directory
 
-# TODO: implement a bootloader class for able restart the system
-
-Bugcheck_data_directory = (Disk_directory + "/System/Bugcheck/Bugcheck.json")
+BUGCHECK_DATA_FILE = (Assets_directory + "/Data/System data/Kernel/Bugcheck.json")
 
 def screen_check(master: Misc):
     """ This function checks if the system is running in a supported resolution. """
@@ -50,7 +48,7 @@ def python_modules_check():
         Logger.warning("Oh no!, The module " + module_name + " not found, is required for the system to work.")
 
     # check if tkinter, tkinterweb, psutils and pyllow are installed, if not, print a warning message, if all the modules are found, then print a success message
-    if not sys.modules.get("tkinter"): module_not_found("tkinter")
+    if not sys.modules.get("tkinter"): module_not_found("tkinter") # Jajaj, its impossible... but just in case..
     elif not sys.modules.get("psutil"): module_not_found("psutil")
     elif not sys.modules.get("pyllow"):  module_not_found("pyllow")
     else:
@@ -107,7 +105,21 @@ def is_running(process):
     return False
 
 class bug_check:
-    """ Show the BSOD, RSOD, GSOD or a custom SOD. """
+    """
+    Show the BSOD, RSOD, GSOD or a custom SOD.
+
+    Arguments:
+        `master : [Misc]` The parent widget for place the BSOD.
+        `error_id : [str]` The error id, like a memory dump 0x12345678.
+        `msg_color : [str]` The hex color of the message.
+        `bg_color : [str]` The hex color of the background.
+
+    Returns:
+        `None`
+
+    Example:
+        >>> bug_check(master, "0x12345678", "FFFFFF", "000000")
+    """
 
     def __init__(self, master: Misc, error_id: str, msg_color: str, bg_color: str):
 
@@ -133,7 +145,7 @@ class bug_check:
         Logger.error("BSOD! The system has failed with code {}", error_id)
 
         # Load the bugcheck data from the json file.
-        with open(Bugcheck_data_directory, 'r') as f:
+        with open(BUGCHECK_DATA_FILE, 'r') as f:
             data = json.load(f)
 
             self.emote = data["Emote"]
@@ -151,6 +163,10 @@ class bug_check:
                     self.error_info = value["description"]
 
         def start():
+
+            # remove all the widgets from self.base
+            for widget in self.base.winfo_children():
+                widget.destroy()
 
             # The emote
             self.emote_label = Label(

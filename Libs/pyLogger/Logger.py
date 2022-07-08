@@ -13,11 +13,14 @@
 
 import datetime
 import inspect
+import logging
+import logging.handlers
 import os
+import re
+import sys
 
-Logs_directory = os.path.join(os.getcwd(), "Logs")
 
-class Style:
+class Color:
 
     """
     This class implements the styles and colors of the logger.
@@ -31,7 +34,7 @@ class Style:
     UNDERLINE = '\033[4m'
     ITALIC = '\033[3m'
 
-    GRAY = '\033[30m'
+    GREY = '\033[30m'
     RED = '\033[31m'
     GREEN = '\033[32m'
     YELLOW = '\033[33m'
@@ -45,225 +48,197 @@ class Style:
     BLUE_BLOCK = '\x1b[6;30;44m'
     PURPLE_BLOCK = '\x1b[6;30;45m'
 
+    BOLD_RED = "\x1b[31;1m"
+    LIGHT_BLUE = "\x1b[1;36m"
+
+    RESET = "\x1b[0m"
     END = '\033[0m'
+
+class ColorizedArgsFormatter(logging.Formatter):
+    arg_colors = [Color.PURPLE, Color.LIGHT_BLUE]
+    level_fields = ["levelname", "levelno"]
+    level_to_color = {
+        logging.DEBUG: Color.PURPLE,
+        logging.INFO: Color.GREEN,
+        logging.WARNING: Color.YELLOW,
+        logging.ERROR: Color.RED,
+        logging.CRITICAL: Color.BOLD_RED,
+    }
+
+    def __init__(self, fmt: str):
+        super().__init__()
+        self.level_to_formatter = {}
+
+        def add_color_format(level: int):
+            color = ColorizedArgsFormatter.level_to_color[level]
+            _format = fmt
+            for fld in ColorizedArgsFormatter.level_fields:
+                search = "(%\(" + fld + "\).*?s)"
+                _format = re.sub(search, f"{color}\\1{Color.RESET}", _format)
+            formatter = logging.Formatter(_format)
+            self.level_to_formatter[level] = formatter
+
+        add_color_format(logging.DEBUG)
+        add_color_format(logging.INFO)
+        add_color_format(logging.WARNING)
+        add_color_format(logging.ERROR)
+        add_color_format(logging.CRITICAL)
+
+    @staticmethod
+    def rewrite_record(record: logging.LogRecord):
+        if not BraceFormatStyleFormatter.is_brace_format_style(record):
+            return
+
+        msg = record.msg
+        msg = msg.replace("{", "_{{")
+        msg = msg.replace("}", "_}}")
+        placeholder_count = 0
+        # add ANSI escape code for next alternating color before each formatting parameter
+        # and reset color after it.
+        while True:
+            if "_{{" not in msg:
+                break
+            color_index = placeholder_count % len(ColorizedArgsFormatter.arg_colors)
+            color = ColorizedArgsFormatter.arg_colors[color_index]
+            msg = msg.replace("_{{", color + "{", 1)
+            msg = msg.replace("_}}", "}" + Color.RESET, 1)
+            placeholder_count += 1
+
+        record.msg = msg.format(*record.args)
+        record.args = []
+
+    def format(self, record):
+        orig_msg = record.msg
+        orig_args = record.args
+        formatter = self.level_to_formatter.get(record.levelno)
+        self.rewrite_record(record)
+        formatted = formatter.format(record)
+        record.msg = orig_msg
+        record.args = orig_args
+        return formatted
+
+
+class BraceFormatStyleFormatter(logging.Formatter):
+    def __init__(self, fmt: str):
+        super().__init__()
+        self.formatter = logging.Formatter(fmt)
+
+    @staticmethod
+    def is_brace_format_style(record: logging.LogRecord):
+        if len(record.args) == 0:
+            return False
+
+        msg = record.msg
+        if '%' in msg:
+            return False
+
+        count_of_start_param = msg.count("{")
+        count_of_end_param = msg.count("}")
+
+        if count_of_start_param != count_of_end_param:
+            return False
+
+        if count_of_start_param != len(record.args):
+            return False
+
+        return True
+
+    @staticmethod
+    def rewrite_record(record: logging.LogRecord):
+        if not BraceFormatStyleFormatter.is_brace_format_style(record):
+            return
+
+        record.msg = record.msg.format(*record.args)
+        record.args = []
+
+    def format(self, record):
+        orig_msg = record.msg
+        orig_args = record.args
+        self.rewrite_record(record)
+        formatted = self.formatter.format(record)
+
+        # restore log record to original state for other handlers
+        record.msg = orig_msg
+        record.args = orig_args
+        return formatted
+
 
 class Logger:
 
-    """ This is a logger that is used to save the messages in a file.
-
-    Returns:
-        `Output : [String]` the logs text.
-
-    Examples:
-        # Simple usage
-        >>> Logger.log("This is a log message")
-        >>> Logger.info("This is an info message")
-        >>> Logger.warning("This is a warning message")
-        >>> Logger.error("This is a error message")
-
-        # Advanced usage
-        >>> Logger.log("This is a log message with {}", args)
-        >>> Logger.info("This is an info message with {}", args)
-        >>> Logger.warning("This is a warning message with {}", args)
-        >>> Logger.error("This is a error message with {}", args)
+    """
+    This class implements the Logger and related functions.
     """
 
-    # Verify if the log folder exists, if not, create it
-    if not os.path.exists(Logs_directory):
-        os.makedirs(Logs_directory)
+    # Check if the Logs folder exists. If not, create it.
+    if not os.path.exists("Logs"):
+        os.makedirs("Logs")
 
-    # Verify if in the Logs folder exist more than 6 files if yes, delete the oldest one
-    log_files = os.listdir(Logs_directory)
+    # Check  if are more than 6 files in the Logs folder. If so, delete the oldest one.
+    if len(os.listdir("Logs")) > 6:
+        oldest_file = min(os.listdir("Logs"), key=os.path.getctime)
+        os.remove(os.path.join("Logs", oldest_file))
 
-    if len(log_files) > 6:
-        log_files.sort()
-        os.remove(Logs_directory + "/" + log_files[0])
+    root_logger = logging.getLogger()
+    root_logger.setLevel(logging.DEBUG)
 
-    # Make the logs file
-    log_filename = "Log_" + datetime.datetime.now().strftime("%Y-%m-%d") + ".log"
+    console_level = "DEBUG"
+    console_handler = logging.StreamHandler(stream=sys.stdout)
+    console_handler.setLevel(console_level)
+    console_format = "%(asctime)s - %(levelname)-8s - %(name)-25s - %(message)s"
+    colored_formatter = ColorizedArgsFormatter(console_format)
+    console_handler.setFormatter(colored_formatter)
+    root_logger.addHandler(console_handler)
 
-    # File header
-    file_header = []
-    file_header.append("-------------------------------------------------------------------------------------------------------------------------")
-    file_header.append("|        Date          |  Type  |         Name         |                            Action                              |")
-    file_header.append("-------------------------------------------------------------------------------------------------------------------------")
+    file_handler = logging.FileHandler("Logs/Log_" + str(datetime.datetime.now().strftime("%Y-%m-%d")) + ".log")
+    file_level = "DEBUG"
+    file_handler.setLevel(file_level)
+    file_format = "%(asctime)s - %(name)s (%(lineno)s) - %(levelname)-8s - %(threadName)-12s - %(message)s"
+    file_handler.setFormatter(BraceFormatStyleFormatter(file_format))
+    root_logger.addHandler(file_handler)
 
-    # Write the header in the log file
-    with open(Logs_directory + "/" + log_filename, "a", encoding="utf8") as log_file:
-        for line in file_header:
-            log_file.write(line + "\n")
+    with open("Logs/Log_" + str(datetime.datetime.now().strftime("%Y-%m-%d")) + ".log", "a") as f:
+        f.write("\n" + "-" * 132 + "\n")
+        print("\n" + "-" * 132 + "\n")
 
-    # Logger header
-    console_header = []
-    console_header.append("----------------------------------------------------------------------------------------")
-    console_header.append("| Type |        Name         |                          Action                         |")
-    console_header.append("----------------------------------------------------------------------------------------")
+    def debug(msg: str, *args, **kwargs):
+        # Get the calling module name, for example, if the module call PIL.PngImagePlugin, only the "PIL" is returned.
+        frame = inspect.stack()[1]
+        calling_function = frame[3]
+        calling_function = calling_function.split(".")[-1]
+        logger = logging.getLogger(calling_function)
+        logger.debug(msg, *args, **kwargs)
 
-    for line in console_header:
-        print(line)
+    def info(msg: str, *args, **kwargs):
+        frame = inspect.stack()[1]
+        calling_function = frame[3]
+        calling_function = calling_function.split(".")[-1]
+        logger = logging.getLogger(calling_function)
+        logger.info(msg, *args, **kwargs)
 
-    def log(message: str, *args):
+    def warning( msg: str, *args, **kwargs):
+        frame = inspect.stack()[1]
+        calling_function = frame[3]
+        calling_function = calling_function.split(".")[-1]
+        logger = logging.getLogger(calling_function)
+        logger.warning(msg, *args, **kwargs)
 
-        """
-        This function is used to log a message.
+    def error(msg: str, *args, **kwargs):
+        frame = inspect.stack()[1]
+        calling_function = frame[3]
+        calling_function = calling_function.split(".")[-1]
+        logger = logging.getLogger(calling_function)
+        logger.error(msg, *args, **kwargs)
 
-        arguments:
-            `message : [String]` the message to log.
-            `args : [List, String]` the arguments to log.
+    def critical(msg: str, *args, **kwargs):
+        frame = inspect.stack()[1]
+        calling_function = frame[3]
+        calling_function = calling_function.split(".")[-1]
+        logger = logging.getLogger(calling_function)
+        logger.critical(msg, *args, **kwargs)
 
-        Returns:
-            `Output : [String]` the logs text.
+    def delete_logs():
+        import os
 
-        Examples:
-            # Simple usage
-            >>> Logger.log("This is a log message")
-
-            # Advanced usage
-            >>> Logger.log("This is a log message with {}", "args")
-        """
-
-        # Get the current date and time
-        date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-
-        # Get the function name
-        function_name = inspect.stack()[1][3]
-
-        log_label = Style.GREEN + "[LOG] " + Style.WHITE + " |" + Style.WHITE
-        function_label = Style.WHITE + "[" + function_name + "]" + Style.WHITE
-
-        # Get the args from {}
-        if len(args) > 0:
-            message = message.format(*args)
-
-        spaceSeparator = 28 - len(function_label)
-
-        # Print the message in the console
-        print(log_label + " " + function_label + " " * spaceSeparator + "| > " + message)
-
-        # Save the message in the log file
-        with open(Logs_directory + "/" + Logger.log_filename, "a", encoding="utf8") as log_file:
-            log_file.write("[" + date + "] " + " | " + "[LOG] " + " | " + "[" + function_name + "] " + " " * spaceSeparator + "| > " + message + "\n")
-
-    def info(message: str, *args):
-
-        """
-        Log an info message (not save to the log file).
-
-        arguments:
-            `message : [String]` the message to log.
-            `*args : [List, String]` the args to put in the message.
-
-        Returns:
-            `Output : [String]` the message to log.
-
-        Examples:
-            # Simple usage
-            >>> Logger.info("This started sucessfully")
-
-            # Advanced usage
-            >>> Logger.info("This started sucessfully at {}", datetime.datetime.now())
-        """
-
-        date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        function_name = inspect.stack()[1][3]
-
-        info_label = Style.BLUE + "[INFO]" + Style.WHITE + " |" + Style.WHITE
-        function_label = Style.WHITE + "[" + function_name + "]" + Style.WHITE
-
-        if len(args) > 0:
-            message = message.format(*args)
-
-        spaceSeparator = 28 - len(function_label)
-
-        print(info_label + " " + function_label + " " * spaceSeparator + "| > " + message)
-
-        with open(Logs_directory + "/" + Logger.log_filename, "a", encoding="utf8") as log_file:
-            log_file.write("[" + date + "] " + " | " + "[INFO] " + "| " + "[" + function_name + "] " + " " * spaceSeparator + "| > " + message + "\n")
-
-
-    def warning(message: str, *args):
-        """
-        Log a warning message.
-
-        arguments:
-            `message : [String]` the message to log.
-            `*args : [List, String]` the args to put in the message.
-
-        Returns:
-            `Output : [String]` the message to log.
-
-        Examples:
-            # Simple usage
-            >>> Logger.warning("This whould error")
-
-            # Advanced usage
-            >>> Logger.warning("This whould error because {}", get_error())
-
-        """
-
-        date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        function_name = inspect.stack()[1][3]
-
-        warning_label = Style.YELLOW + "[WARN]" + Style.WHITE + " |" + Style.WHITE
-        function_label = Style.WHITE + "[" + function_name + "]" + Style.WHITE
-
-        if len(args) > 0:
-            message = message.format(*args)
-
-        spaceSeparator = 28 - len(function_label)
-
-        print(warning_label + " " + function_label + " " * spaceSeparator + "| > " + message)
-
-        with open(Logs_directory + "/" + Logger.log_filename, "a", encoding="utf8") as log_file:
-            log_file.write("[" + date + "] " + " | " + "[WARN] | " + "[" + function_name + "] " + " " * spaceSeparator + "| > " + message + "\n")
-
-
-    def error(message: str, *args):
-
-        """
-        This function is used to log a error message.
-
-        arguments:
-            `message : [String]` the message to log.
-            `*args : [List, String]` the args to put in the message.
-
-        Returns:
-            `Output : [String]` the logs text.
-
-        Examples:
-            # Simple usage
-            >>> Logger.error("Oh no, something went wrong!") # Log a error message
-
-            # Advanced usage
-            >>> Logger.error("Oh no, something went wrong with {}", class())
-        """
-
-        date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        function_name = inspect.stack()[1][3]
-
-        fail_label = Style.RED + "[FAIL] |" + Style.WHITE
-        function_label = Style.WHITE + "[" + function_name + "]" + Style.WHITE
-
-        if len(args) > 0:
-            message = message.format(*args)
-
-        spaceSeparator = 28 - len(function_label)
-
-        print(fail_label + " " + function_label + " " * spaceSeparator + "| > " + message)
-
-        with open(Logs_directory + "/" + Logger.log_filename, "a", encoding="utf8") as log_file:
-            log_file.write("[" + date + "] " + " | " + "[FAIL] | " + "[" + function_name + "] " + " " * spaceSeparator + "| > " + message + "\n")
-
-
-    def clean_logs():
-        """
-        This function is used to remove all the logs files from the logs folder.
-        """
-
-        function_name = inspect.stack()[1][3]
-        print(Style.WHITE + "[" + function_name + "] " + Style.WHITE + " | " + Style.WHITE + "Cleaning logs files...")
-
-        # Remove the logs files
-        for file in os.listdir(Logs_directory):
-            if file.endswith(".log"):
-                os.remove(Logs_directory + "/" + file)
+        for file in os.listdir("Logs"):
+            if file.startswith("Log_"):
+                os.remove("Logs/" + file)
