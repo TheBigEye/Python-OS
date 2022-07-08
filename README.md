@@ -64,6 +64,8 @@
 <!-- <img src="https://user-images.githubusercontent.com/63316583/156764802-7e1ffb65-f482-45ef-9c05-f82d9c4b4e23.svg" width="512" height="360"> UNUSED but usefuul -->
 
 **Python OS** is an operating system simulator written in Python, with a graphical interface made with Tkinter, the graphical interface is inspired by Windows to make it more user-friendly
+
+This was developed from the beginning as a hobby, currently I use it to learn and apply my knowledge with Python and GUI design :)
 ## Features
 
 #### Desktop environment:
