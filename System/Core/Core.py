@@ -17,7 +17,7 @@ from tkinter import Misc
 
 from Libs.pyLogger.Logger import Logger
 from Libs.pyUtils.pyData import JSON
-from System.Core.FileSystem import fs_routines
+from System.Core.FileSystem import FS_routines
 from System.Core.Kernel import bug_check
 from System.Core.TaskSystem import ts_routines
 from System.Utils.Vars import Assets_directory
@@ -90,7 +90,7 @@ def routines():
     ts_routines()
 
     # Load the file system
-    fs_routines()
+    FS_routines()
 
 
 def set_boot(value):

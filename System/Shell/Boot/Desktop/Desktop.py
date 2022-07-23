@@ -1,26 +1,24 @@
 import time
 from tkinter import Button, Frame, Label
 
-from Libs.pyImage.Image import setImage
+from Libs.pyImage.Image import getTkColor, setImage
 from Libs.pyLogger.Logger import Logger
-
-from System.Core.Core import boot
 from System.Core.Kernel import bug_check
 from System.Programs.Browser.Browser import Browser
 from System.Programs.File_manager.File_manager import File_manager
-from System.Programs.Terminal.Terminal import Terminal
 from System.Programs.Map.Map import Map
-from System.Programs.Welcome_dialog.Welcome import Welcome_dialog
+from System.Programs.Terminal.Terminal import Terminal
 from System.Shell.Boot.Desktop.Startmenu import startmenu
+from System.Shell.Boot.Desktop.Taskbar import Taskbar_button
 from System.Shell.Message_box import Message_box
-from System.Utils.Utils import Execute, check_internet
+from System.Utils.Utils import Execute
 from System.Utils.Vars import XCursor_2
 
 __author__ = 'TheBigEye'
 __version__ = '2.0'
 
 def Terminal_programm(master):
-    Execute(master, 800, Terminal, master, True)
+    Execute(master, 400, Terminal, master, True)
 
 def File_manager_programm(master):
     Execute(master, 1000, File_manager, master, True)
@@ -31,9 +29,7 @@ def Browser_programm(master):
     for widget in master.winfo_children():
         widget.destroy()
 
-    bc = bug_check(master, "0x00000007" , "#ffffff", "#000000")
-
-    master.after(3000, bc)
+    bug_check(master, "0x00000007" , "#ffffff", "#000000")
 
 def Map_programm(master):
     Execute(master, 800, Map, master, True)
@@ -56,7 +52,7 @@ class Desktop(Frame):
         Logger.info("### Loading desktop enviroment ...")
 
         # Initialize the Wallpaper
-        self.Wallpaper_image = setImage("Assets/Shell/Desktop/Wallpapers/default.png")
+        self.Wallpaper_image = setImage("Assets/Shell/Desktop/Wallpapers/Space_panorama.png")
         self.Wallpaper = Label(
             self.master,
             image= self.Wallpaper_image,
@@ -65,6 +61,7 @@ class Desktop(Frame):
             bg="#001023"
         )
         self.Wallpaper.place(x=0, y=0)
+        self.Wallpaper.update_idletasks()
         Logger.info("Wallpaper processed and loaded")
 
         # Initialize the Cursor
@@ -81,7 +78,7 @@ class Desktop(Frame):
             image = self.Taskbar_image,
             background = "black",
             foreground = "gray",
-            relief = "raised",
+            relief = "flat",
         )
         self.Taskbar.place(x= 109, y= 571)
         self.Taskbar.lift()
@@ -97,7 +94,7 @@ class Desktop(Frame):
             image = self.Startbar_image,
             background = "white",
             foreground = "gray",
-            relief = "raised",
+            relief = "flat",
         )
         self.Startbar.place(x= 0, y= 571)
         self.Startbar.lift()
@@ -113,7 +110,7 @@ class Desktop(Frame):
             image = self.Clockbar_image,
             background = "white",
             foreground = "gray",
-            relief = "raised",
+            relief = "flat",
         )
         self.Clockbar.place(x= 849, y= 571)
         self.Clockbar.lift()
@@ -125,88 +122,60 @@ class Desktop(Frame):
 # -------------------------------------------------------------[ Startbar buttons ]-----------------------------------------------------------
 
         # Modules icon in startbar
-        self.Modules_button = setImage("Assets/Shell/Desktop/Taskbar/Modules_icon.png", (24,24), "#ff00ff", "#002C4F")
-        self.Modules_button_light = setImage("Assets/Shell/Desktop/Taskbar/Modules_icon.png", (24,24), "#ff00ff", "#00345B")
-        self.Modules_startbar_button = Button(
+        self.Modules_startbar_button = Taskbar_button(
             self.Startbar,
-            borderwidth="0",
-            relief="raised",
-            bg = "#002C4F",
-            activebackground = "#002C4F",
-            image= self.Modules_button
+            button_image_path = "Assets/Shell/Desktop/Taskbar/Modules_icon.png",
+            master_image_path = "Assets/Shell/Desktop/Taskbar/Startbar.png",
+            position = (37, 2)
         )
-        self.Modules_startbar_button.place(x=35, y=2)
         self.Modules_startbar_button.bind("<Button-1>", lambda event: Map_programm(self.master))
-        self.Modules_startbar_button.bind("<Enter>", lambda event: self.Modules_startbar_button.config(image = self.Modules_button_light))
-        self.Modules_startbar_button.bind("<Leave>", lambda event: self.Modules_startbar_button.config(image = self.Modules_button))
+        self.Modules_startbar_button.place(x=37, y=2)
         Logger.info("Modules icon loaded on startbar")
 
-
         # Search icon in startbar
-        self.Search_button = setImage("Assets/Shell/Desktop/Taskbar/Search_icon.png", (24, 24), "#ff00ff", "#002C4F")
-        self.Search_button_light = setImage("Assets/Shell/Desktop/Taskbar/Search_icon.png", (24, 24), "#ff00ff", "#00345B")
-        self.Search_startbar_button = Button(
+        self.Search_startbar_button = Taskbar_button(
             self.Startbar,
-            borderwidth="0",
-            relief="raised",
-            bg = "#002C4F",
-            activebackground = "#002C4F",
-            image= self.Search_button
+            button_image_path = "Assets/Shell/Desktop/Taskbar/Search_icon.png",
+            master_image_path = "Assets/Shell/Desktop/Taskbar/Startbar.png",
+            position = (68, 2)
         )
-        self.Search_startbar_button.place(x=66, y=2)
         self.Search_startbar_button.bind("<Button-1>", lambda event: Terminal_programm(self.master))
-        self.Search_startbar_button.bind("<Enter>", lambda event: self.Search_startbar_button.config(image = self.Search_button_light))
-        self.Search_startbar_button.bind("<Leave>", lambda event: self.Search_startbar_button.config(image = self.Search_button))
+        self.Search_startbar_button.place(x=68, y=2)
         Logger.info("Search icon loaded on startbar")
 
 # -------------------------------------------------------------[ Taskbar buttons ]-----------------------------------------------------------
 
         # Terminal icon in taskbar
-        self.Terminal_button = setImage("Assets/Shell/Programs/Terminal/Terminal_icon.png", (24, 24), "#ff00ff", "#00142D")
-        self.Terminal_button_light = setImage("Assets/Shell/Programs/Terminal/Terminal_icon.png", (24, 24), "#ff00ff", "#001B3D")
-        self.Terminal_taskbar_button = Button(
+        self.Terminal_taskbar_button = Taskbar_button(
             self.Taskbar,
-            borderwidth="0",
-            relief="flat",
-            bg="#00142D",
-            activebackground = "#00142D",
-            image = self.Terminal_button
+            button_image_path = "Assets/Shell/Programs/Terminal/Terminal_icon.png",
+            master_image_path = "Assets/Shell/Desktop/Taskbar/Taskbar.png",
+            position = (109, 2)
         )
         self.Terminal_taskbar_button.bind("<Button-1>", lambda event: Terminal_programm(self.master))
-        self.Terminal_taskbar_button.bind("<Enter>", lambda event: self.Terminal_taskbar_button.config(image = self.Terminal_button_light))
-        self.Terminal_taskbar_button.bind("<Leave>", lambda event: self.Terminal_taskbar_button.config(image = self.Terminal_button))
+        self.Terminal_taskbar_button.update_idletasks()
         Logger.info("Terminal icon loaded on taskbar")
 
         # File manager icon in taskbar
-        self.File_manager_button = setImage("Assets/Shell/Programs/File manager/File_manager_icon.png", (24, 24), "#ff00ff", "#00142D")
-        self.File_manager_button_light = setImage("Assets/Shell/Programs/File manager/File_manager_icon.png", (24, 24), "#ff00ff", "#001B3D")
-        self.File_manager_taskbar_button = Button(
+        self.File_manager_taskbar_button = Taskbar_button(
             self.Taskbar,
-            borderwidth="0",
-            relief="flat",
-            bg="#00142D",
-            activebackground = "#00142D",
-            image = self.File_manager_button
+            button_image_path = "Assets/Shell/Programs/File manager/File_manager_icon.png",
+            master_image_path = "Assets/Shell/Desktop/Taskbar/Taskbar.png",
+            position = (109, 2)
         )
         self.File_manager_taskbar_button.bind("<Button-1>", lambda event: File_manager_programm(self.master))
-        self.File_manager_taskbar_button.bind("<Enter>", lambda event: self.File_manager_taskbar_button.config(image = self.File_manager_button_light))
-        self.File_manager_taskbar_button.bind("<Leave>", lambda event: self.File_manager_taskbar_button.config(image = self.File_manager_button))
+        self.File_manager_taskbar_button.update_idletasks()
         Logger.info("File manager icon loaded on taskbar")
 
         # Browser icon in taskbar
-        self.Browser_button = setImage("Assets/Shell/Programs/Browser/Browser_icon.png", (24, 24), "#ff00ff", "#00142D")
-        self.Browser_button_light = setImage("Assets/Shell/Programs/Browser/Browser_icon.png", (24, 24), "#ff00ff", "#001B3D")
-        self.Browser_taskbar_button = Button(
+        self.Browser_taskbar_button = Taskbar_button(
             self.Taskbar,
-            borderwidth="0",
-            relief="flat",
-            bg="#00142D",
-            activebackground = "#00142D",
-            image = self.Browser_button
+            button_image_path = "Assets/Shell/Programs/Browser/Browser_icon.png",
+            master_image_path = "Assets/Shell/Desktop/Taskbar/Taskbar.png",
+            position = (109, 2)
         )
         self.Browser_taskbar_button.bind("<Button-1>", lambda event: Browser_programm(self.master))
-        self.Browser_taskbar_button.bind("<Enter>", lambda event: self.Browser_taskbar_button.config(image = self.Browser_button_light))
-        self.Browser_taskbar_button.bind("<Leave>", lambda event: self.Browser_taskbar_button.config(image = self.Browser_button))
+        self.Browser_taskbar_button.update_idletasks()
         Logger.info("Browser icon loaded on taskbar")
 
         # se crea una lista de los botones de la barra de tarea
@@ -241,7 +210,7 @@ class Desktop(Frame):
             borderwidth = "0",
             background = "#002C4F",
             foreground = "#F3F3F3",
-            relief = "raised",
+            relief = "flat",
             font=("Segoe UI Semibold", 7),
             text = "",
         )

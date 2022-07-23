@@ -1,13 +1,14 @@
-from io import BytesIO
 import os
-from tkinter import *
+from io import BytesIO
+from tkinter import PhotoImage
 from typing import Literal
+
 from PIL import Image, ImageTk
 
 __author__ = "TheBigEye"
 
 # CONVERTIONS ----------------------------------------------------------------
-def ImageToTk(image: Image):
+def ImageToTk(image: Image.Image):
     """
     Converts an image to a Tkinter image.
     """
@@ -55,7 +56,7 @@ def getImage(path: str):
     image = image.convert("RGBA")
     return image
 
-def setSize(image: Image, size: tuple):
+def setSize(image: Image.Image, size: tuple):
     """
     Resizes an image.
     """
@@ -72,7 +73,7 @@ def setSize(image: Image, size: tuple):
     image = image.resize(size)
     return image
 
-def replaceColor(image: Image, color: tuple | str, new_color: tuple | str):
+def replaceColor(image: Image.Image, color: tuple | str, new_color: tuple | str):
     """
     Replaces a color in an image.
     """
@@ -120,7 +121,7 @@ def replaceColor(image: Image, color: tuple | str, new_color: tuple | str):
                 image.putpixel((x, y), new_color)
     return image
 
-def setHUE(image: Image, hue: int):
+def setHUE(image: Image.Image, hue: int):
     """
     Sets the hue of an image.
     """
@@ -144,7 +145,7 @@ def setHUE(image: Image, hue: int):
     image = image.convert("RGBA")
     return image
 
-def setSaturation(image: Image, saturation: int):
+def setSaturation(image: Image.Image, saturation: int) -> Image:
     """
     Sets the saturation of an image.
     """
@@ -168,7 +169,7 @@ def setSaturation(image: Image, saturation: int):
     image = image.convert("RGBA")
     return image
 
-def setValue(image: Image, value: int):
+def setValue(image: Image, value: int) -> Image:
     """
     Sets the value of an image.
     """
@@ -218,11 +219,63 @@ def getColor(image: Image, x: int, y: int):
     pixel = image.getpixel((x, y))
     return pixel
 
+# getTkColor(image: PhotoImage, x: int, y: int): get the color of a pixel in a Tkinter PhotoImage
+def getTkColor(path: str, x: int, y: int):
+    """
+    Returns the color of a pixel in a image.
+    """
+
+    # Checks if the path is a string
+    if not isinstance(path, str):
+        raise TypeError("The path must be a string.")
+
+    # Checks if the x and y are integers
+    if not isinstance(x, int):
+        raise TypeError("The x must be an integer.")
+    if not isinstance(y, int):
+        raise TypeError("The y must be an integer.")
+
+    # Checks if the x and y are in the image
+    if x < 0 or x >= Image.open(path).size[0]:
+        raise ValueError("The x must be in the image.")
+    if y < 0 or y >= Image.open(path).size[1]:
+        raise ValueError("The y must be in the image.")
+
+    # Returns the color
+    image = Image.open(path)
+    image = image.convert("RGBA")
+    pixel = image.getpixel((x, y))
+    color = "#%02x%02x%02x" % (pixel[0], pixel[1], pixel[2])
+    return color
+
 
 # MY MASTERPIECE --------------------------------------------------------------------
-def setImage(path: str, size: tuple = None, fromColor: str | tuple = None, toColor: str | tuple = None, hue: int = None, saturation: int = None, value: int = None):
+def setImage(path: str, size: tuple = None, fromColor: str | tuple = None, toColor: str | tuple = None, hue: int = None, saturation: int = None, value: int = None) -> ImageTk.PhotoImage:
     """
-    Sets the image.
+    Make a image from a path.
+
+    Arguments:
+        `path: [str]` The path to the image file (.PNG recomended).
+        `size: [tuple]` The size of the image.
+        `fromColor: [str | tuple]` The color to replace.
+        `toColor: [str | tuple]` The color witch will replace the fromColor.
+        `hue: [int]` The hue of the image.
+        `saturation: [int]` The saturation of the image.
+        `value: [int]` The value of the image (brightness 0 - 255).
+
+    Returns:
+        `image: [ImageTk]` The image.
+
+    Raises:
+        `TypeError` If the path is not a string.
+        `ValueError` If the path is not a valid path.
+        `TypeError` If the size is not a tuple.
+        `TypeError` If the fromColor is not a string or a tuple (HEX or RGB).
+        `TypeError` If the toColor is not a string or a tuple (HEX or RGB).
+        `TypeError` If the hue is not an integer.
+        `TypeError` If the saturation is not an integer.
+        `TypeError` If the value is not an integer.
+
     """
 
     # Get the image
@@ -251,5 +304,5 @@ def setImage(path: str, size: tuple = None, fromColor: str | tuple = None, toCol
 
     # Convert the image to RGBA, and then to TK
     image = image.convert("RGBA")
-    image = ImageToTk(image)
+    image = ImageTk.PhotoImage(image)
     return image

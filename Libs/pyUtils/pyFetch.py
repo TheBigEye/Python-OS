@@ -51,7 +51,7 @@ class Color:
 
 # ---------------------------------------------------------------------------------------------------------------------------------
 
-def Set_chars_colors(ascii_art, chars: str, color: Color):
+def Set_chars_colors(ascii_art, chars: str, color: Color) -> str:
     for data in ascii_art: # Loop through the ascii art
         if not chars == None: # If the chars are not none
             for char in chars: # Loop through the chars list
@@ -59,7 +59,7 @@ def Set_chars_colors(ascii_art, chars: str, color: Color):
 
     return ascii_art
 
-def Get_username(color: Color):
+def Get_username(color: Color) -> str:
     """
     This function returns the username of the user
     """
@@ -85,7 +85,7 @@ def Get_OS_info(color: Color, OS_name: str = str(platform.platform()), OS_kernel
         OS_info += str("Kernel: " + OS_kernel) + "\n"
     return OS_info
 
-def Get_uptime(color: Color):
+def Get_uptime(color: Color) -> str:
     """
     This function returns the uptime of the system
     """
@@ -108,7 +108,7 @@ def Get_uptime(color: Color):
         Uptime = str("Uptime: " + Uptime_string) + "\n"
     return Uptime
 
-def Get_Software_info(color: Color):
+def Get_Software_info(color: Color) -> str:
     """
     This function returns the software information
     """
@@ -123,7 +123,7 @@ def Get_Software_info(color: Color):
         Software_info += str("Shell: " + str(sys.platform)) + "\n"
     return Software_info
 
-def Get_Hardware_info(color: Color):
+def Get_Hardware_info(color: Color) -> str:
     """
     This function returns the hardware information
     """
@@ -142,7 +142,7 @@ def Get_Hardware_info(color: Color):
 
 # ---------------------------------------------------------------------------------------------------------------------------------
 
-def get_neofetch(logo_file_path, info_color: Color = Color.YELLOW, chars: list = [None, None, None, None, None, None, None]):
+def get_neofetch(logo_file_path, info_color: Color = Color.YELLOW, chars: list = [None, None, None, None, None, None, None]) -> str:
     """
     This function prints the neofetch in terminal
 

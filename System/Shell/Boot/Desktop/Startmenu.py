@@ -34,7 +34,7 @@ class startmenu(Frame):
         self.Start_button_light = setImage("Assets/Shell/Desktop/Start menu/Start_icon.png", (24, 24), "#ff00ff", "#00345B")
 
         def open_start_menu():
-            self.Startmenu.place(x=1, y=126)
+            self.Startmenu.place(x=1, y=128)
             self.Startmenu.lift()
             time.sleep(0.1)
 
@@ -79,3 +79,5 @@ class startmenu(Frame):
         Close_start_button.bind("<Leave>", lambda event: Close_start_button.config(image = self.Start_button_image))
 
         Logger.info("Start menu component loaded")
+
+        # Initialize the Start menu programs list

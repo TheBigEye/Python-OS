@@ -1,3 +1,4 @@
+import time
 # Drag and drop functions
 
 def make_draggable_button(Button):
@@ -60,40 +61,41 @@ class drag_it:
 
     def on_drag_start(self, event):
 
-        global widget
+        self.widget.lift() # move to the top
 
-        widget = event.widget
-        widget.lift()
-        widget._drag_start_x = event.x
-        widget._drag_start_y = event.y
+        # save the x and y coordinates
+        self.widget._drag_start_x = event.x
+        self.widget._drag_start_y = event.y
 
-        widget['cursor'] = "hand2"
+        # move the widget to the cursor position
+        self.widget.place(x = self.widget.winfo_x() - self.widget._drag_start_x + event.x, y = self.widget.winfo_y())
 
+        self.widget['cursor'] = "hand2"
 
     def on_drag_finish(self, event):
 
-        global widget
-        widget.lift()
-        widget = event.widget
-        widget._drag_start_x = 16
-        widget._drag_start_y = 4
+        self.widget.master.update()
 
-        widget['cursor'] = ""
+        self.widget.lift()
 
+        # reset the coordinates
+        self.widget._drag_start_x = 16
+        self.widget._drag_start_y = 4
+
+        self.widget['cursor'] = ""
 
     def on_drag_motion(self, event):
 
-        global widget, x, y
-        widget.lift()
-        widget = event.widget
-        x = int((widget.winfo_x() - widget._drag_start_x )) + int((event.x) / 2)
-        y = int((widget.winfo_y() - widget._drag_start_y )) + int((event.y) / 2)
+        # calculate the new coordinates
+        self.x = self.widget.winfo_x() - self.widget._drag_start_x + event.x
+        self.y = self.widget.winfo_y() - self.widget._drag_start_y + event.y
 
-        widget.place(x = x, y = y)
-        widget.update()
+        # move the widget (the cursor are positioned in the middle of the widget)
+        self.widget.place(x = self.x, y = self.y)
+        self.widget.update_idletasks()
 
-        for widget in self.widget.winfo_children():
-            widget.update()
+        for component in self.widget.winfo_children():
+            component.update_idletasks()
 
-        # evoiding the blinking bug
-        self.widget.master.update()
+        # evoiding the blinking bug (oh well, close enough)
+        self.widget.master.update_idletasks()

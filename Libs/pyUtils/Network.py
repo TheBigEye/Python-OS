@@ -6,7 +6,7 @@ class Network:
     This class implements the network functions.
     """
 
-    def getStatus():
+    def getStatus() -> bool:
         """
         Checks if the network is connected.
         """
@@ -20,14 +20,14 @@ class Network:
         except:
             return False
 
-    def getIP():
+    def getIP() -> str:
         """
         Returns the IP address of the computer.
         """
 
         return psutil.net_if_addrs()['Ethernet'][0].address
 
-    def getHTTPStatus(URL: str):
+    def getHTTPStatus(URL: str) -> bool:
         """
         Returns the HTTP status of a URL.
         """

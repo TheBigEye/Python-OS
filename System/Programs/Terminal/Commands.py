@@ -84,7 +84,7 @@ def CMD(master, entry, output):
         # The string must be in quotes
         text = command.split("\"")[1]
 
-        output.insert(INSERT, text + "\n")
+        output.insert(INSERT, "~$ " + text + "\n")
         output.see(END)
 
     if command.startswith("echo "):
@@ -263,16 +263,17 @@ def CMD(master, entry, output):
 # -------------------------------------------------------------------------------------------------------------------------------------------------
 
     def cd_command(command):
-        """Cd command"""
+        """Change directory command"""
 
-        from System.Core.FileSystem import cd
+        from System.Core.FileSystem import Change_directory
 
         command = command.replace("cd ", "")
 
-        output.insert(INSERT, cd(command) + "\n")
+        output.insert(INSERT, Change_directory(command) + "\n")
         output.see(END)
 
-    if command.startswith("cd "):
+    if command.lower().startswith("cd "):
+        output.insert(INSERT, "~$" + command + "\n")
         cd_command(command)
 
     def mkfolder_command(command):
@@ -286,16 +287,19 @@ def CMD(master, entry, output):
 
         """
 
-        from System.Core.FileSystem import mkdir
+        from System.Core.FileSystem import make_directory
 
-        command = command.replace("mkfolder ", "")
+        for i in mkfolder_commands:
+            command = command.replace(i, "")
 
-        output.insert(INSERT, mkdir(command) + "\n")
+        output.insert(INSERT, make_directory(command) + "\n")
         output.see(END)
 
-    if command.startswith("mkfolder "):
-        mkfolder_command(command)
+    mkfolder_commands = ("mkfolder ", "mkdir ")
 
+    if command.lower().startswith(mkfolder_commands):
+        output.insert(INSERT, "~$" + command + "\n")
+        mkfolder_command(command)
 
     def dfolder_command(command):
 
@@ -310,12 +314,16 @@ def CMD(master, entry, output):
 
         from System.Core.FileSystem import rmdir
 
-        command = command.replace("dfolder ", "")
+        for i in dfolder_commands:
+            command = command.replace(i, "")
 
         output.insert(INSERT, rmdir(command) + "\n")
         output.see(END)
 
-    if command.startswith("dfolder "):
+    dfolder_commands = ("dfolder ", "rmfolder", "rmdir ")
+
+    if command.lower().startswith(dfolder_commands):
+        output.insert(INSERT, "~$ " + command + "\n")
         dfolder_command(command)
 
 
@@ -330,16 +338,18 @@ def CMD(master, entry, output):
 
         """
 
-        from System.Core.FileSystem import mkfile
+        from System.Core.FileSystem import make_file
 
-        command = command.replace("mkfile ", "")
+        for i in mkfile_commands:
+            command = command.replace(i, "")
 
-        mkfile(command)
-
-        output.insert(INSERT, "File " + command + " created " + "\n")
+        output.insert(INSERT, make_file(command) + "\n")
         output.see(END)
 
-    if command.startswith("mkfile "):
+    mkfile_commands = ("mkfile ", "touch ")
+
+    if command.lower().startswith(mkfile_commands):
+        output.insert(INSERT, "~$" + command + "\n")
         mkfile_command(command)
 
 
@@ -364,6 +374,7 @@ def CMD(master, entry, output):
         output.see(END)
 
     if command.startswith("dfile "):
+        output.insert(INSERT, "~$" + command + "\n")
         dfile_command(command)
 
 
@@ -382,6 +393,7 @@ def CMD(master, entry, output):
         output.see(END)
 
     if command.startswith("efile "):
+        output.insert(INSERT, "~$" + command + "\n")
         edit_file_command(command)
 
 
@@ -398,21 +410,25 @@ def CMD(master, entry, output):
         output.see(END)
 
     if command.startswith("metafile "):
+        output.insert(INSERT, "~$" + command + "\n")
         metafile_command(command)
 
 
     # dir command will print the directory of the current file (using the filesystem in core.py), like: dir() , > dir.
     def dir_command():
 
-        from System.Core.FileSystem import ls
+        from System.Core.FileSystem import List_directory
 
-        output.insert(INSERT, ls())
+        output.insert(INSERT, List_directory())
         output.insert(INSERT,  "\n")
 
         output.see(END)
 
-    # if start with dir or DIR lower or upper
-    if command.startswith("dir") or command.startswith("DIR") or command.startswith("ls") or command.startswith("?"):
+    dir_commands = ("dir", "ls", "dirs", "lsdirs", "?")
+
+    # if start with some of the dir_commands (make then to lowercase)
+    if command.lower().startswith(dir_commands):
+        output.insert(INSERT, "~$ " + command + "\n")
         dir_command()
 
 
@@ -428,23 +444,17 @@ def CMD(master, entry, output):
     def tree_command(command):
         from System.Core.FileSystem import tree
 
-        if command.startswith("tree "): # Specific directory, tree <directory>
+        if command.startswith("tree "):
             command = command.replace("tree ", "")
-
-            output.insert(INSERT, tree(command))
-            output.insert(INSERT, "\n")
-            output.see(END)
-
-        elif command.startswith("tree"): # Current directory, tree
+        elif command.startswith("tree"):
             command = command.replace("tree", "")
 
-            command = "$null"
+        output.insert(INSERT, tree(command))
+        output.insert(INSERT, "\n")
+        output.see(END)
 
-            output.insert(INSERT, tree(command))
-            output.insert(INSERT, "\n")
-            output.see(END)
-
-    if command.startswith("tr"):
+    if command.startswith("tree"):
+        output.insert(INSERT, "~$ " + command + "\n")
         master.after(1000, tree_command(command))
 
     def foreground_command(command):
@@ -473,6 +483,7 @@ def CMD(master, entry, output):
         output.see(END)
 
     if command.startswith("foreground"):
+        output.insert(INSERT, "~$ " + command + "\n")
         master.after(1000, foreground_command(command))
 
 
@@ -491,6 +502,8 @@ def CMD(master, entry, output):
 
         from System.Programs.Terminal.Terminal import set_background
 
+
+        output.insert(INSERT, "~$ " + command + "\n")
         command = command.replace("background ", "")
 
         # The color is beetween quotation marks
@@ -508,6 +521,8 @@ def CMD(master, entry, output):
     def neofetch_command():
 
         from System.Programs.Terminal.Terminal import (get_background, get_foreground)
+
+        output.insert(INSERT, "~$ neofetch" + "\n")
 
         neo = ""
         neo += "--------\n"
@@ -530,6 +545,7 @@ def CMD(master, entry, output):
 
         import platform
 
+        output.insert(INSERT, "~$ info" + "\n")
         output.insert(INSERT, "Info: ─────────────────────────────────────────────────────────────────────" + "\n")
         output.insert(INSERT, "System:     " + platform.system() +    "\n")
         output.insert(INSERT, "Release:    " + platform.release() +   "\n")
@@ -542,32 +558,34 @@ def CMD(master, entry, output):
     if command.startswith("info"):
         info_command()
 
+# -------------------------------------------------------------------------------------------------------------------------------------------------
 
     def help_command():
         """Help command"""
 
-        output.insert(INSERT, 'print "text"             - print a string' +                                   '\n')
-        output.insert(INSERT, 'echo "text"              - print a string' +                                   '\n')
-        output.insert(INSERT, 'clear | cls              - clear the terminal' +                               '\n')
-        output.insert(INSERT,                                                                                 '\n')
-        output.insert(INSERT, 'dir | ? | ls             - show the file system directory' +                   '\n')
-        output.insert(INSERT, 'tree                     - show the file system directory as tree' +           '\n')
-        output.insert(INSERT,                                                                                 '\n')
-        output.insert(INSERT, 'mkfolder folder_name           - create a folder in the file system' +         '\n')
-        output.insert(INSERT, 'mkfile file_name.ext           - create a file in the file system' +           '\n')
-        output.insert(INSERT, 'dfolder folder_name            - delete a folder in the file system' +         '\n')
-        output.insert(INSERT, 'dfile file_name.ext            - delete a file in the file system' +           '\n')
-        output.insert(INSERT, 'efile file_name.ext "content"  - edit a file in the file system' +             '\n')
-        output.insert(INSERT, 'metafile file_name.ext         - show the metadata, like content or date' +    '\n')
-        output.insert(INSERT,                                                                                 '\n')
-        output.insert(INSERT, 'info                     - show the system info' +                             '\n')
-        output.insert(INSERT, 'ps                       - show all processes' +                               '\n')
-        output.insert(INSERT, 'reg                      - show the registry' +                                '\n')
-        output.insert(INSERT, 'foreground "color"       - change the terminal foreground color' +             '\n')
-        output.insert(INSERT, 'background "color"       - change the terminal background color' +             '\n')
-        output.insert(INSERT, 'neofetch                 - show the terminal and system info' +                '\n')
-        output.insert(INSERT, '>>> python_code          - run a python interpreter where you can code' +      '\n\n')
+        output.insert(INSERT,  "~$ help" + "\n")
+        output.insert(INSERT,  "Help: ─────────────────────────────────────────────────────────────────────" + "\n")
+        output.insert(INSERT,  "Commands:                                                                  " + "\n")
+        output.insert(INSERT,  "  help                        - Prints this help message                   " + "\n")
+        output.insert(INSERT,  "  clear                       - Clears the terminal screen                 " + "\n")
+        output.insert(INSERT,  "  exit                        - Closes the terminal                        " + "\n")
+        output.insert(INSERT,  "  info                        - Prints system information                  " + "\n")
+        output.insert(INSERT,  "  ps                          - Prints the processes                       " + "\n")
+        output.insert(INSERT,  "  dir                         - Prints the current directory               " + "\n")
+        output.insert(INSERT,  "  tree | <directory>          - Prints the directory tree                  " + "\n")
+        output.insert(INSERT,  "  mkfolder | mkdir <name>     - Makes a new folder                         " + "\n")
+        output.insert(INSERT,  "  rmfolder | rmdir <name>     - Removes a folder                           " + "\n")
+        output.insert(INSERT,  "  mkfile | touch <name>       - Makes a new file on the current dir        " + "\n")
+        output.insert(INSERT,  "  efile <file>                - Edit a file content                        " + "\n")
+        output.insert(INSERT,  "  metafile <file>             - Show the metadata of a file                " + "\n")
+        output.insert(INSERT,  "  neofetch                    - Prints the system information              " + "\n")
+        output.insert(INSERT,  "  foreground <color>          - Change the terminal foreground color       " + "\n")
+        output.insert(INSERT,  "  background <color>          - Change the terminal background color       " + "\n")
+        output.insert(INSERT,  "  >>> <python code>           - Run a python command                       " + "\n")
+        output.insert(INSERT,  "───────────────────────────────────────────────────────────────────────────" + "\n\n")
         output.see(END)
 
     if command.startswith("help"):
         help_command()
+
+# -------------------------------------------------------------------------------------------------------------------------------------------------

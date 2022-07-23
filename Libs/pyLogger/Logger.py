@@ -18,6 +18,7 @@ import logging.handlers
 import os
 import re
 import sys
+from time import asctime
 
 
 class Color:
@@ -198,7 +199,6 @@ class Logger:
 
     with open("Logs/Log_" + str(datetime.datetime.now().strftime("%Y-%m-%d")) + ".log", "a") as f:
         f.write("\n" + "-" * 132 + "\n")
-        print("\n" + "-" * 132 + "\n")
 
     def debug(msg: str, *args, **kwargs):
         # Get the calling module name, for example, if the module call PIL.PngImagePlugin, only the "PIL" is returned.
@@ -239,6 +239,16 @@ class Logger:
     def delete_logs():
         import os
 
+        # Shutdown the logger
+        logging.shutdown()
+
         for file in os.listdir("Logs"):
             if file.startswith("Log_"):
                 os.remove("Logs/" + file)
+
+        asctime_var = str(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S") + ",255")
+
+        levelname_var = str(Color.GREEN + "INFO" + Color.RESET) + " " * (8 - len("INFO"))
+        name_var = "loggerCleaner" + " " * (25 - len("loggerCleaner"))
+        message_var = "All the logs files have been deleted."
+        print(asctime_var + " - " + levelname_var + " - " + name_var + " - " + message_var)

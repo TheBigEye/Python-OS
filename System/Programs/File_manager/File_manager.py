@@ -75,10 +75,10 @@ class Folder(Label):
             self.Folder.config(image=self.image)
             self.name_label.config(bg="#00142D")
 
-        # if click on the folder, cd to the folder
-        self.Folder.bind("<Button-1>", lambda event: cd(self.name))
-        self.name_label.bind("<Button-1>", lambda event: cd(self.name))
-        self.selection_label.bind("<Button-1>", lambda event: cd(self.name))
+        # if click on the folder, change directory to the folder
+        self.Folder.bind("<Button-1>", lambda event: Change_directory(self.name))
+        self.name_label.bind("<Button-1>", lambda event: Change_directory(self.name))
+        self.selection_label.bind("<Button-1>", lambda event: Change_directory(self.name))
 
         self.Folder.place(x=self.x + 1, y=self.y)
         self.name_label.place(x=self.x + 25, y=(self.y) + 4)
@@ -223,7 +223,8 @@ class File_manager(Frame):
 
             # remove the folders and files widgets from the File manager
             for widget in self.File_manager.winfo_children():
-                    widget.destroy()
+                widget.update_idletasks()
+                widget.destroy()
 
             # se crea una lista de las carpetas y archivos
             files_n_folders = []
@@ -262,7 +263,7 @@ class File_manager(Frame):
 
                 # remove the / from the value
                 value = value[1:]
-                cd(value)
+                Change_directory(value)
                 render_filesystem(self)
 
             def update_dir_bar(self):
@@ -323,7 +324,7 @@ class File_manager(Frame):
                 """ Go back to the previous directory """
 
                 # get the current directory
-                cd("..")
+                Change_directory("..")
                 render_filesystem(self)
 
             self.back_button = Button(

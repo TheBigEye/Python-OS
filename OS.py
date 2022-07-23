@@ -5,20 +5,19 @@
         OS.py
 
     Abstract:
-        This module implements the Python OS main window and executable.
+        This module implements the Python OS main window and args parser.
 
     Author:
         TheBigEye 2-Jul-2021
 """
 
-import os as Current_OS
-import sys as System
 import tkinter as tk
+from sys import argv, exit
 from tkinter import PhotoImage
 
 from Libs.pyLogger.Logger import Logger
-from System.Core.Kernel import python_modules_check
 from Libs.pyUtils.pyFetch import Color, get_neofetch
+from System.Core.Kernel import python_modules_check
 
 # ------------------------------------------[ Main ]------------------------------------------- #
 
@@ -32,34 +31,40 @@ class main(tk.Tk):
 
         from System.Core.Core import boot_check
         from System.Core.Kernel import screen_check
-        from System.Utils.Vars import Assets_directory
 
         super().__init__()
 
         self.title("Python OS")
-        self.geometry("1024x600+64+32")
+
+        self.WIDTH = 1024
+        self.HEIGHT = 600
+
+        self.screen_width = self.winfo_screenwidth()
+        self.screen_height = self.winfo_screenheight()
+        self.window_x = (self.screen_width/2) - (self.WIDTH /2)
+        self.window_y = (self.screen_height/2) - (self.HEIGHT/2)
+
+        self.geometry('%dx%d+%d+%d' % (self.WIDTH, self.HEIGHT, self.window_x, self.window_y))
         self.resizable(False, False)
 
-        self.icon = PhotoImage(file = Assets_directory + "/Icon.png")
+        self.icon = PhotoImage(file = "Assets/Icon.png")
 
-        if Current_OS.name == "nt":
-            self.configure(background= "#000000")
-            self.iconphoto(True, self.icon)
-        else:
-            self.configure(background= "#000000")
+        self.configure(background= "#000000")
+        self.wm_iconphoto(True, self.icon)
 
         screen_check(self) # Check if the screen is big
-
         boot_check(self) # Start the boot process
+
+        self.update()
 
         self.mainloop()
 
     def stop(self):
         """ Stops the system """
         self.destroy()
-        System.exit()
+        exit()
 
-def run():
+def start_runtime():
     """
     This function gets the arguments from the command line.
 
@@ -69,36 +74,58 @@ def run():
 
     from System.Core.Core import set_boot
 
-    arguments = System.argv[1:]
+    arguments = ()
+    for arg in argv:
+        arguments += (arg,)
 
-    def help_arg():
+    # Check if the user wants to see the help
+    if "--help" in arguments:
         print("""
-        --help | --h:                Shows this help.
-        --version | --v:             Shows the version of the program.
-        --delete-logs | --dl:        Deletes the logs.
-        --set-boot int | --b int:     Sets the boot value.
+        Command line arguments:
+            --help: Shows this help.
+            --version: Shows the version.
+            --delete-logs: Deletes the logs.
+            --set-boot int: Sets the boot.
+            --neofetch: Shows the neofetch.
         """)
 
-    def version_arg():
-        print("Python OS version: 1.0.0")
+    # Check if the user wants to see the version
+    if "--version" in arguments:
+        print("""
+        This is the version of the OS.py script.
+        """)
 
-    def neofetch_arg():
+    # Check if the user wants to delete the logs
+    if "--delete-logs" in arguments:
+        Logger.delete_logs()
+
+    # Check if the user wants to set the boot
+    if "--set-boot" in arguments:
+        # get the value of the boot
+        boot = arguments[arguments.index("--set-boot") + 1]
+        # set the boot
+        set_boot(boot)
+
+    # Check if the user see the neofetch
+    if "--neofetch" in arguments:
         print(get_neofetch("Assets/Data/logo.txt", Color.YELLOW, ["*", None, None, "#", None, None, None]))
 
-    if len(arguments) == 0:
+    # Check if the user wants to start the system
+    if "--run-clean" in arguments:
+        import os
+        if os.name == "nt":
+            os.system("cls")
+        else:
+            os.system("clear")
+        Logger.delete_logs()
         main()
-    else:
-        match arguments[0]:
-            case "--help"        | "--h":   help_arg()
-            case "--modules"     | "--mc":  python_modules_check()
-            case "--version"     | "--v":   version_arg()
-            case "--delete-logs" | "--dl":  Logger.delete_logs()
-            case "--set-boot"    | "--b":   set_boot(System.argv[2])
-            case "--neofetch"    | "--nf":  neofetch_arg()
-            case _:
-                raise ValueError("Invalid argument {}, use --help to see the help.", arguments[0])
+
+
+    # If no arguments are given, run the OS
+    if len(arguments) == 1:
+        main()
 
 if __name__ == "__main__":
-    run()
+    start_runtime()
 
 # -------------------------------------------[ End ]------------------------------------------- #

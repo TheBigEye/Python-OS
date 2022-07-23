@@ -54,7 +54,7 @@ def python_modules_check():
     else:
         Logger.info("All the needed modules are installed.")
 
-def get_desktop_enviroment():
+def get_desktop_enviroment() -> str:
     """ This function get the desktop enviroment. """
     if sys.platform in ["win32", "cygwin"]:
         return "windows"
@@ -91,7 +91,7 @@ def get_desktop_enviroment():
     Logger.warning("Could not detect the desktop environment.")
     return "unknown"
 
-def is_running(process):
+def is_running(process) -> bool:
     """ This function checks if the given process is running. """
     try: #Linux/Unix
         s = subprocess.Popen(["ps", "axw"],stdout=subprocess.PIPE)
@@ -233,6 +233,8 @@ class bug_check:
                 self.shutdown_time -= 1
 
                 if self.shutdown_time > -1:
+                    for widgets in self.base.winfo_children():
+                        widgets.update_idletasks()
                     self.countdown.after(1000, start)
                 else:
                     for widget in self.master.winfo_children():

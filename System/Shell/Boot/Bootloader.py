@@ -36,6 +36,7 @@ class Bootloader(Frame):
                 ind = 50
 
             self.loader_bar.configure(width=ind)
+            self.loader_bar.update_idletasks()
             self.master.after(10, update_vmw_loader, ind)
 
         self.loader_bar = Label(self.master, width=1, height=1, bg="#FFFFFF", borderwidth=0)
@@ -48,7 +49,7 @@ class Bootloader(Frame):
 
         # Make a list of frames
         self.frames = [
-            PhotoImage(file="Assets/Shell/Boot/Bootloader/Loading.gif", format="gif -index %i" % (i)) for i in range(self.frames_count)
+            PhotoImage(file="Assets/Shell/Boot/Bootloader/Loading 2.gif", format="gif -index %i" % (i)) for i in range(self.frames_count)
         ]
 
         # Show and update the frames
@@ -65,11 +66,12 @@ class Bootloader(Frame):
             self.loading.configure(image=frame)
             self.master.after(rnd, update_os_loader, ind)
 
-        self.loading = Label(self.master, borderwidth=0.1)
+        self.loading = Label(self.master, borderwidth=0.1, bg="#000000")
 
         def add_progressbar():
 
             self.loader_bar.place(x=290, y=456)
+            self.loader_bar.update_idletasks()
 
         def add_loading():
 
