@@ -1,4 +1,4 @@
-#### Beginner's Handbook
+### Beginner's Handbook
 
 This manual explains the keyboard shortcuts to navigate on the new Window Manager (the mouse is still necessary XD)
 - **NOTICE**: For now, this applies only to Terminal, windows of other programs can still be dragged normally
