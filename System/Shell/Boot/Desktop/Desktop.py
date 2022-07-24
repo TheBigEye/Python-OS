@@ -18,7 +18,7 @@ __author__ = 'TheBigEye'
 __version__ = '2.0'
 
 def Terminal_programm(master):
-    Execute(master, 800, Terminal, master, True)
+    Execute(master, 400, Terminal, master, True)
 
 def File_manager_programm(master):
     Execute(master, 1000, File_manager, master, True)
