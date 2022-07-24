@@ -118,6 +118,24 @@ def set_boot(value):
 
     JSON.set(BOOT_DATA_FILE, "Boot_phase", int_value)
 
+def set_desktop_mode(value):
+
+    """ This function is used to set the desktop mode. """
+
+    from Libs.pyLogger.Logger import Logger
+
+    str_value = str(value)
+    int_value = int(value)
+
+    match int_value:
+        case 0: Logger.info("{} | Desktop mode set to: WINDOW MANAGER", str_value)
+        case 1: Logger.info("{} | Desktop mode set to: DESKTOP ENVIROMENT", str_value)
+        case _:
+            Logger.error("Invalid value, must be 0-1, STOPING..")
+            sys.exit()
+
+    JSON.set(BOOT_DATA_FILE, "Desktop_mode", int_value)
+
 
 class boot:
     """

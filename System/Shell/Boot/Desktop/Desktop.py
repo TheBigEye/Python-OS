@@ -1,24 +1,30 @@
 import time
 from tkinter import Button, Frame, Label
 
-from Libs.pyImage.Image import getTkColor, setImage
+from Libs.pyImage.Image import setImage
 from Libs.pyLogger.Logger import Logger
+from Libs.pyUtils.pyData import JSON
 from System.Core.Kernel import bug_check
-from System.Programs.Browser.Browser import Browser
 from System.Programs.File_manager.File_manager import File_manager
 from System.Programs.Map.Map import Map
-from System.Programs.Terminal.Terminal import Terminal
+from System.Programs.Terminal.Terminal import WM_Terminal, DE_Terminal
 from System.Shell.Boot.Desktop.Startmenu import startmenu
 from System.Shell.Boot.Desktop.Taskbar import Taskbar_button
 from System.Shell.Message_box import Message_box
 from System.Utils.Utils import Execute
-from System.Utils.Vars import XCursor_2
+from System.Utils.Vars import Assets_directory, XCursor_2
 
 __author__ = 'TheBigEye'
 __version__ = '2.0'
 
+BOOT_DATA_FILE = (Assets_directory + "/Data/System data/Boot/Boot.json")
+DESKTOP_MODE = JSON.get(BOOT_DATA_FILE, "Desktop_mode")
+
 def Terminal_programm(master):
-    Execute(master, 400, Terminal, master, True)
+    if DESKTOP_MODE == 0:
+        Execute(master, 400, WM_Terminal, master, True)
+    elif DESKTOP_MODE == 1:
+        Execute(master, 400, DE_Terminal, master, True)
 
 def File_manager_programm(master):
     Execute(master, 1000, File_manager, master, True)

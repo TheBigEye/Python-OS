@@ -17,11 +17,10 @@ from tkinter import PhotoImage
 
 from Libs.pyLogger.Logger import Logger
 from Libs.pyUtils.pyFetch import Color, get_neofetch
+from System.Core.Core import set_desktop_mode
 from System.Core.Kernel import python_modules_check
 
 # ------------------------------------------[ Main ]------------------------------------------- #
-
-# FIXME: Here, somewhere in this module, there is a big performance loss (slow start)
 
 class main(tk.Tk):
     """ This class implements the main window of the OS. """
@@ -56,7 +55,6 @@ class main(tk.Tk):
         boot_check(self) # Start the boot process
 
         self.update()
-
         self.mainloop()
 
     def stop(self):
@@ -108,7 +106,9 @@ def start_runtime():
 
     # Check if the user see the neofetch
     if "--neofetch" in arguments:
-        print(get_neofetch("Assets/Data/logo.txt", Color.YELLOW, ["*", None, None, "#", None, None, None]))
+        print(
+            get_neofetch("Assets/Data/logo.txt", Color.YELLOW, ["*", None, None, "#", None, None, None])
+        )
 
     # Check if the user wants to start the system
     if "--run-clean" in arguments:
@@ -120,6 +120,11 @@ def start_runtime():
         Logger.delete_logs()
         main()
 
+    if "--wm" in arguments:
+        set_desktop_mode("0")
+
+    if "--de" in arguments:
+        set_desktop_mode("1")
 
     # If no arguments are given, run the OS
     if len(arguments) == 1:
