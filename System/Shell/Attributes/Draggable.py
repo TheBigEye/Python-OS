@@ -87,8 +87,8 @@ class drag_it:
     def on_drag_motion(self, event):
 
         # calculate the new coordinates
-        self.x = self.widget.winfo_x() - self.widget._drag_start_x + event.x
-        self.y = self.widget.winfo_y() - self.widget._drag_start_y + event.y
+        self.x = int((self.widget.winfo_x() - int(self.widget._drag_start_x))) + int((event.x) / 2)
+        self.y = int((self.widget.winfo_y() - int(self.widget._drag_start_y))) + int((event.y) / 2)
 
         # move the widget (the cursor are positioned in the middle of the widget)
         self.widget.place(x = self.x, y = self.y)
