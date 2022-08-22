@@ -1,3 +1,0 @@
-"""
-    pyUtils - Utilities for Python
-"""
