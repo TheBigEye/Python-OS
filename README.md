@@ -63,21 +63,21 @@
 
 <!-- <img src="https://user-images.githubusercontent.com/63316583/156764802-7e1ffb65-f482-45ef-9c05-f82d9c4b4e23.svg" width="512" height="360"> UNUSED but usefuul -->
 
-**Python OS** is an operating system simulator written in Python, with a graphical interface made with Tkinter, the graphical interface is inspired by Windows to make it more user-friendly
+**Python OS** is an operating system simulator written in Python, with a graphical interface made with Tkinter, the graphical interface is inspired by Windows to make it more user-friendly.
 
-This was developed from the beginning as a hobby, currently I use it to learn and apply my knowledge with Python and GUI design :)
+This was developed from the beginning as a hobby, currently I use it to learn and apply my knowledge with Python and GUI design :).
 ## Features
 
 #### Desktop environment:
-- It is composed of a wallpaper along with a taskbar
+- It is composed of a wallpaper along with a taskbar.
 - The taskbar contains a clock, volume and internet icons.
 - A start menu.
-- Draggabble windows
+- Draggabble windows.
 
 #### Programs:
-- **Terminal** - you can write and execute commands
-- **File manager** - You can see files and folders, change directories and see the size of each file
-- **Browser** - You can browse the internet (currently it only uses html 3, so most of the pages don't work very well)
+- **Terminal** - you can write and execute commands.
+- **File manager** - You can see files and folders, change directories and see the size of each file.
+- **Browser** - You can browse the internet (currently it only uses html 3, so most of the pages don't work very well).
 
 #### Miscellaneous:
 - **Boot loader** (animation).
@@ -90,16 +90,19 @@ This was developed from the beginning as a hobby, currently I use it to learn an
 - **Terminal mode.**
 - **File system**.
 
-### Some current ideas...
-- **Antivirus** (fake)
-- **Control pane**
-- **Draggable desktop icons**
-- **Internet**
-- **System configuration**
-- **Reboot and shutdown**
+#### Some current ideas:
+- **Antivirus (fake).**
+- **Control pane.**
+- **Draggable desktop icons.**
+- **Internet.**
+- **System configuration.**
+- **Reboot and shutdown.**
+
+## Bugs
+- Dragging windows can cause their content to flicker or no longer render.
+- Sometimes taskbar buttons flicker.
 
 ## Installation
-
 Download the code and unzip it, it is necessary to have Python 3.10 and have the following modules installed 
 
 - [`Pillow`](https://github.com/python-pillow/Pillow)       Necessary so that the program can read the images and work.
