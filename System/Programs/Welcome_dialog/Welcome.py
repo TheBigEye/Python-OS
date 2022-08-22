@@ -1,8 +1,8 @@
 from tkinter import Button, Frame, Label
-from Libs.pyImage.Image import setImage
+from Libs.pyImage.Image import Image
 
-from System.Shell.Attributes.Draggable import drag_it
-from System.Programs.Terminal.Commands import CMD
+from System.shell.Attributes.Draggable import drag_it
+from System.programs.Terminal.Commands import CMD
 
 __author__ = "TheBigEye"
 __version__ = "1.8"
@@ -24,7 +24,7 @@ class Welcome_dialog(Frame):
         self.draggable = draggable
 
 
-        self.Welcome_window_image = setImage("Assets/Shell/Programs/Welcome dialog/Window.png")  # Welcome dialog image base
+        self.Welcome_window_image = Image.setImage("Assets/Shell/Programs/Welcome dialog/Window.png")  # Welcome dialog image base
 
         self.Welcome_window = Label(
             self.master,
@@ -33,7 +33,7 @@ class Welcome_dialog(Frame):
             borderwidth="0"
         )
 
-        self.Welcome_screen_image = setImage("Assets/Shell/Programs/Welcome dialog/Dialog.png")
+        self.Welcome_screen_image = Image.setImage("Assets/Shell/Programs/Welcome dialog/Dialog.png")
 
         self.Welcome_screen = Label(
             self.Welcome_window,
@@ -48,8 +48,8 @@ class Welcome_dialog(Frame):
 
         # ----------------------------------------------------------------- [Boton de cerrar ventana] -------------------------------------------------------------------------
 
-        self.Close_button_image = setImage("Assets/Shell/Window/Close_button.png")  # Window close button
-        self.Close_button_red_image = setImage("Assets/Shell/Window/Close_button_red.png")  # Window close red button
+        self.Close_button_image = Image.setImage("Assets/Shell/Window/Close_button.png")  # Window close button
+        self.Close_button_red_image = Image.setImage("Assets/Shell/Window/Close_button_red.png")  # Window close red button
 
         def Close_window():
             """Close the window"""

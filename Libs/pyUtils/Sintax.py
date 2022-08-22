@@ -1,3 +1,10 @@
+"""
+    Module Name:
+        Sintax.py
+
+    Module Description:
+        Contains the sintax functions and snippets.
+"""
 
 # datatypes
 def typeof(obj):
@@ -15,44 +22,43 @@ def indexOf(list, obj):
             return i
     return -1
 
-def toString(obj):
+def toString(obj) -> str:
     """Converts an object to string."""
     return str(obj)
 
-def toInt(obj):
+def toInt(obj) -> int:
     """Converts an object to int."""
     return int(obj)
 
-def toFloat(obj):
+def toFloat(obj) -> float:
     """Converts an object to float."""
     return float(obj)
 
-def toChar(int):
+def toChar(int) -> str:
     """Returns the character from the integer (ascii code)."""
     return chr(int)
 
 # String utils
-def toUpperCase(string):
+def toUpperCase(string) -> str:
     """Returns the string in upper case."""
     return string.upper()
 
-def toLowerCase(string):
+def toLowerCase(string) -> str:
     """Returns the string in lower case."""
     return string.lower()
 
-def getLength(string):
+def getLength(string) -> int:
     """Returns the length of the string."""
     return len(string)
 
-def getCharsCount(string, char):
+def getCharsCount(string, char) -> int:
     """Returns the number of times the character appears in the string."""
     return string.count(char)
 
-def getCharIndex(string, char):
+def getCharIndex(string, char) -> int:
     """Returns the index of the character."""
     return string.index(char)
 
-def getCharAt(string, index):
+def getCharAt(string, index) -> str:
     """Returns the character at the index."""
     return string[index]
-

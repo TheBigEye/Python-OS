@@ -1,8 +1,8 @@
 from tkinter import Button, Frame, Label
 
 import tkintermapview as tkmapview
-from Libs.pyImage.Image import setImage
-from System.Shell.Attributes.Draggable import drag_it
+from Libs.pyImage.Image import Image
+from System.shell.Attributes.Draggable import drag_it
 
 class Map(Frame):
 
@@ -20,9 +20,9 @@ class Map(Frame):
         self.master = master
         self.draggable = draggable
 
-        self.Map_image = setImage("Assets/Shell/Programs/Map/Window.png", None, "#ff00ff", "#002C4F")  # Map image base
-        self.Splash_logo_image = setImage("Assets/Shell/Programs/Map/Map_icon.png", (112, 112), "#ff00ff", "#002C4F")  # Splash image
-        self.Splash_image = setImage("Assets/Shell/Programs/Map/Splash.png")  # Splash image
+        self.Map_image = Image.setImage("Assets/Shell/Programs/Map/Window.png", None, "#ff00ff", "#002C4F")  # Map image base
+        self.Splash_logo_image = Image.setImage("Assets/Shell/Programs/Map/Map_icon.png", (112, 112), "#ff00ff", "#002C4F")  # Splash image
+        self.Splash_image = Image.setImage("Assets/Shell/Programs/Map/Splash.png")  # Splash image
 
         self.Map = Label(
             self.master,
@@ -39,8 +39,8 @@ class Map(Frame):
 
 # ----------------------------------------------------------------- [Close map button] -------------------------------------------------------------------------
 
-        self.Close_button_image = setImage("Assets/Shell/Window/Close_button.png")  # Map close button
-        self.Close_button_red_image = setImage("Assets/Shell/Window/Close_button_red.png")  # Map close button
+        self.Close_button_image = Image.setImage("Assets/Shell/Window/Close_button.png")  # Map close button
+        self.Close_button_red_image = Image.setImage("Assets/Shell/Window/Close_button_red.png")  # Map close button
 
         def Close_Map():
             """Close the Map"""
@@ -68,8 +68,8 @@ class Map(Frame):
 
 # ----------------------------------------------------------------- [Maximize map button] ----------------------------------------------------------------------
 
-        self.Maximize_button_image = setImage("Assets/Shell/Window/Maximize_button.png")  # Map maximize button
-        self.Maximize_button_light_image = setImage("Assets/Shell/Window/Maximize_button_light.png")  # Map maximize button light
+        self.Maximize_button_image = Image.setImage("Assets/Shell/Window/Maximize_button.png")  # Map maximize button
+        self.Maximize_button_light_image = Image.setImage("Assets/Shell/Window/Maximize_button_light.png")  # Map maximize button light
 
         def Maximize_Map():
             """Maximize the Map"""
@@ -95,8 +95,8 @@ class Map(Frame):
 
         # ----------------------------------------------------------------- [Minimize terminal button] ----------------------------------------------------------------------
 
-        self.Minimize_button_image = setImage("Assets/Shell/Window/Minimize_button.png")  # Terminal minimize button
-        self.Minimize_button_light_image = setImage("Assets/Shell/Window/Minimize_button_light.png")  # Terminal minimize button light
+        self.Minimize_button_image = Image.setImage("Assets/Shell/Window/Minimize_button.png")  # Terminal minimize button
+        self.Minimize_button_light_image = Image.setImage("Assets/Shell/Window/Minimize_button_light.png")  # Terminal minimize button light
 
         def Minimize_Map():
             """Minimize the Map"""

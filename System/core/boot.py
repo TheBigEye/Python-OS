@@ -17,10 +17,10 @@ from tkinter import Misc
 
 from Libs.pyLogger.Logger import Logger
 from Libs.pyUtils.pyData import JSON
-from System.Core.FileSystem import FS_routines
-from System.Core.Kernel import bug_check
-from System.Core.TaskSystem import ts_routines
-from System.Utils.Vars import Assets_directory
+
+from System.core.filesystem import FS_routines
+from System.core.kernel import KRNL_Bug_check
+from System.utils.vars import Assets_directory
 
 BOOT_DATA_FILE = (Assets_directory + "/Data/System data/Boot/Boot.json")
 
@@ -57,8 +57,7 @@ match Boot_phase:
     case 7: isDesktop = True
     case 8: isBoot = True
     case _:
-        Logger.error("Invalid value, must be 0-8, STOPING..")
-        sys.exit()
+        raise ValueError("Invalid value, must be 0-8, STOPING..")
 
 
 def check_os():
@@ -73,7 +72,6 @@ def check_os():
 
 
 def routines():
-
     """ Used to execute the first tasks in the first seconds of system startup """
 
     check_os()
@@ -86,16 +84,18 @@ def routines():
     else:
         Logger.warning("Unknown OS, starting anyway...")
 
-    # Load the process system (deprecated for now)
-    ts_routines()
-
     # Load the file system
     FS_routines()
 
 
-def set_boot(value):
+def set_boot(value: int):
+    """
+    This function is used to set the kernel level (boot order)
 
-    """ This function is used to set the kernel level (boot order). """
+    Arguments:
+        `value` : `[int]` - The value to set the boot level to.
+
+    """
 
     from Libs.pyLogger.Logger import Logger
 
@@ -113,14 +113,18 @@ def set_boot(value):
         case 7: Logger.info("{} | Kernel level set to: Desktop", str_value)
         case 8: Logger.info("{} | Kernel level set to: Boot", str_value)
         case _:
-            Logger.error("Invalid value, must be 0-8, STOPING..")
-            sys.exit()
+            raise ValueError("Invalid value, must be 0-8, STOPING..")
 
     JSON.set(BOOT_DATA_FILE, "Boot_phase", int_value)
 
-def set_desktop_mode(value):
+def set_desktop_mode(value: int):
+    """
+    It sets the desktop mode
 
-    """ This function is used to set the desktop mode. """
+    Arguments:
+        `value` : `[int]` The value to set the desktop mode to.
+
+    """
 
     from Libs.pyLogger.Logger import Logger
 
@@ -131,28 +135,29 @@ def set_desktop_mode(value):
         case 0: Logger.info("{} | Desktop mode set to: WINDOW MANAGER", str_value)
         case 1: Logger.info("{} | Desktop mode set to: DESKTOP ENVIROMENT", str_value)
         case _:
-            Logger.error("Invalid value, must be 0-1, STOPING..")
+            raise ValueError("Invalid value, must be 0-1, STOPING..")
             sys.exit()
 
     JSON.set(BOOT_DATA_FILE, "Desktop_mode", int_value)
-
 
 class boot:
     """
     Start a boot process.
 
     Arguments:
-        `master : [Misc]` The parent widget or window.
-        `screen : [Misc]` The screen to be displayed.
-        `time : [int]` The time to wait before to display the screen.
+        `master` : `[Misc]` The parent widget or window.
+        `screen` : `[Misc]` The screen to be displayed.
+        `time` : `[int]` The time to wait before to display the screen.
 
     Example:
-        >>> boot(root, Desktop, 5000) # Wait 5 seconds before to display the Desktop screen.
+        >>> # Wait 5 seconds before to display the Desktop screen.
+        >>> boot(root, Desktop, 5000)
     """
 
     def __init__(self, master: Misc, screen: Misc, time: int):
+        """ Start a boot process. """
 
-        from System.Shell.Boot.Bootloader import Bootloader
+        from System.shell.Boot.Bootloader import Bootloader
 
         self.master = master
         self.screen = screen
@@ -162,26 +167,23 @@ class boot:
         self.master.after(time  + 1000, screen, self.master)
 
 
-
 def boot_check(master):
-    """
-    This function is used to check if the boot process is complete.
-    """
+    """ Check if the boot process is complete. """
 
-    from System.Shell.Boot.BIOS import BIOS
-    from System.Shell.Boot.Desktop.Desktop import Desktop
-    from System.Shell.Boot.Installer import Os_Installer
-    from System.Shell.Boot.Login import Login
+    from System.shell.Boot.BIOS import BIOS
+    from System.shell.Boot.Desktop.Desktop import Desktop
+    from System.shell.Boot.Installer import Os_Installer
+    from System.shell.Boot.Login import Login
 
     # Here the variables of the boot order are checked and the corresponding function is executed:
     if isBSOD:
-        bug_check(master, "0xDEADDEAD" , "#ffffff", "#000000")
+        KRNL_Bug_check(master, "0xDEADDEAD" , "#ffffff", "#000000")
 
     elif isRSOD:
-        bug_check(master, "0xDEADDEAD" , "#ffffff", "#ba0000")
+        KRNL_Bug_check(master, "0xDEADDEAD" , "#ffffff", "#ba0000")
 
     elif isGSOD:
-        bug_check(master, "0xDEADDEAD" , "#ffffff", "#00ba00")
+        KRNL_Bug_check(master, "0xDEADDEAD" , "#ffffff", "#00ba00")
 
     elif isBIOS:
         boot(master, BIOS, 0)

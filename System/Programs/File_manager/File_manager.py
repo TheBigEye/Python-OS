@@ -1,8 +1,8 @@
 from tkinter import *
-from Libs.pyImage.Image import setImage
-from System.Shell.Attributes.Draggable import drag_it
+from Libs.pyImage.Image import Image
+from System.shell.Attributes.Draggable import drag_it
 
-from System.Core.FileSystem import *
+from System.core.filesystem import *
 
 
 __author__ = 'TheBigEye'
@@ -21,11 +21,11 @@ class Folder(Label):
         self.y = y
         self.name = name
 
-        self.image = setImage("Assets/Shell/Icons/Folder_icon.png", (24, 24), "#ff00ff", "#00142D")
-        self.image_selected = setImage("Assets/Shell/Icons/Folder_icon.png", (24, 24), "#ff00ff", "#001228")
+        self.image = Image.setImage("Assets/Shell/Icons/Folder_icon.png", (24, 24), "#ff00ff", "#00142D")
+        self.image_selected = Image.setImage("Assets/Shell/Icons/Folder_icon.png", (24, 24), "#ff00ff", "#001228")
 
-        self.selection_normal = setImage("Assets/Shell/Programs/File manager/Selection.png", None, "#ff00ff", "#00142D")
-        self.selection_selected = setImage("Assets/Shell/Programs/File manager/Selection_selected.png", None, "#ff00ff", "#00142D")
+        self.selection_normal = Image.setImage("Assets/Shell/Programs/File manager/Selection.png", None, "#ff00ff", "#00142D")
+        self.selection_selected = Image.setImage("Assets/Shell/Programs/File manager/Selection_selected.png", None, "#ff00ff", "#00142D")
 
         self.selection_label = Label(
             self.master,
@@ -76,9 +76,9 @@ class Folder(Label):
             self.name_label.config(bg="#00142D")
 
         # if click on the folder, change directory to the folder
-        self.Folder.bind("<Button-1>", lambda event: Change_directory(self.name))
-        self.name_label.bind("<Button-1>", lambda event: Change_directory(self.name))
-        self.selection_label.bind("<Button-1>", lambda event: Change_directory(self.name))
+        self.Folder.bind("<Button-1>", lambda event: change_directory(self.name))
+        self.name_label.bind("<Button-1>", lambda event: change_directory(self.name))
+        self.selection_label.bind("<Button-1>", lambda event: change_directory(self.name))
 
         self.Folder.place(x=self.x + 1, y=self.y)
         self.name_label.place(x=self.x + 25, y=(self.y) + 4)
@@ -98,11 +98,11 @@ class File(Label):
         self.name = name
 
         self.icon = icon
-        self.file_icon = setImage("Assets/Shell/Icons/" + icon + "_icon.png", (24, 24), "#ff00ff", "#00142D")
-        self.file_icon_selected = setImage("Assets/Shell/Icons/" + icon + "_icon.png", (24, 24), "#ff00ff", "#001228")
+        self.file_icon = Image.setImage("Assets/Shell/Icons/" + icon + "_icon.png", (24, 24), "#ff00ff", "#00142D")
+        self.file_icon_selected = Image.setImage("Assets/Shell/Icons/" + icon + "_icon.png", (24, 24), "#ff00ff", "#001228")
 
-        self.selection_normal = setImage("Assets/Shell/Programs/File manager/Selection.png", None, "#ff00ff", "#00142D")
-        self.selection_selected = setImage("Assets/Shell/Programs/File manager/Selection_selected.png", None, "#ff00ff", "#00142D")
+        self.selection_normal = Image.setImage("Assets/Shell/Programs/File manager/Selection.png", None, "#ff00ff", "#00142D")
+        self.selection_selected = Image.setImage("Assets/Shell/Programs/File manager/Selection_selected.png", None, "#ff00ff", "#00142D")
 
         self.selection_label = Label(
             self.master,
@@ -205,9 +205,9 @@ class File_manager(Frame):
         self.master = master
         self.draggable = draggable
 
-        self.File_manager_image = setImage("Assets/Shell/Programs/File manager/Window.png")  # File manager image base
-        self.Splash_logo_image = setImage("Assets/Shell/Programs/File manager/File_manager_icon.png", (112, 112), "#ff00ff", "#002C4F")  # Splash image
-        self.Splash_image = setImage("Assets/Shell/Programs/File manager/Splash.png")  # Splash image
+        self.File_manager_image = Image.setImage("Assets/Shell/Programs/File manager/Window.png")  # File manager image base
+        self.Splash_logo_image = Image.setImage("Assets/Shell/Programs/File manager/File_manager_icon.png", (112, 112), "#ff00ff", "#002C4F")  # Splash image
+        self.Splash_image = Image.setImage("Assets/Shell/Programs/File manager/Splash.png")  # Splash image
 
         self.File_manager = Label(
             self.master,
@@ -263,7 +263,7 @@ class File_manager(Frame):
 
                 # remove the / from the value
                 value = value[1:]
-                Change_directory(value)
+                change_directory(value)
                 render_filesystem(self)
 
             def update_dir_bar(self):
@@ -297,7 +297,7 @@ class File_manager(Frame):
             self.dir_bar.bind("<Return>", lambda event: parse_dir_bar(self, str(self.dir_bar.get())))
 
             # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-            self.go_button_image = setImage("Assets/Shell/Programs/File manager/Go_arrow.png")
+            self.go_button_image = Image.setImage("Assets/Shell/Programs/File manager/Go_arrow.png")
 
             def go_arrow(self):
                 """ Open a folder """
@@ -310,6 +310,7 @@ class File_manager(Frame):
                 width=13,
                 height=13,
                 image=self.go_button_image,
+                activebackground = "#001228",
                 borderwidth="0",
                 command=lambda: go_arrow(self)
             )
@@ -317,14 +318,14 @@ class File_manager(Frame):
             self.go_button.place(x=548, y=28)
 
             # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-            self.back_button_image = setImage("Assets/Shell/Programs/File manager/Back_arrow.png")
+            self.back_button_image = Image.setImage("Assets/Shell/Programs/File manager/Back_arrow.png")
 
 
             def back_arrow(self):
                 """ Go back to the previous directory """
 
                 # get the current directory
-                Change_directory("..")
+                change_directory("..")
                 render_filesystem(self)
 
             self.back_button = Button(
@@ -332,6 +333,7 @@ class File_manager(Frame):
                 width=13,
                 height=13,
                 image=self.back_button_image,
+                activebackground = "#001228",
                 borderwidth="0",
                 command=lambda: back_arrow(self)
             )
@@ -348,8 +350,8 @@ class File_manager(Frame):
 
                 self.File_manager.destroy()
 
-            self.Close_button_image = setImage("Assets/Shell/Window/Close_button.png")
-            self.Close_button_red_image = setImage("Assets/Shell/Window/Close_button_red.png")
+            self.Close_button_image = Image.setImage("Assets/Shell/Window/Close_button.png")
+            self.Close_button_red_image = Image.setImage("Assets/Shell/Window/Close_button_red.png")
 
             self.Close_button = Button(
                 self.File_manager,

@@ -1,11 +1,21 @@
+"""
+    Module Name:
+        pyData.py
+
+    Module Description:
+        Contains functions to manipulate data objects.
+"""
 
 import json
 import os
+from typing import Union
+
 
 # JSON ----------------------------------------------------------------------------------------------------------------------------
 class JSON:
+    """ Handles JSON files and data structures. """
 
-    def get(path: str, key: str):
+    def get(path: str, key: str) -> Union[bool, str, int]:
         """
         Returns a JSON from a path.
         """
@@ -106,6 +116,7 @@ class JSON:
         return True
 
 class TXT:
+    """ Handles TXT files and plain data structures. """
 
     def get(path: str):
         """

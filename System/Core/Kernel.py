@@ -16,13 +16,14 @@ import subprocess
 import sys
 from tkinter import BOTH, Label, Misc
 
-import psutil
 from Libs.pyLogger.Logger import Logger
-from System.Utils.Vars import Assets_directory
+from System.utils.vars import Assets_directory
 
 BUGCHECK_DATA_FILE = (Assets_directory + "/Data/System data/Kernel/Bugcheck.json")
 
-def screen_check(master: Misc):
+# Checkers ---------------------------------------------------------------------------------------------------------------------
+
+def screen_check(master: Misc) -> None:
     """ This function checks if the system is running in a supported resolution. """
 
     # get the window resolution from the master
@@ -54,8 +55,10 @@ def python_modules_check():
     else:
         Logger.info("All the needed modules are installed.")
 
+# Getters ----------------------------------------------------------------------------------------------------------------------
+
 def get_desktop_enviroment() -> str:
-    """ This function get the desktop enviroment. """
+    """ Get the desktop enviroment. """
     if sys.platform in ["win32", "cygwin"]:
         return "windows"
     elif sys.platform == "darwin":
@@ -80,7 +83,7 @@ def get_desktop_enviroment() -> str:
         if os.environ.get('KDE_FULL_SESSION') == 'true':
             return "kde"
         elif os.environ.get('GNOME_DESKTOP_SESSION_ID'):
-            if not "deprecated" in os.environ.get('GNOME_DESKTOP_SESSION_ID'):
+            if "deprecated" not in os.environ.get('GNOME_DESKTOP_SESSION_ID'):
                 return "gnome2"
         #From http://ubuntuforums.org/showthread.php?t=652320
         elif is_running("xfce-mcs-manage"):
@@ -91,8 +94,21 @@ def get_desktop_enviroment() -> str:
     Logger.warning("Could not detect the desktop environment.")
     return "unknown"
 
-def is_running(process) -> bool:
-    """ This function checks if the given process is running. """
+def is_running(process: str) -> bool:
+    """
+    This function checks if the given process is running
+
+    Arguments:
+        `process`: `[str]` The process to check if it is running.
+
+    Returns:
+        `True` if the process is running, `False` otherwise.
+
+    Example:
+        >>> is_running("python")
+        >>> True
+    """
+
     try: #Linux/Unix
         s = subprocess.Popen(["ps", "axw"],stdout=subprocess.PIPE)
     except: #Windows
@@ -104,24 +120,33 @@ def is_running(process) -> bool:
     Logger.warning("The process " + process + " is not running.")
     return False
 
-class bug_check:
+def KRNL_get_os() -> str:
+    """ This function return the OS name. """
+    return str(os.name)
+
+
+# --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+class KRNL_Bug_check:
     """
     Show the BSOD, RSOD, GSOD or a custom SOD.
 
     Arguments:
-        `master : [Misc]` The parent widget for place the BSOD.
-        `error_id : [str]` The error id, like a memory dump 0x12345678.
-        `msg_color : [str]` The hex color of the message.
-        `bg_color : [str]` The hex color of the background.
+        `master` : `[Misc]` The parent widget for place the BSOD.
+        `error_id` : `[str]` The error id, like a memory dump 0x12345678.
+        `msg_color` : `[str]` The hex color of the message.
+        `bg_color` : `[str]` The hex color of the background.
 
     Returns:
         `None`
 
     Example:
-        >>> bug_check(master, "0x12345678", "FFFFFF", "000000")
+        >>> KRNL_Bug_check(master, "0x12345678", "FFFFFF", "000000")
     """
 
-    def __init__(self, master: Misc, error_id: str, msg_color: str, bg_color: str):
+    def __init__(self, master: Misc, error_id: str, msg_color: str, bg_color: str) -> None:
+
+        """ Initialize the bug checker. """
 
         self.master = master
         self.error_id = error_id
@@ -163,6 +188,7 @@ class bug_check:
                     self.error_info = value["description"]
 
         def start():
+            """ Start the BSoD. """
 
             # remove all the widgets from self.base
             for widget in self.base.winfo_children():
@@ -229,6 +255,7 @@ class bug_check:
             self.comment_label.place(x = 32, y = 425)
 
             def update():
+                """ Update the countdown and refresh the display. """
 
                 self.shutdown_time -= 1
 

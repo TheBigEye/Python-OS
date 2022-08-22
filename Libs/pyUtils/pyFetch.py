@@ -1,3 +1,11 @@
+"""
+    Module Name:
+        pyFetch
+
+    Module Description:
+        Little Neofetch implementation in Python
+"""
+
 import os
 import platform
 import sys
@@ -5,10 +13,7 @@ import time
 import psutil
 
 class Color:
-
-    """
-    This class implements the styles and colors for the neofetch
-    """
+    """ Neofetch colors and styles. """
 
     HEADER = '\033[95m'
     CYAN = '\033[96m'
@@ -51,20 +56,31 @@ class Color:
 
 # ---------------------------------------------------------------------------------------------------------------------------------
 
-def Set_chars_colors(ascii_art, chars: str, color: Color) -> str:
+def Set_chars_colors(ascii_art: str, chars: str, color: Color) -> str:
+    """
+    Sets the colors of the characters
+
+    Arguments:
+        `ascii_art [str]`: The ascii art to be colored
+        `chars [str]`: The characters from the ascii art to be colored
+        `color [Color]`: The color to be used
+
+    Returns:
+        `str`: The colored ascii art
+    """
+
     for data in ascii_art: # Loop through the ascii art
-        if not chars == None: # If the chars are not none
+        if chars != None: # If the chars are not none
             for char in chars: # Loop through the chars list
                 if data == char: ascii_art = ascii_art.replace(data, color + data + Color.RESET) # Replace the char with the color + char
 
     return ascii_art
 
 def Get_username(color: Color) -> str:
-    """
-    This function returns the username of the user
-    """
+    """ Returns the username of the user """
+
     Username = "" # Initialize the username
-    if not color == None: # If the color is not none
+    if color != None: # If the color is not none
         Username += str(Color.BOLD + color + str(os.getlogin() + "@" + platform.node()).upper() + Color.RESET) + "\n"
         Username += str("-" * len(str(os.getlogin() + "@" + platform.node()).upper())) + "\n"
     else:
@@ -72,12 +88,11 @@ def Get_username(color: Color) -> str:
         Username += str("-" * len(str(os.getlogin() + "@" + platform.node()).upper())) + "\n"
     return Username
 
-def Get_OS_info(color: Color, OS_name: str = str(platform.platform()), OS_kernel: str = str(platform.release())):
-    """
-    This function returns the OS information
-    """
+def Get_OS_info(color: Color, OS_name: str = str(platform.platform()), OS_kernel: str = str(platform.release())) -> str:
+    """ Returns the OS information """
+
     OS_info = ""
-    if not color == None:
+    if color != None:
         OS_info += str(Color.BOLD + color + "OS: " + Color.RESET + OS_name + Color.RESET) + "\n"
         OS_info += str(Color.BOLD + color + "Kernel: " + Color.RESET + OS_kernel + Color.RESET) + "\n"
     else:
@@ -86,9 +101,8 @@ def Get_OS_info(color: Color, OS_name: str = str(platform.platform()), OS_kernel
     return OS_info
 
 def Get_uptime(color: Color) -> str:
-    """
-    This function returns the uptime of the system
-    """
+    """ Returns the uptime of the system """
+
     Uptime_string = ""
     Uptime = ""
 
@@ -102,18 +116,17 @@ def Get_uptime(color: Color) -> str:
     else:
         Uptime_string = str(int((Current_time - Boot_time) / 3600)) + " hours"
 
-    if not color == None:
+    if color != None:
         Uptime = str(Color.BOLD + color + "Uptime: " + Color.RESET + Uptime_string + Color.RESET) + "\n"
     else:
         Uptime = str("Uptime: " + Uptime_string) + "\n"
     return Uptime
 
 def Get_Software_info(color: Color) -> str:
-    """
-    This function returns the software information
-    """
+    """ Returns the software information """
+
     Software_info = ""
-    if not color == None:
+    if color != None:
         Software_info += str(Color.BOLD + color + "Packages: " + Color.RESET + "14 (py-pkg)" + Color.RESET) + "\n"
         Software_info += str(Color.BOLD + color + "Python: " + Color.RESET + str(sys.version.split(" ")[0]) + Color.RESET) + "\n"
         Software_info += str(Color.BOLD + color + "Shell: " + Color.RESET + str(sys.platform) + Color.RESET) + "\n"
@@ -124,13 +137,12 @@ def Get_Software_info(color: Color) -> str:
     return Software_info
 
 def Get_Hardware_info(color: Color) -> str:
-    """
-    This function returns the hardware information
-    """
+    """ Returns the hardware information """
+
     Hardware_info = ""
     # get cpu name and freq, eg: Intel(R) i7-4770 CPU @ 3.40GHz
     cpu_name = str(platform.processor().split(" ")[0] + " " + platform.processor().split(" ")[1])
-    if not color == None:
+    if color != None:
         Hardware_info += str(Color.BOLD + color + "CPU: " + Color.RESET + cpu_name + Color.RESET) + "\n"
         Hardware_info += str(Color.BOLD + color + "GPU: " + Color.RESET + str("N/A")) + "\n"
         Hardware_info += str(Color.BOLD + color + "Memory: " + Color.RESET + str(int(psutil.virtual_memory().used / 1024 / 1024)) + "MiB / " + str(int(psutil.virtual_memory().total / 1024 / 1024)) + "MiB" + Color.RESET) + "\n"
@@ -142,7 +154,7 @@ def Get_Hardware_info(color: Color) -> str:
 
 # ---------------------------------------------------------------------------------------------------------------------------------
 
-def get_neofetch(logo_file_path, info_color: Color = Color.YELLOW, chars: list = [None, None, None, None, None, None, None]) -> str:
+def get_neofetch(logo_file_path: str, info_color: Color = Color.YELLOW, chars: list = [None, None, None, None, None, None, None]) -> str:
     """
     This function prints the neofetch in terminal
 
@@ -169,7 +181,7 @@ def get_neofetch(logo_file_path, info_color: Color = Color.YELLOW, chars: list =
     Info_string += Get_Software_info(info_color)
     Info_string += Get_Hardware_info(info_color)
     Info_string += "\n"
-    if not info_color == None:
+    if info_color != None:
         Info_string += Color.DARK_BLACK_BLOCK + "   " + Color.RESET + Color.DARK_RED_BLOCK + "   " + Color.RESET + Color.DARK_GREEN_BLOCK + "   " + Color.RESET + Color.DARK_YELLOW_BLOCK + "   " + Color.RESET + Color.DARK_BLUE_BLOCK + "   " + Color.RESET + Color.DARK_PURPLE_BLOCK + "   " + Color.RESET + Color.DARK_CYAN_BLOCK + "   " + Color.RESET + Color.DARK_WHITE_BLOCK + "   " + Color.RESET + "\n"
         Info_string += Color.LIGHT_GREY_BLOCK + "   " + Color.RESET + Color.LIGHT_RED_BLOCK + "   " + Color.RESET + Color.LIGHT_GREEN_BLOCK + "   " + Color.RESET + Color.LIGHT_YELLOW_BLOCK + "   " + Color.RESET + Color.LIGHT_BLUE_BLOCK + "   " + Color.RESET + Color.LIGHT_PURPLE_BLOCK + "   " + Color.RESET + Color.LIGHT_CYAN_BLOCK + "   " + Color.RESET + Color.LIGHT_WHITE_BLOCK + "   " + Color.RESET + "\n"
 

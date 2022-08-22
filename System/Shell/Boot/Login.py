@@ -1,6 +1,6 @@
 from tkinter import Button, Entry, Label
 
-from Libs.pyImage.Image import setImage
+from Libs.pyImage.Image import Image
 
 __author__ = 'TheBigEye'
 __version__ = '2.0'
@@ -15,7 +15,7 @@ def Login(master):  # Display the login window
 
     master.configure(background = Login_background_color)  # Sets the background to Blue
 
-    Login_GUI = setImage("Assets/Shell/Boot/Login/Login.png")
+    Login_GUI = Image.setImage("Assets/Shell/Boot/Login/Login.png")
     Login = Label(master, image = Login_GUI, borderwidth="0.1")
     Login.place(x=0, y=0)
 
@@ -35,7 +35,7 @@ def Login(master):  # Display the login window
     Login_Password_Entry.focus()
     Login_Password_Entry.place(x= 435, y= 344)
 
-    Login_Button_icon = setImage("Assets/Shell/Boot/Login/Login.png")
+    Login_Button_icon = Image.setImage("Assets/Shell/Boot/Login/Login.png")
     Login_Button = Button(Login,
         width = 30,
         height = 19,

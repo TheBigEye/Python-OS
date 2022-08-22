@@ -1,7 +1,7 @@
 import time
 from tkinter import Button, Frame, Label
 
-from Libs.pyImage.Image import setImage
+from Libs.pyImage.Image import Image
 from Libs.pyLogger.Logger import Logger
 
 
@@ -21,7 +21,7 @@ class startmenu(Frame):
         Logger.info("### Loading start menu components ...")
 
         # Initialize the Start menu
-        self.Startmenu_image = setImage("Assets/Shell/Desktop/Start menu/Start_menu.png")
+        self.Startmenu_image = Image.setImage("Assets/Shell/Desktop/Start menu/Start_menu.png")
         self.Startmenu = Label(
             self.master,
             width = 314,
@@ -30,8 +30,8 @@ class startmenu(Frame):
             borderwidth = "0"
         )
 
-        self.Start_button_image = setImage("Assets/Shell/Desktop/Start menu/Start_icon.png", (24, 24), "#ff00ff", "#002C4F")
-        self.Start_button_light = setImage("Assets/Shell/Desktop/Start menu/Start_icon.png", (24, 24), "#ff00ff", "#00345B")
+        self.Start_button_image = Image.setImage("Assets/Shell/Desktop/Start menu/Start_icon.png", (24, 24), "#ff00ff", "#002C4F")
+        self.Start_button_light = Image.setImage("Assets/Shell/Desktop/Start menu/Start_icon.png", (24, 24), "#ff00ff", "#00345B")
 
         def open_start_menu():
             self.Startmenu.place(x=1, y=128)

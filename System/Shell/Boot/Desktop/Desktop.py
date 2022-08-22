@@ -1,21 +1,21 @@
 import time
 from tkinter import Button, Frame, Label
 
-from Libs.pyImage.Image import setImage
+from Libs.pyImage.Image import Image
 from Libs.pyLogger.Logger import Logger
 from Libs.pyUtils.pyData import JSON
-from System.Core.Kernel import bug_check
-from System.Programs.File_manager.File_manager import File_manager
-from System.Programs.Map.Map import Map
-from System.Programs.Terminal.Terminal import WM_Terminal, DE_Terminal
-from System.Shell.Boot.Desktop.Startmenu import startmenu
-from System.Shell.Boot.Desktop.Taskbar import Taskbar_button
-from System.Shell.Message_box import Message_box
-from System.Utils.Utils import Execute
-from System.Utils.Vars import Assets_directory, XCursor_2
+from System.core.kernel import KRNL_Bug_check
+from System.programs.File_manager.File_manager import File_manager
+from System.programs.Map.Map import Map
+from System.programs.Terminal.Terminal import WM_Terminal, DE_Terminal
+from System.shell.Boot.Desktop.Startmenu import startmenu
+from System.shell.Boot.Desktop.Taskbar import Taskbar_button
+from System.shell.Message_box import MessageBox
+from System.utils.utils import Execute
+from System.utils.vars import Assets_directory, XCursor_2
 
 __author__ = 'TheBigEye'
-__version__ = '2.0'
+__version__ = '2.1'
 
 BOOT_DATA_FILE = (Assets_directory + "/Data/System data/Boot/Boot.json")
 DESKTOP_MODE = JSON.get(BOOT_DATA_FILE, "Desktop_mode")
@@ -30,12 +30,12 @@ def File_manager_programm(master):
     Execute(master, 1000, File_manager, master, True)
 
 def Browser_programm(master):
-    Message_box(master, "Warning", "Browser", "this may not work very well", True)
+    MessageBox(master, "this may not work very well", "Warning", True)
     #Execute(master, 1200, Browser, master, True) # REMOVED: Browser is not working properly and will be fixed in the future.
     for widget in master.winfo_children():
         widget.destroy()
 
-    bug_check(master, "0x00000007" , "#ffffff", "#000000")
+    KRNL_Bug_check(master, "0x00000007" , "#ffffff", "#000000")
 
 def Map_programm(master):
     Execute(master, 800, Map, master, True)
@@ -58,7 +58,7 @@ class Desktop(Frame):
         Logger.info("### Loading desktop enviroment ...")
 
         # Initialize the Wallpaper
-        self.Wallpaper_image = setImage("Assets/Shell/Desktop/Wallpapers/Space_panorama.png")
+        self.Wallpaper_image = Image.setImage("Assets/Shell/Desktop/Wallpapers/Space_panorama.png")
         self.Wallpaper = Label(
             self.master,
             image= self.Wallpaper_image,
@@ -67,7 +67,6 @@ class Desktop(Frame):
             bg="#001023"
         )
         self.Wallpaper.place(x=0, y=0)
-        self.Wallpaper.update_idletasks()
         Logger.info("Wallpaper processed and loaded")
 
         # Initialize the Cursor
@@ -75,7 +74,7 @@ class Desktop(Frame):
         Logger.info("Cursor processed and loaded")
 
         # Initialize the Taskbar
-        self.Taskbar_image = setImage("Assets/Shell/Desktop/Taskbar/Taskbar.png")
+        self.Taskbar_image = Image.setImage("Assets/Shell/Desktop/Taskbar/Taskbar.png")
         self.Taskbar = Label(
             self.master,
             width = 740,
@@ -91,7 +90,7 @@ class Desktop(Frame):
         Logger.info("Taskbar processed and loaded")
 
         # Initialize the Start bar
-        self.Startbar_image = setImage("Assets/Shell/Desktop/Taskbar/Startbar.png")
+        self.Startbar_image = Image.setImage("Assets/Shell/Desktop/Taskbar/Startbar.png")
         self.Startbar = Label(
             self.master,
             width = 109,
@@ -107,7 +106,7 @@ class Desktop(Frame):
         Logger.info("Startbar processed and loaded")
 
         # Initialize the Clockbar
-        self.Clockbar_image = setImage("Assets/Shell/Desktop/Taskbar/Clockbar.png")
+        self.Clockbar_image = Image.setImage("Assets/Shell/Desktop/Taskbar/Clockbar.png")
         self.Clockbar = Label(
             self.master,
             width = 284,
@@ -145,7 +144,7 @@ class Desktop(Frame):
             master_image_path = "Assets/Shell/Desktop/Taskbar/Startbar.png",
             position = (68, 2)
         )
-        self.Search_startbar_button.bind("<Button-1>", lambda event: Terminal_programm(self.master))
+        self.Search_startbar_button.bind("<Button-1>", lambda event: MessageBox(self.master, "This feature is not yet available", "Warning", True))
         self.Search_startbar_button.place(x=68, y=2)
         Logger.info("Search icon loaded on startbar")
 
@@ -225,8 +224,8 @@ class Desktop(Frame):
         Logger.info("Clock component loaded")
 
         # Sound volume icon in clockbar
-        self.Sound_button = setImage("Assets/Shell/Desktop/Taskbar/high-volume.png", (24, 24), "#ff00ff", "#002C4F")
-        self.Sound_button_light = setImage("Assets/Shell/Desktop/Taskbar/high-volume.png", (24, 24), "#ff00ff", "#004C82")
+        self.Sound_button = Image.setImage("Assets/Shell/Desktop/Taskbar/high-volume.png", (24, 24), "#ff00ff", "#002C4F")
+        self.Sound_button_light = Image.setImage("Assets/Shell/Desktop/Taskbar/high-volume.png", (24, 24), "#ff00ff", "#004C82")
         self.Sound_clockbar_button = Button(
             self.Clockbar,
             width = 16,
@@ -237,14 +236,14 @@ class Desktop(Frame):
             activebackground = "#002C4F",
             image = self.Sound_button
         )
-        self.Sound_clockbar_button.bind("<Button-1>", lambda event: Message_box(self.master, "Info", "Sound", "In development...", True))
+        self.Sound_clockbar_button.bind("<Button-1>", lambda event: MessageBox(self.master, "In development...", "Info", True))
         self.Sound_clockbar_button.bind("<Enter>", lambda event: self.Sound_clockbar_button.config(image = self.Sound_button_light))
         self.Sound_clockbar_button.bind("<Leave>", lambda event: self.Sound_clockbar_button.config(image = self.Sound_button))
         Logger.info("Sound volume icon loaded on clockbar")
 
         # Battery icon in clockbar
-        self.Battery_button = setImage("Assets/Shell/Desktop/Taskbar/high-battery.png", (24, 24), "#ff00ff", "#002C4F")
-        self.Battery_button_light = setImage("Assets/Shell/Desktop/Taskbar/high-battery.png", (24, 24), "#ff00ff", "#004C82")
+        self.Battery_button = Image.setImage("Assets/Shell/Desktop/Taskbar/high-battery.png", (24, 24), "#ff00ff", "#002C4F")
+        self.Battery_button_light = Image.setImage("Assets/Shell/Desktop/Taskbar/high-battery.png", (24, 24), "#ff00ff", "#004C82")
         self.Battery_clockbar_button = Button(
             self.Clockbar,
             width = 16,
@@ -255,14 +254,14 @@ class Desktop(Frame):
             activebackground = "#002C4F",
             image = self.Battery_button
         )
-        self.Battery_clockbar_button.bind("<Button-1>", lambda event: Message_box(self.master, "Error", "Battery", "Nice error :)", True))
+        self.Battery_clockbar_button.bind("<Button-1>", lambda event: MessageBox(self.master, "Nice error :)", "Error", True))
         self.Battery_clockbar_button.bind("<Enter>", lambda event: self.Battery_clockbar_button.config(image = self.Battery_button_light))
         self.Battery_clockbar_button.bind("<Leave>", lambda event: self.Battery_clockbar_button.config(image = self.Battery_button))
         Logger.info("Battery icon loaded on clockbar")
 
         # Internet icon in clockbar
-        self.Internet_button = setImage("Assets/Shell/Desktop/Taskbar/high-internet.png", (24, 24), "#ff00ff", "#002C4F")
-        self.Internet_button_light = setImage("Assets/Shell/Desktop/Taskbar/high-internet.png", (24, 24), "#ff00ff", "#004C82")
+        self.Internet_button = Image.setImage("Assets/Shell/Desktop/Taskbar/high-internet.png", (24, 24), "#ff00ff", "#002C4F")
+        self.Internet_button_light = Image.setImage("Assets/Shell/Desktop/Taskbar/high-internet.png", (24, 24), "#ff00ff", "#004C82")
         self.Internet_clockbar_button = Button(
             self.Clockbar,
             width = 16,
@@ -273,7 +272,7 @@ class Desktop(Frame):
             activebackground = "#002C4F",
             image = self.Internet_button
         )
-        self.Internet_clockbar_button.bind("<Button-1>", lambda event: Message_box(self.master, "Warning", "Internet", "Nice warning :)", True))
+        self.Internet_clockbar_button.bind("<Button-1>", lambda event: MessageBox(self.master, "Nice warning :)", "Warning", True))
         self.Internet_clockbar_button.bind("<Enter>", lambda event: self.Internet_clockbar_button.config(image = self.Internet_button_light))
         self.Internet_clockbar_button.bind("<Leave>", lambda event: self.Internet_clockbar_button.config(image = self.Internet_button))
         Logger.info("Internet icon loaded on clockbar")

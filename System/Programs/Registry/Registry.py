@@ -2,8 +2,7 @@
 
 from tkinter.ttk import Treeview
 
-from System.Utils.Utils import Asset
+from System.utils.utils import Asset
 
 class Registry(Frame):
     pass # in development
-

@@ -13,14 +13,15 @@ import datetime
 import json
 import os
 import random
+import re
 import shelve
 from shelve import Shelf
+from typing import Any, Dict, List, Union
 
 from Libs.pyLogger.Logger import Logger
 from Libs.pyUtils.pyData import JSON
-from System.Utils.Vars import Assets_directory, Disk_directory
 
-# ------------------------------------------------------------ [ Init ] ------------------------------------------------------------
+from System.utils.vars import Assets_directory, Disk_directory
 
 FS_DISK_DATA_FILES = [
     (Disk_directory + "/FS/Filesystem.dat"), # save the file system
@@ -32,14 +33,20 @@ FS_DISK_FILE = (Disk_directory + "/FS/Filesystem")
 BOOT_DATA_FILE = (Assets_directory + "/Data/System data/Boot/Boot.json")
 FS_STRUCTURE_FILE = (Assets_directory + "/Data/System data/File system/FS.txt")
 
+# TODO: in case some future version of python no longer supports shelve, port this to sqlite3
+
 # read or make the file system data file
-FS = shelve.open(FS_DISK_FILE, writeback=True)
+FS_data = shelve.open(FS_DISK_FILE, writeback=True)
 current_dir = []
 
-def FS_routines():
+def FS_routines() -> None:
+    """ Run the file system routines """
 
     def check_boot():
-        if JSON.get(BOOT_DATA_FILE, "FS_mounted") != False:
+
+        """ Check if in the boot the file system is mounted """
+
+        if JSON.get(BOOT_DATA_FILE, "FS_mounted") is not False:
             return
 
         Logger.error("File system is not mounted, installing ...")
@@ -50,7 +57,7 @@ def FS_routines():
         if os.path.exists(FS_DISK_DATA_FILES[2]): os.remove(FS_DISK_DATA_FILES[2]) # delete the .dir file
 
         FS_model = shelve.open(FS_DISK_FILE, writeback=True)
-        FS_install(FS_model)
+        install(FS_model)
 
         JSON.set(BOOT_DATA_FILE, "FS_mounted", True)
 
@@ -59,154 +66,159 @@ def FS_routines():
     check_boot()
     Logger.info("File system ready!")
 
-# ------------------------------------------------------------ [ Utils ] ------------------------------------------------------------
+def write(FS_data: Shelf):
+    """ Write the file system changes to the disk """
 
-def FS_write(FS: Shelf):
+    FS_data.sync()
+
+def install(FS_image: Shelf) -> None:
     """
-    Write the file system changes to the disk
+    Install the file system
+
+    Arguments:
+        FS: the file system database file
     """
 
-    FS.sync()
-
-def FS_install(FS: Shelf):
     Username = "User"
 
     # Load the File system structure file
-    with open(FS_STRUCTURE_FILE, 'r') as fs_structure:
-        fs_data = fs_structure.read()
+    with open(FS_STRUCTURE_FILE, 'r') as structure:
+        data = structure.read()
 
         # Get the %User% from the structure and change it to the username
-        fs_data = fs_data.replace("%User%", Username)
+        data = data.replace("%User%", Username)
 
         # Set the structure to the File system
-        FS[""] = json.loads(fs_data)
+        FS_image[""] = json.loads(data)
 
         # save the File system
-        FS.sync()
+        FS_image.sync()
 
-def FS_current_dictionary():
-    """Return a dictionary representing the files in the current directory"""
-    dir = FS[""]
+def current_dictionary() -> Dict[str, Dict[str, Union[Dict[str, Dict[Any, Any]], Dict[str, str], str]]]:
+    this_directory = FS_data[""]
+
     for key in current_dir:
-        dir = dir[key]
-    return dir
+        this_directory = this_directory[key]
 
-# ------------------------------------------------------------ [ Commands ] ------------------------------------------------------------
+    return this_directory
 
-def List_directory() -> str:
-
+def list_directory() -> str:
     """
     List the files in the current directory
 
     Return:
-        A string with the files aand  folders in the current directory
+        A string with the files and folders in the current directory
     """
 
-    directory_data = ("Contents of directory " + str("/" + "/".join(current_dir) ) + '/:' + "\n")
+    directory_data = ""
+    current_directory = current_dictionary()
 
     # show orderly alphabetically
-    for element in sorted(FS_current_dictionary()):
+    for element in sorted(current_directory):
         if "." in element:
             # Get metadata
-            File_extension = str(element.split(".")[1] + " file")
+            File_extension = str(str(element).split(".")[1] + " file")
             File_size = str(get_file_size(element))
             File_date = str(get_file_date(element))
 
             # Show the file
-            directory_data += (" " + element + " " * (20 - len(element)) + " " + File_extension + " " * (10 - len(File_extension)) + " " + File_size + " " * (10 - len(File_size)) + " " + File_date + "\n")
+            directory_data += str(" " + element + " " * (20 - len(element)) + " " + File_extension + " " * (10 - len(File_extension)) + " " + File_size + " " * (10 - len(File_size)) + " " + File_date + "\n")
         else:
-            directory_data += (" " + element + "/\n")
+            directory_data += str(" " + element + "/" + " " * (20 - len(element + "/")) + " " + "--- dir" + "\n")
 
     return directory_data
 
-def Change_directory(directory) -> str: # cd equivalent
+def change_directory(directory: str) -> int: # cd equivalent
 
     """
     Change the current directory
+
+    Return:
+        0: If the directory exists and the current directory is changed.
+        1: If the directory does not exist.
+        2: If the directory is not a directory.
     """
 
     # if the directory contains a dot and extension like .txt, cannot change directory into it
     if "." in directory and directory.split(".")[1] != "":
-
-        return str("Cannot change the directory into a file")
+        return 2 # cannot change the directory into a file
 
     # if the directory is .., go to the parent directory
-    if directory == "..":
+    if directory == ".." or directory == "<-":
         if len(current_dir) > 0:
             current_dir.pop()
-        return str("Directory changed to " + str("/" + "/".join(current_dir) ) )
+        return 0 # success
 
     # if the directory is a subdirectory, go to the subdirectory
-    if directory in FS_current_dictionary():
+    if directory in current_dictionary():
         current_dir.append(directory)
-        return str("Directory changed to " + str("/" + "/".join(current_dir)))
+        return 0 # success
 
-    return str("Directory " + directory + " does not exist")
+    return 1 # directory not found
 
-# ------------------------------------------------------------ [ Files ] ------------------------------------------------------------
-
-def make_directory(directory_name) -> str: # mkdir equivalent
+def make_directory(directory_name) -> int: # mkdir equivalent
 
     """
     Create a directory
+
+    Return:
+        0: If the directory is created successfully.
+        1: If the directory already exists.
+        2: If the directory name is invalid.
     """
 
     # Check if the directory already exists in the current directory
-    if directory_name in FS_current_dictionary():
-        return str("Directory " + directory_name +" already exists in " + str("/" + "/".join(current_dir) ) )
+    if directory_name in current_dictionary():
+        return 1 # directory already exists
 
     #Check if the name have a . in it, if so, it is a file and cannot be a directory
     if "." in directory_name:
-        return str("Cannot create a directory with . in the name")
+        return 2 # cannot create a directory with a file name
 
     # create an empty directory there and sync back to shelve dictionary!
-    dir = FS_current_dictionary()
-    dir[directory_name] = {}
-    FS.sync()
+    this_directory = current_dictionary()
+    this_directory[directory_name] = {}
+    FS_data.sync()
 
-    return str("Directory " + directory_name + " created in " + str("/" + "/".join(current_dir) ) )
+    return 0 # Directory created successfully
 
-def make_file(file_name) -> str: # touch equivalent
+def make_file(file_name: str) -> int:
 
     """
-    Create a file in the current directory
+    Create a empty file in the current directory
+
+    Return:
+        0: If the file is created successfully.
+        1: If the file already exists.
+        2: If the file name is invalid. (only letters, numbers, spaces and underscores are allowed).
+        3: If the file name is too long (max 48 characters).
+        4: If the file name is too short (min 1 character).
     """
 
     # Get the name and extension
     name = file_name.split(".")[0]
     extension = file_name.split(".")[1]
+    name_and_extension = str(name + "." + extension)
 
-    name_and_extension = name + "." + extension
+    if name_and_extension in current_dictionary(): return 1 # Check if the file already exists in the current directory
+    if not re.match("^[a-zA-Z0-9_ ]+$", name): return 2# Check if the file name is invalid
+    if len(name) > 48: return 3 # Check if the file name is too long
+    if len(name) < 1: return 4 # Check if the file name is too short
 
-    # Check if the file already exists in the current directory
-    if name_and_extension in FS_current_dictionary():
-        Logger.warning("File {} already exists, overwriting", name_and_extension)
+    # If all is good, create the file
+    this_directory = current_dictionary()
+    this_directory[name_and_extension] = {
+        "Metadata": {
+            "Extension": extension,
+            "Created": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            "Modified": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        },
+        "Data": ""
+    }
 
-        # add a random number to the name, imposible to have a file with the same name :)
-        name = name + "-" + str(random.randint(0, 512) + random.randint(0, 512))
-        name_and_extension = name + "." + extension
+    FS_data.sync()
 
-        # create the file
-        directory = FS_current_dictionary()
-        directory[name_and_extension] = ""
-        return
-
-    Logger.info("Created file {} in {}", name_and_extension, str("/" + "/".join(current_dir)))
-
-    dir = FS_current_dictionary()
-    dir[name_and_extension] = {
-            "Metadata": {
-                "Extension": extension,
-                "Created": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-                "Modified": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            },
-            "Data": ""
-        }
-
-    FS.sync()
-
-    return str("File " + name_and_extension + " created in " + str("/" + "/".join(current_dir) ) )
-
+    return 0 # File created successfully
 
 def edit_file(file_name, content):
 
@@ -215,197 +227,180 @@ def edit_file(file_name, content):
     """
 
     # Check if the file exists
-    if file_name not in FS_current_dictionary():
+    if file_name not in current_dictionary():
         return str("File " + file_name + " does not exist")
 
-    dir = FS_current_dictionary()
-    dir[file_name] = {
+    this_directory = current_dictionary()
+    this_directory[file_name] = {
             "Metadata": {
-                "Extension": dir[file_name]["Metadata"]["Extension"],
-                "Created": dir[file_name]["Metadata"]["Created"],
+                "Extension": this_directory[file_name]["Metadata"]["Extension"],
+                "Created": this_directory[file_name]["Metadata"]["Created"],
                 "Modified": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             },
             "Data": content
         }
 
-    FS.sync()
+    FS_data.sync()
 
     return str("File " + file_name + " edited")
 
 
-def get_file_content(name_and_extension):
+def move_file(file_name, destination):
+
+    """
+    Move the file to another directory
+
+    Return:
+        0: If the file is moved successfully.
+        1: If the file does not exist.
+        2: If the destination directory does not exist.
+        3: If the destination is not a directory.
+        4: If the file already exists in the destination directory.
+    """
+
+    # Check if the file exists in the current directory
+    if file_name not in current_dictionary():
+        return 1 # File does not exist
+
+    # if the destination is .. or <-, move the file to the parent directory
+    if destination == ".." or destination == "<-":
+
+        # FIXME: Check if the file already exists in the parent directory, actually,
+        # the functiom exists, but cannot move back to the parent directory a file from depth 3 folder
+
+        # copy the file and save in  a variable
+        file_data = current_dictionary()[file_name]
+
+        # get the parent directory
+        parent_directory = current_dir[:-1]
+
+        # check if the file already exists in the parent directory
+        if file_name in FS_data["/".join(parent_directory)]:
+            return 4
+
+        # delete the file from the current directory
+        del current_dictionary()[file_name]
+
+        # go to the parent directory
+        if len(current_dir) > 0:
+            current_dir.pop()
+
+        # copy the file to the parent directory
+        current_dictionary()[file_name] = file_data
+
+        FS_data.sync()
+
+        return 0 # success
+    else:
+
+        # Check if the destination is a directory
+        if destination not in current_dictionary():
+            return 2 # Destination directory does not exist
+
+        if "." in destination:
+            return 3 # Destination is not a directory
+
+        # get the parent destination directory
+        parent_directory = current_dictionary()[destination]
+
+        # check if the file already exists in the destination directory
+        if file_name in parent_directory:
+            return 4
+
+        # Move the file
+        this_directory = current_dictionary()
+        this_directory[destination][file_name] = this_directory[file_name]
+        del this_directory[file_name]
+
+        FS_data.sync()
+        return 0 # success
+
+
+def get_file_content(name_and_extension: str):
 
     """
     Return the content of the file
     """
 
     # Check if the file exists
-    if name_and_extension not in FS_current_dictionary():
+    if name_and_extension not in current_dictionary():
         Logger.error("File {} does not exist", name_and_extension)
         return
 
     Logger.info("Getting content of file {}", name_and_extension)
 
-    dir = FS_current_dictionary()
-    return dir[name_and_extension]["Data"]
+    this_directory = current_dictionary()
+    this_file = this_directory[name_and_extension]["Data"]
 
+    return this_file
 
-def get_file_metadata(name_and_extension):
+def get_file_metadata(name_and_extension: str):
 
     """
     Return a dictionary with the metadata of the file
     """
 
-    metadata_data = ""
+    metadata = ""
 
     # Check if the file exists
-    if name_and_extension not in FS_current_dictionary():
+    if name_and_extension not in current_dictionary():
         Logger.error("File {} does not exist", name_and_extension)
         return
 
     Logger.info("Getting metadata of file {}", name_and_extension)
 
-    dir = FS_current_dictionary()
-    metadata_data += "File: " + name_and_extension + "\n"
-    metadata_data += "Created: " + dir[name_and_extension]["Metadata"]["Created"] + "\n"
-    metadata_data += "Modified: " + dir[name_and_extension]["Metadata"]["Modified"] + "\n"
-    return metadata_data
+    this_directory = current_dictionary()
+    this_file = this_directory[name_and_extension]
 
+    metadata += "File: " + name_and_extension + "\n"
+    metadata += "Created: " + this_file["Metadata"]["Created"] + "\n"
+    metadata += "Modified: " + this_file["Metadata"]["Modified"] + "\n"
 
-def rmdir(name):
+    return metadata
+
+def remove_directory(name: str) -> int:
 
     """
     Remove a directory
     """
 
     # Check if the directory exists
-    if name not in FS_current_dictionary():
-        return str("Directory " + name + " does not exist")
+    if name not in current_dictionary():
+        return 1 # directory not found
 
-    dir = FS_current_dictionary()
-    del dir[name]
-    FS.sync()
+    # Check if the direcotry is not a file
+    if "." in name:
+        return 2 # cannot remove a file
 
-    return str("Directory " + name + " deleted")
+    this_directory = current_dictionary()
+    del this_directory[name]
+    FS_data.sync()
+
+    return 0 # Directory removed successfully
 
 
-def rmfile(name_and_extension):
+def remove_file(name_and_extension) -> None:
 
     """
     Delete a file from the current directory
     """
 
+    this_directory = current_dictionary()
+
     # Check if the file exists
-    if name_and_extension not in FS_current_dictionary():
+    if name_and_extension not in this_directory:
         Logger.error("File {} does not exist", name_and_extension)
         return
 
     Logger.info("Deleting file {}", name_and_extension)
+    del this_directory[name_and_extension]
 
-    dir = FS_current_dictionary()
-    del dir[name_and_extension]
-    FS.sync()
+    FS_data.sync()
 
+def get_folders() -> List[str]:
+    """ Return a list with the folders of the current directory """
 
-def tree(*args):
-
-    """
-    Prints the tree of the current directory
-    """
-
-    tree = ""
-
-    # if no argument is given, print the whole tree
-    if len(args[0]) == 0:
-
-        directory = FS_current_dictionary()
-        tree += "Contents of " + str("/" + "/".join(current_dir) ) + '/:' + "\n"
-
-    elif args[0] in FS_current_dictionary():
-
-        directory = FS_current_dictionary()[args[0]]
-        tree += "Contents of " + str("/" + "/".join(current_dir) ) + '/' + args[0] + '/:' + "\n"
-
-    # if the direcotry not exists, return an error message
-    else:
-        return str("Directory " + args[0] + " does not exist at " + str("/" + "/".join(current_dir) ) )
-
-    for deep_1 in sorted(directory):
-        # ignore files, like: something.extension
-        if "." not in deep_1:
-
-            # if the directory is empty
-            if len(directory[deep_1]) == 0:
-                # Check if is the last dir in the current directory
-                if deep_1 == sorted(directory)[-1]:
-                    if len(directory) == 1:
-                        tree += "└─── " + deep_1 + "\n"
-                    else:
-                        tree += "├─── " + deep_1 + "\n"
-                else:
-                    if len(directory) == 1:
-                        tree += "└─── " + deep_1 + "\n"
-                    else:
-                        tree += "├─── " + deep_1 + "\n"
-
-            else:
-                # Check if is the last dir in the current directory
-                if deep_1 == sorted(directory)[-1]:
-                    if deep_1 == sorted(directory)[-2]:
-                        tree += '└─── ' + deep_1 + "\n"
-                    else:
-                        if len(directory) == 1:
-                            tree += '├─── ' + deep_1 + "\n"
-                        else:
-                            tree += "└─── " + deep_1 + "\n"
-
-                else:
-                    if deep_1 == sorted(directory)[-2]:
-                        tree += '└─── ' + deep_1 + "\n"
-                    else:
-                        tree += '├─── ' + deep_1 + "\n"
-
-                for deep_2 in sorted(directory[deep_1]):
-                    # ignore files, like: something.extension
-                    if "." not in deep_2:
-                        # Check if is the last dir in the first directory
-                        if deep_2 == sorted(directory[deep_1])[-1]:
-
-                            if deep_2 == sorted(directory[deep_1])[-2]:
-                                tree += '    ├─── ' + deep_2 + "\n"
-                            else:
-                                if deep_1 == sorted(directory)[-1]:
-                                    tree += '    └─── ' + deep_2 + "\n"
-                                else:
-                                    if deep_1 == sorted(directory)[-2]:
-                                        tree += '    └─── ' + deep_2 + "\n"
-                                    else:
-                                        tree += "|   └─── " + deep_2 + "\n"
-                        else:
-                            if deep_2 == sorted(directory[deep_1])[-2]:
-                                if deep_1 == sorted(directory)[-1]:
-                                    tree += '    ├─── ' + deep_2 + "\n"
-                                else:
-                                    if deep_1 == sorted(directory)[-2]:
-                                        tree += '    ├─── ' + deep_2 + "\n"
-                                    else:
-                                        tree += '|   ├─── ' + deep_2 + "\n"
-
-                            else:
-                                if deep_2 == sorted(directory[deep_1])[-3]:
-                                    tree += "    ├─── " + deep_2 + "\n"
-                                else:
-                                    tree += "|   └─── " + deep_2 + "\n"
-
-    return tree
-
-def get_folders():
-
-    """
-    Return a list with the folders of the current directory
-    """
-
-    directory = FS_current_dictionary()
+    directory = current_dictionary()
     folders = []
 
     for deep_1 in sorted(directory):
@@ -415,13 +410,10 @@ def get_folders():
 
     return folders
 
-def get_files():
+def get_files() -> List[str]:
+    """ Return a list with the files of the current directory """
 
-    """
-    Return a list with the files of the current directory
-    """
-
-    directory = FS_current_dictionary()
+    directory = current_dictionary()
     files = []
 
     for deep_1 in sorted(directory):
@@ -432,12 +424,9 @@ def get_files():
     return files
 
 def get_files_and_folders_list():
+    """ Return a list with the files and folders of the current directory """
 
-    """
-    Return a list with the files and folders of the current directory
-    """
-
-    directory = FS_current_dictionary()
+    directory = current_dictionary()
     files_and_folders = []
 
     for deep_1 in sorted(directory):
@@ -449,43 +438,42 @@ def get_files_and_folders_list():
 
     return files_and_folders
 
-def get_current_directory():
-
-    """
-    Return the current directory
-    """
+def get_current_directory() -> str:
+    """ Return the current directory """
 
     return "/" + "/".join(current_dir)
 
-def get_file_date(name_and_extension):
+def get_file_date(name_and_extension: str) -> str:
+    """ Get the file creation date from the metadata """
 
-    """
-    Return the created date of the file from the metadata
-    """
+    this_directory = current_dictionary()
 
     # Check if the file exists
-    if name_and_extension not in FS_current_dictionary():
+    if name_and_extension not in this_directory:
         Logger.error("File {} does not exist", name_and_extension)
         return
 
     # Get the metadata of the file
-    dir = FS_current_dictionary()
-    meta = str(dir[name_and_extension]["Metadata"]["Created"])
+    this_file = this_directory[name_and_extension]
+    metadata = str(this_file["Metadata"]["Created"])
 
     # Return the created date of the file
-    return meta
+    return metadata
 
-def get_file_size(name_and_extension):
-    # Get the file content and caculate the size in bytes
+def get_file_size(name_and_extension: str) -> str:
+    """ Get the file content and caculate the size in bytes """
+
+    this_directory = current_dictionary()
 
     # Check if the file exists
-    if name_and_extension not in FS_current_dictionary():
+    if name_and_extension not in this_directory:
         Logger.error("File {} does not exist", name_and_extension)
         return
 
     # Get the metadata of the file
-    dir = FS_current_dictionary()
-    content = str(dir[name_and_extension]["Data"])
+
+    this_file = this_directory[name_and_extension]
+    content = str(this_file["Data"])
     content_size = len(content)
 
     # Return the size in bytes

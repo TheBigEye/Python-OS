@@ -1,3 +1,11 @@
+"""
+    Module Name:
+        Encoding.py
+
+    Module Description:
+        This module contains functions that convert objects to different text encodings.
+"""
+
 from typing import Literal
 
 # FORMATS CONVERSORS

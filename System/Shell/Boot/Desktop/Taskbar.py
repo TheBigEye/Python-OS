@@ -1,8 +1,9 @@
-from tkinter import Misc, Button, PhotoImage
-from Libs.pyImage.Image import getTkColor, setImage
+from tkinter import Button, Misc, PhotoImage
+
+from Libs.pyImage.Image import Image
 
 
-def Taskbar_button(master: Misc, button_image_path, master_image_path, position: tuple):
+class Taskbar_button(Button):
     """
     Taskbar button
 
@@ -16,26 +17,35 @@ def Taskbar_button(master: Misc, button_image_path, master_image_path, position:
         `button : [Button]` The button.
     """
 
-    bright = 12
+    def __init__(self, master: Misc, button_image_path: str, master_image_path: str, position: tuple) -> None:
 
-    image_color = getTkColor(master_image_path, position[0], position[1])
-    image_active_color = ("#%02x%02x%02x" % (int(image_color[1:3], 16) + bright, int(image_color[3:5], 16) + bright, int(image_color[5:7], 16) + bright))
+        self.master = master
+        self.button_image_path = button_image_path
+        self.master_image_path = master_image_path
+        self.position = position
 
-    normal_image = setImage(button_image_path, (24, 24), "#ff00ff", image_color)
-    active_image = setImage(button_image_path, (24, 24), "#ff00ff", image_active_color)
+        self.bright = 12
 
-    # Creates the button
-    task_button = Button(
-        master,
-        relief="flat",
-        bg=image_color,
-        activebackground=image_active_color,
-        image=normal_image,
-        borderwidth=0
-    )
+        self.image_color = Image.getTkColor(master_image_path, position[0], position[1])
+        self.image_active_color = ("#%02x%02x%02x" % (
+            int(self.image_color[1:3], 16) + self.bright, # Red
+            int(self.image_color[3:5], 16) + self.bright, # Green
+            int(self.image_color[5:7], 16) + self.bright  # Blue
+        ))
 
-    # Binds the mouse enter and leave events
-    task_button.bind("<Enter>", lambda event: task_button.config(image = active_image))
-    task_button.bind("<Leave>", lambda event: task_button.config(image = normal_image))
+        self.normal_image = Image.setImage(button_image_path, (24, 24), "#ff00ff", self.image_color)
+        self.active_image = Image.setImage(button_image_path, (24, 24), "#ff00ff", self.image_active_color)
 
-    return task_button
+        # Creates the button
+        super().__init__(
+            master,
+            relief="flat",
+            bg=self.image_color,
+            activebackground=self.image_active_color,
+            image=self.normal_image,
+            borderwidth=0
+        )
+
+        # Binds the mouse enter and leave events
+        self.bind("<Enter>", lambda event: self.config(image = self.active_image))
+        self.bind("<Leave>", lambda event: self.config(image = self.normal_image))

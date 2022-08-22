@@ -13,11 +13,14 @@
 import datetime
 import os
 import urllib.request
+from tkinter import Misc
 
-from PIL import Image, ImageTk
-from System.Utils.Colormap import Color
 from Libs.pyLogger.Logger import Logger
-from System.Utils.Vars import Assets_directory, Loading, Logs_directory, XCursor_2
+from PIL import Image as Img
+from PIL.Image import Image
+from PIL.ImageTk import PhotoImage
+from System.utils.colormap import Color
+from System.utils.vars import Assets_directory, Loading, XCursor_2
 
 # -------------------------------------------[ Time ]------------------------------------------- #
 
@@ -48,15 +51,13 @@ def Get_Current_Date_Time():
 
 # -------------------------------------------[ Misc ]------------------------------------------- #
 
-def Execute(master, Loading_time: float, Function, *args):
+def Execute(master: Misc, Loading_time: float, Function, *args):
 
     """
     This function will execute a function with a loading time.
     """
 
-    from System.Core.Core import in_windows
-
-    global Open, Loading_cursor, Normal_cursor
+    from System.core.boot import in_windows
 
     def Open():
         Function(*args)
@@ -80,7 +81,7 @@ def Execute(master, Loading_time: float, Function, *args):
     master.after(1000, Normal_cursor)
 
 
-def Asset_colored(Folder_name, file_name_and_extension, hue_value):
+def Asset_colored(Folder_name: str, file_name_and_extension: str, hue_value):
 
     # First: Search the folder inside from Assets folder and save the path
     for root, dirs, files in os.walk(Assets_directory):
@@ -93,7 +94,7 @@ def Asset_colored(Folder_name, file_name_and_extension, hue_value):
     for root, dirs, files in os.walk(folder_path):
         for file in files:
             if file.endswith(file_name_and_extension):
-                img = Image.open(os.path.join(root, file))
+                img = Img.open(os.path.join(root, file))
                 img = img.convert("RGBA")
                 image_data = img.getdata()
 
@@ -103,7 +104,7 @@ def Asset_colored(Folder_name, file_name_and_extension, hue_value):
                     newData.append(tuple(int(item[i] * hue_value) for i in range(3)) + (255,))
 
                 img.putdata(newData)
-                return ImageTk.PhotoImage(img)
+                return PhotoImage(img)
 
 # Check if the internet is on.
 def check_internet():
@@ -121,7 +122,7 @@ def Image_getcolor(image, x, y):
         for file in files:
 
             if file.endswith(image):
-                img = Image.open(os.path.join(root, file))
+                img = Img.open(os.path.join(root, file))
                 img = img.convert("RGBA")
                 image_data = img.getdata()
 

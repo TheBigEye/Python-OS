@@ -58,7 +58,7 @@ class Color:
             `string : [str]` The string color to convert
 
         Returns:
-            `rgb : [tuple]` The rgb color
+            `[tuple]` The rgb color
 
         Example:
             >>> color_str_rgb("white")
@@ -84,14 +84,14 @@ class Color:
         Convert string color to hex
 
         Arguments:
-            `string : [str]` The string color to convert
+            `string` : `[str]` The string color to convert
 
         Returns:
-            `hex : [str]` The hex color
+            `[str]` The hex color
 
         Example:
             >>> color_str_hex("white")
-            "#ffffff"
+            >>> "#ffffff"
         """
 
         from Libs.pyLogger.Logger import Logger
@@ -249,20 +249,3 @@ class Color:
         else:
             Logger.error("The value isnt a tuple, returning black", hsv_color)
             return (0, 0, 0)
-
-    def supported():
-        """
-        Returns the supported colors
-
-        Arguments:
-            None
-
-        Returns:
-            `supported : [list]` The supported colors
-
-        Example:
-            >>> color_supported()
-            ["white", "black", "red", "green", "blue", "yellow", "orange", "purple", "cyan"]
-        """
-
-        return list(colors.keys())

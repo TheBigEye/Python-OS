@@ -1,10 +1,10 @@
 import random
-from tkinter import Frame, Label, PhotoImage
+from tkinter import Frame, Label, Misc, PhotoImage
 
 from Libs.pyLogger.Logger import Logger
-from System.Utils.Utils import Asset_colored
-from System.Utils.Vars import Assets_directory
-from System.Core.Core import routines
+from System.utils.utils import Asset_colored
+from System.utils.vars import Assets_directory
+from System.core.boot import routines
 
 __author__ = 'TheBigEye'
 __version__ = '1.5'
@@ -12,7 +12,7 @@ __version__ = '1.5'
 
 class Bootloader(Frame):
 
-    def __init__(self, master, loading_time: int):
+    def __init__(self, master: Misc, loading_time: int):
 
         super().__init__(master)
 
@@ -86,6 +86,8 @@ class Bootloader(Frame):
             self.loading.place_forget()
 
             Logger.debug("Finishing...")
+
+            self.master.after(512, self.master.configure(background="#080808"))
 
         def quit_vmw_bootloader():
 

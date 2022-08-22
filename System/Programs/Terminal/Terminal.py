@@ -1,10 +1,11 @@
 from tkinter import Button, Entry, Frame, Label, Text
 from tkinter.constants import INSERT
 
-from Libs.pyImage.Image import setImage
+from Libs.pyImage.Image import Image
 from Libs.pyUtils.pyData import JSON
-from System.Programs.Terminal.Commands import CMD
-from System.Shell.Attributes.Draggable import drag_it
+from System.programs.Terminal.Commands import CMD
+from System.shell.Attributes.Draggable import drag_it
+from System.shell.Components.UITextbox import UITextbox
 
 __author__ = "TheBigEye"
 __version__ = "1.8"
@@ -32,11 +33,11 @@ def get_background():
 
 
 # -----------------------------------------------------------------[ WINDOW MANAGER VERSION ]----------------------------------------------------------------------- #
-WM_Terminal_icon = setImage("Assets/Shell/Programs/Terminal/Terminal_icon.png", (112, 112), "#ff00ff", "#002C4F")
+WM_Terminal_icon = Image.setImage("Assets/Shell/Programs/Terminal/Terminal_icon.png", (112, 112), "#ff00ff", "#002C4F")
 
-WM_Terminal_image = setImage("Assets/Shell/Programs/Terminal/WM_Window.png", None, "#ff00ff", get_background())
-WM_Terminal_fullheight_image = setImage("Assets/Shell/Programs/Terminal/WM_Window_fullheight.png", None, "#ff00ff", get_background())
-WM_Splash_image = setImage("Assets/Shell/Programs/Terminal/WM_Splash.png")
+WM_Terminal_image = Image.setImage("Assets/Shell/Programs/Terminal/WM_Window.png", None, "#ff00ff", get_background())
+WM_Terminal_fullheight_image = Image.setImage("Assets/Shell/Programs/Terminal/WM_Window_fullheight.png", None, "#ff00ff", get_background())
+WM_Splash_image = Image.setImage("Assets/Shell/Programs/Terminal/WM_Splash.png")
 
 class WM_Terminal(Frame):
     def __init__(self, master, draggable: bool):
@@ -62,7 +63,7 @@ class WM_Terminal(Frame):
             borderwidth="0",
         )
 
-        self.Terminal_screen = Text(
+        self.Terminal_screen = UITextbox(
             self.Terminal,
             bd=2,
             relief="flat",
@@ -72,9 +73,9 @@ class WM_Terminal(Frame):
         )
 
         self.Terminal_screen.config(width=75, height=22, bg=self.background, fg=self.foreground, state="normal", insertbackground="#dfdfdf")
-        self.Terminal_screen.insert(INSERT, " Welcome to the terminal"                                                    + "\n")
+        self.Terminal_screen.insert_colored(" Welcome to the terminal"                                                    + "\n", "#B8BA37")
         self.Terminal_screen.insert(INSERT, "                                                                                \n")
-        self.Terminal_screen.insert(INSERT, ">/ Type a command, or use help for get commands"                             + "\n")
+        self.Terminal_screen.insert_color_word("- Type a command, or use help for get commands"                             + "\n", [("help", "#B8BA37")])
         self.Terminal_screen.insert(INSERT, "                                                                                \n")
 
         self.Terminal_screen.config(state="disabled")
@@ -92,6 +93,8 @@ class WM_Terminal(Frame):
             borderwidth="0",
             fg=self.foreground,
             bg=self.background,
+            relief="flat",
+            insertwidth = 5,
             font=font
         )
 
@@ -99,7 +102,7 @@ class WM_Terminal(Frame):
         self.Terminal_entry.bind("<Return>", Command_handler)
         self.Terminal_entry.focus()
 
-        self.Terminal_entry.place(x=5.5, y=324)
+        self.Terminal_entry.place(x=5.5, y=328)
 
 
         def Splash_screen(time):
@@ -169,10 +172,10 @@ class WM_Terminal(Frame):
 
 
 # ----------------------------------------------------------------- [DESKTOP ENVIROMENT VERSION] ---------------------------------------------------------------------
-DE_Terminal_icon = setImage("Assets/Shell/Programs/Terminal/Terminal_icon.png", (112, 112), "#ff00ff", "#002C4F")
+DE_Terminal_icon = Image.setImage("Assets/Shell/Programs/Terminal/Terminal_icon.png", (112, 112), "#ff00ff", "#002C4F")
 
-DE_Terminal_image = setImage("Assets/Shell/Programs/Terminal/DE_Window.png", None, "#ff00ff", get_background())
-DE_Splash_image = setImage("Assets/Shell/Programs/Terminal/DE_Splash.png")
+DE_Terminal_image = Image.setImage("Assets/Shell/Programs/Terminal/DE_Window.png", None, "#ff00ff", get_background())
+DE_Splash_image = Image.setImage("Assets/Shell/Programs/Terminal/DE_Splash.png")
 
 class DE_Terminal(Frame):
     def __init__(self, master, draggable: bool):
@@ -198,7 +201,7 @@ class DE_Terminal(Frame):
             borderwidth="0",
         )
 
-        self.Terminal_screen = Text(
+        self.Terminal_screen = UITextbox(
             self.Terminal,
             bd=2,
             relief="flat",
@@ -208,9 +211,9 @@ class DE_Terminal(Frame):
         )
 
         self.Terminal_screen.config(width=75, height=20, bg=self.background, fg=self.foreground, state="normal", insertbackground="#dfdfdf")
-        self.Terminal_screen.insert(INSERT, "═════════════════════════ Welcome to the terminal ═════════════════════════" + "\n")
+        self.Terminal_screen.insert_colored(" Welcome to the terminal"                                                    + "\n", "#B8BA37")
         self.Terminal_screen.insert(INSERT, "                                                                                \n")
-        self.Terminal_screen.insert(INSERT, ">/ Type a command, or use help for get commands"                             + "\n")
+        self.Terminal_screen.insert_color_word("- Type a command, or use help for get commands"                             + "\n", [("help", "#B8BA37")])
         self.Terminal_screen.insert(INSERT, "                                                                                \n")
 
         self.Terminal_screen.config(state="disabled")
@@ -221,8 +224,8 @@ class DE_Terminal(Frame):
 
 # ----------------------------------------------------------------- [Close terminal button] -------------------------------------------------------------------------
 
-        self.Close_button_image = setImage("Assets/Shell/Window/Close_button.png")  # Terminal close button
-        self.Close_button_red_image = setImage("Assets/Shell/Window/Close_button_red.png")  # Terminal close button
+        self.Close_button_image = Image.setImage("Assets/Shell/Window/Close_button.png")  # Terminal close button
+        self.Close_button_red_image = Image.setImage("Assets/Shell/Window/Close_button_red.png")  # Terminal close button
 
         def Close_Terminal():
             """Close the Terminal"""
@@ -252,8 +255,8 @@ class DE_Terminal(Frame):
 
 # ----------------------------------------------------------------- [Maximize terminal button] ----------------------------------------------------------------------
 
-        self.Maximize_button_image = setImage("Assets/Shell/Window/Maximize_button.png")  # Terminal maximize button
-        self.Maximize_button_light_image = setImage("Assets/Shell/Window/Maximize_button_light.png")  # Terminal maximize button light
+        self.Maximize_button_image = Image.setImage("Assets/Shell/Window/Maximize_button.png")  # Terminal maximize button
+        self.Maximize_button_light_image = Image.setImage("Assets/Shell/Window/Maximize_button_light.png")  # Terminal maximize button light
 
         def Maximize_Terminal():
             """Maximize the Terminal"""
@@ -279,8 +282,8 @@ class DE_Terminal(Frame):
 
         # ----------------------------------------------------------------- [Minimize terminal button] ----------------------------------------------------------------------
 
-        self.Minimize_button_image = setImage("Assets/Shell/Window/Minimize_button.png")  # Terminal minimize button
-        self.Minimize_button_light_image = setImage("Assets/Shell/Window/Minimize_button_light.png")  # Terminal minimize button light
+        self.Minimize_button_image = Image.setImage("Assets/Shell/Window/Minimize_button.png")  # Terminal minimize button
+        self.Minimize_button_light_image = Image.setImage("Assets/Shell/Window/Minimize_button_light.png")  # Terminal minimize button light
 
         def Minimize_Terminal():
             """Minimize the Terminal"""
@@ -319,7 +322,7 @@ class DE_Terminal(Frame):
         self.Terminal_entry.bind("<Return>", Command_handler)
         self.Terminal_entry.focus()
 
-        self.Terminal_entry.place(x=5.5, y=322)
+        self.Terminal_entry.place(x=5.5, y=324)
 
         def Splash_screen(time):
             """Splash screen"""

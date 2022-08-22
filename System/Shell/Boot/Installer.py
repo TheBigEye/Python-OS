@@ -1,7 +1,8 @@
 from tkinter import Entry, Label, Text
 from tkinter.constants import INSERT, NORMAL
 
-from System.Programs.Terminal.Commands import CMD
+from System.programs.Terminal.Commands import CMD
+from System.shell.Components.UITextbox import UITextbox
 
 __author__ = 'TheBigEye'
 __version__ = '1.5'
@@ -21,7 +22,7 @@ def Os_Installer(master):  # Display the Post-Bios window (coming soon the OOBE)
     Terminal.place(x=0, y=0)
 
 
-    Terminal_screen = Text(
+    Terminal_screen = UITextbox(
         Terminal,
         bd=2,
         relief="flat",
