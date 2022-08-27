@@ -21,7 +21,7 @@
      <a href="https://github.com/TheBigEye#gh-light-mode-only"> <!-- light mode -->
           <img 
                src="https://img.shields.io/badge/Python-FFD43B?style=for-the-badge&logo=python&logoColor=blue&color=4f4f4f" 
-               Title="Python"  
+               Title="Made with Python"  
           />
           <img 
                src="https://komarev.com/ghpvc/?username=Eye-Python-OS&label=Views&style=for-the-badge" 
@@ -29,13 +29,13 @@
           />
           <img 
                src="https://img.shields.io/badge/VSCode-0078D4?style=for-the-badge&logo=visual%20studio%20code&logoColor=ffffff&color=blue" 
-               Title="VScode" 
+               Title="Programmed using VScode" 
           />
      </a>
      <a href="https://github.com/TheBigEye#gh-dark-mode-only"> <!-- dark mode -->
           <img 
                src="https://img.shields.io/badge/Python-FFD43B?style=for-the-badge&logo=python&logoColor=blue&color=4f4f4f" 
-               Title="Python"  
+               Title="Made with Python"  
           />
           <img 
                src="https://komarev.com/ghpvc/?username=Eye-Python-OS&label=Views&color=000000&style=for-the-badge" 
@@ -43,7 +43,7 @@
           />
           <img 
                src="https://img.shields.io/badge/VSCode-0078D4?style=for-the-badge&logo=visual%20studio%20code&logoColor=blue&color=000000" 
-               Title="VScode" 
+               Title="Programmed using VScode" 
           />
      </a>
 </p>
