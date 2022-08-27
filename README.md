@@ -105,10 +105,10 @@ This was developed from the beginning as a hobby, currently I use it to learn an
 ## Installation
 Download the code and unzip it, it is necessary to have Python 3.10 and have the following modules installed 
 
-- [`Pillow`](https://github.com/python-pillow/Pillow)       Necessary so that the program can read the images and work.
-- [`Psutil`](https://github.com/giampaolo/psutil)      Necessary for the neofetch command and some functions to work.
-- [`Tkinterweb`](https://github.com/Andereoo/TkinterWeb)  Necessary for the browser to work.
-- [`TkinterMapView`](https://github.com/TomSchimansky/TkinterMapView)  Necessary for the Map Viewer to work.
+- [`Pillow`          ](https://github.com/python-pillow/Pillow)          Necessary so that the program can read the images and work.
+- [`Psutil`          ](https://github.com/giampaolo/psutil)              Necessary for the neofetch command and some functions to work.
+- [`Tkinterweb`      ](https://github.com/Andereoo/TkinterWeb)           Necessary for the browser to work.
+- [`TkinterMapView`  ](https://github.com/TomSchimansky/TkinterMapView)  Necessary for the Map Viewer to work.
 
 For a quick installation use the following command inside the project folder:
 
@@ -120,7 +120,7 @@ And double click on OS.py file to run the project or just in the command line yo
 ```sh
 python OS.py
 ```
-**NOTE**: If you're on a on a minimal Linux installation, you need a desktop or window manager compatible with the python-tk package to work ._.
+**NOTE**: If you're on a on a minimal Linux installation, you need a desktop or window manager compatible with the `python-tk` package to work ._.
 
 #
 
