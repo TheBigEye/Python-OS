@@ -4,15 +4,15 @@
 <p align="center">
     <a href="https://github.com/TheBigEye/Python-OS#gh-light-mode-only"> <!-- light mode -->
         <img
-             width="100%"
-             src="https://github.com/TheBigEye/TheBigEye/blob/main/Projects/Python-OS/Light-header.svg?raw=true" alt="Light mode Python OS logo!"
-         />
+            width="100%"
+            src="https://github.com/TheBigEye/TheBigEye/blob/main/Projects/Python-OS/Light-header.svg?raw=true" alt="Light mode Python OS logo!"
+        />
     </a>
     <a href="https://github.com/TheBigEye#gh-dark-mode-only"> <!-- dark mode -->
         <img
-             width="100%"
-             src="https://github.com/TheBigEye/TheBigEye/blob/main/Projects/Python-OS/Dark-header.svg?raw=true" alt="Dark mode Python OS logo!!"
-         />
+            width="100%"
+            src="https://github.com/TheBigEye/TheBigEye/blob/main/Projects/Python-OS/Dark-header.svg?raw=true" alt="Dark mode Python OS logo!!"
+        />
     </a>
 </p>
 
@@ -52,11 +52,11 @@
 
 <!-- Light or dark according to the github theme that the user has when viewing it -->
 
- <!-- Logo -->
+<!-- Logo -->
 <img 
-     align="right"
-     src="https://user-images.githubusercontent.com/63316583/175645873-207b9d4c-7bd9-40b5-8883-ebda57b07dc2.svg"
-     title="Python OS"
+    align="right"
+    src="https://user-images.githubusercontent.com/63316583/175645873-207b9d4c-7bd9-40b5-8883-ebda57b07dc2.svg"
+    title="Python OS"
 />
 
 <!-- ----------------------------------------------------------------------------------------------------------------------------------------------------------------->
