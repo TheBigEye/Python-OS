@@ -103,6 +103,10 @@ This was developed from the beginning as a hobby, currently I use it to learn an
 - Sometimes taskbar buttons flicker.
 
 ## Installation
+
+> **Note**: If you're on a on a minimal Linux installation:
+> * You may need to install a desktop or window manager compatible with the `python-tk` package to work ._.
+
 Download the code and unzip it, it is necessary to have Python 3.10 and have the following modules installed 
 
 - [`Pillow`          ](https://github.com/python-pillow/Pillow)          Necessary so that the program can read the images and work.
@@ -120,9 +124,7 @@ And double click on OS.py file to run the project or just in the command line yo
 ```sh
 python OS.py
 ```
-**NOTE**: If you're on a on a minimal Linux installation, you need a desktop or window manager compatible with the `python-tk` package to work ._.
 
-#
 
 <!-- -------------------------------------------------------------------------- Credits ------------------------------------------------------------------------------>
 <!-- Header and footer svgs --- kyechan99/capsule-render -->
