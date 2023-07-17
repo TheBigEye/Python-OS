@@ -5,13 +5,13 @@
     <a href="https://github.com/TheBigEye/Python-OS#gh-light-mode-only"> <!-- light mode -->
         <img
             width="100%"
-            src="https://github.com/TheBigEye/TheBigEye/blob/main/Projects/Python-OS/Light-header.svg?raw=true" alt="Light mode Python OS logo!"
+            src="https://github.com/TheBigEye/TheBigEye/blob/main/assets/projects/Python-OS/Light-header.svg?raw=true" alt="Light mode Python OS logo!"
         />
     </a>
     <a href="https://github.com/TheBigEye#gh-dark-mode-only"> <!-- dark mode -->
         <img
             width="100%"
-            src="https://github.com/TheBigEye/TheBigEye/blob/main/Projects/Python-OS/Dark-header.svg?raw=true" alt="Dark mode Python OS logo!!"
+            src="https://github.com/TheBigEye/TheBigEye/blob/main/assets/projects/Python-OS/Dark-header.svg?raw=true" alt="Dark mode Python OS logo!!"
         />
     </a>
 </p>
