@@ -1,4 +1,0 @@
-psutil
-tkinterweb
-pillow
-tkintermapview
