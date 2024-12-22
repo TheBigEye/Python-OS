@@ -29,7 +29,7 @@ class WindowManager:
         self.background_image = ImageTk.PhotoImage(Image.open("./assets/splash.bmp"))
         self.background_label = tk.Label(self.main_frame, image=self.background_image, bd= 0)
 
-        self.copyright_label = tk.Label(
+        self.test_label = tk.Label(
             self.main_frame,
             text="Python WM - This is a test",
             fg="#ffffff",
@@ -43,14 +43,15 @@ class WindowManager:
         self.main_frame.bind("<Configure>", lambda event: self.update_on_resize())
 
     def update_on_resize(self):
-        """Update UI elements positioning when main window is resized."""
+        """ Update UI elements positioning when main window is resized """
         # Update the position of the splash image
         # self.background_label.place(x=(self.main_frame.winfo_width() / 2) - (self.background_image.width() / 2), y=(self.main_frame.winfo_height() / 2) - (self.background_image.height() / 2))
 
-        self.copyright_label.place(x=self.main_frame.winfo_width() - 214, y=self.main_frame.winfo_height() - 20)
+        self.test_label.place(x=self.main_frame.winfo_width() - 214, y=self.main_frame.winfo_height() - 20)
 
     def create_window(self, title="Window", content=None, size=(50, 50, 210, 200), flags=0):
-        """Create a new top-level window.
+        """
+        Create a new top-level window
 
         Args:
             title: The title of the window
@@ -68,7 +69,8 @@ class WindowManager:
         return window
 
     def create_child(self, parent: Window, title="Window", content=None, size=(50, 50, 210, 200), flags=0):
-        """Create a new child window inside the given parent window.
+        """
+        Create a new child window inside the given parent window
 
         Args:
             parent: The parent Window instance
@@ -76,6 +78,7 @@ class WindowManager:
         Returns:
             Window: The newly created child window
         """
+
         child = parent.create_child(title, content=content, size=size, flags=flags)
         self.windows.append(child)
 
