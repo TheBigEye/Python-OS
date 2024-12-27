@@ -46,19 +46,27 @@ in_mac = False
 
 
 # Start the boot order
-match Boot_phase:
-    case 0: isBSOD = True
-    case 1: isRSOD = True
-    case 2: isGSOD = True
-    case 3: isBIOS = True
-    case 4: isINSTALLER = True
-    case 5: isBootloader = True
-    case 6: isLogin = True
-    case 7: isDesktop = True
-    case 8: isBoot = True
-    case _:
-        raise ValueError("Invalid value, must be 0-8, STOPING..")
-
+# Start the boot order
+if Boot_phase == 0:
+    isBSOD = True
+elif Boot_phase == 1:
+    isRSOD = True
+elif Boot_phase == 2:
+    isGSOD = True
+elif Boot_phase == 3:
+    isBIOS = True
+elif Boot_phase == 4:
+    isINSTALLER = True
+elif Boot_phase == 5:
+    isBootloader = True
+elif Boot_phase == 6:
+    isLogin = True
+elif Boot_phase == 7:
+    isDesktop = True
+elif Boot_phase == 8:
+    isBoot = True
+else:
+    raise ValueError("Invalid value, must be 0-8, STOPPING..")
 
 def check_os():
 
@@ -102,18 +110,26 @@ def set_boot(value: int):
     str_value = str(value)
     int_value = int(value)
 
-    match int_value:
-        case 0: Logger.info("{} | Kernel level set to: Black screen of death", str_value)
-        case 1: Logger.info("{} | set to: Red screen of death", str_value)
-        case 2: Logger.info("{} | Kernel level set to: Green screen of death", str_value)
-        case 3: Logger.info("{} | Kernel level set to: BIOS", str_value)
-        case 4: Logger.info("{} | Kernel level set to: Installer", str_value)
-        case 5: Logger.info("{} | Kernel level set to: Bootloader", str_value)
-        case 6: Logger.info("{} | Kernel level set to: Login", str_value)
-        case 7: Logger.info("{} | Kernel level set to: Desktop", str_value)
-        case 8: Logger.info("{} | Kernel level set to: Boot", str_value)
-        case _:
-            raise ValueError("Invalid value, must be 0-8, STOPING..")
+    if int_value == 0:
+        Logger.info("{} | Kernel level set to: Black screen of death", str_value)
+    elif int_value == 1: 
+        Logger.info("{} | set to: Red screen of death", str_value)
+    elif int_value == 2: 
+        Logger.info("{} | Kernel level set to: Green screen of death", str_value)
+    elif int_value == 3: 
+        Logger.info("{} | Kernel level set to: BIOS", str_value)
+    elif int_value == 4: 
+        Logger.info("{} | Kernel level set to: Installer", str_value)
+    elif int_value == 5: 
+        Logger.info("{} | Kernel level set to: Bootloader", str_value)
+    elif int_value == 6: 
+        Logger.info("{} | Kernel level set to: Login", str_value)
+    elif int_value == 7: 
+        Logger.info("{} | Kernel level set to: Desktop", str_value)
+    elif int_value == 8: 
+        Logger.info("{} | Kernel level set to: Boot", str_value)
+    else:
+        raise ValueError("Invalid value, must be 0-8, STOPING..")
 
     JSON.set(BOOT_DATA_FILE, "Boot_phase", int_value)
 
@@ -131,12 +147,13 @@ def set_desktop_mode(value: int):
     str_value = str(value)
     int_value = int(value)
 
-    match int_value:
-        case 0: Logger.info("{} | Desktop mode set to: WINDOW MANAGER", str_value)
-        case 1: Logger.info("{} | Desktop mode set to: DESKTOP ENVIROMENT", str_value)
-        case _:
-            raise ValueError("Invalid value, must be 0-1, STOPING..")
-            sys.exit()
+    if int_value == 0:
+        Logger.info("{} | Desktop mode set to: WINDOW MANAGER", str_value)
+    elif int_value == 1: 
+        Logger.info("{} | Desktop mode set to: DESKTOP ENVIROMENT", str_value)
+    else:
+        raise ValueError("Invalid value, must be 0-1, STOPING..")
+        sys.exit()
 
     JSON.set(BOOT_DATA_FILE, "Desktop_mode", int_value)
 
