@@ -26,12 +26,14 @@ class MessageBox(Label):
         self.BG_color = "#001633"
 
         # Change the border color depending on the messagebox type.
-        match self.mb_type:
-            case "info": self.MB_Image = Image.setImage("Assets/Shell/Desktop/Message box/WM_Window.png", None, "#003C6C", "#4A91A7")
-            case "warning": self.MB_Image = Image.setImage("Assets/Shell/Desktop/Message box/WM_Window.png", None, "#003C6C", "#D66535")
-            case "error": self.MB_Image = Image.setImage("Assets/Shell/Desktop/Message box/WM_Window.png", None, "#003C6C", "#D63A35" )
-            case _:
-                self.MB_Image = Image.setImage("Assets/Shell/Desktop/Message box/WM_Window.png")
+        if self.mb_type == "info":
+            self.MB_Image = Image.setImage("Assets/Shell/Desktop/Message box/WM_Window.png", None, "#003C6C", "#4A91A7")
+        elif self.mb_type == "warning": 
+            self.MB_Image = Image.setImage("Assets/Shell/Desktop/Message box/WM_Window.png", None, "#003C6C", "#D66535")
+        elif self.mb_type == "error": 
+            self.MB_Image = Image.setImage("Assets/Shell/Desktop/Message box/WM_Window.png", None, "#003C6C", "#D63A35" )
+        else:
+            self.MB_Image = Image.setImage("Assets/Shell/Desktop/Message box/WM_Window.png")
 
         # Icons.
         self.MB_Error_icon = Image.setImage("Assets/Shell/Desktop/Message box/Error.png", (36, 36), "#ff00ff", self.BG_color)
